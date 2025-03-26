@@ -19,7 +19,7 @@ services:
   php:
     build:
       context: .
-      dockerfile: ./app/Dockerfile
+      dockerfile: ./php/Dockerfile
       target: app
     depends_on:
       db:
