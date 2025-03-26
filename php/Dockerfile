@@ -16,17 +16,13 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
-WORKDIR /app
+WORKDIR /api
 
-COPY ./app/composer.* .
+COPY ./api/composer.* .
 
 RUN composer install --prefer-dist --no-dev --no-scripts --no-progress --no-interaction
 
-COPY ./app .
-
-RUN npm install
-
-RUN npm run build
+COPY ./api .
 
 RUN composer dump-autoload --optimize
 
@@ -35,7 +31,7 @@ COPY ./php/entrypoint.sh /
 ENTRYPOINT [ "sh", "/entrypoint.sh" ]
 
 
-FROM app as app_dev
+FROM app AS app_dev
 
 ENV XDEBUG_MODE=off
 

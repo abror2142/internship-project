@@ -25,13 +25,20 @@ services:
       target: app_dev
     restart: unless-stopped
     volumes:
-      - ./app/public:/app/public
+      - ./api/public:/api/public
       - ./php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini:ro
     environment:
       - XDEBUG_MODE=${XDEBUG_MODE:-off}
     depends_on:
       db:
         condition: service_healthy
+  
+  spa:
+    build:
+      context: .
+      dockerfile: ./spa/Dockerfile
+    depends_on:
+      - php
 
   nginx:
     build:
@@ -43,7 +50,9 @@ services:
       - '80:80'
     depends_on:
       - php
+      - spa
       - db
+  
 
 volumes:
   mysqldata:

@@ -24,6 +24,11 @@ services:
     depends_on:
       db:
         condition: service_healthy
+  
+  spa:
+    build:
+      context: .
+      dockerfile: ./spa/Dockerfile
 
   nginx:
     build:
@@ -38,3 +43,4 @@ services:
 
 volumes:
   mysqldata:
+  spa_static:
