@@ -1,3 +1,7 @@
+# Internship Project
+
+---
+
 ## 🏗️ Project Structure
 
 📦 internship-project
