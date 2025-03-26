@@ -1,0 +1,49 @@
+services:
+  db:
+    image: mysql
+    restart: unless-stopped
+    environment:
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysqldata:/var/lib/mysql
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+
+  php:
+    build:
+      context: .
+      dockerfile: ./php/Dockerfile
+      target: app_dev
+    restart: unless-stopped
+    volumes:
+      - ./app/public:/app/public
+      - ./php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini:ro
+    environment:
+      - XDEBUG_MODE=${XDEBUG_MODE:-off}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
+      target: server_dev
+    restart: unless-stopped
+    ports:
+      - '80:80'
+    depends_on:
+      - php
+      - db
+
+volumes:
+  mysqldata:

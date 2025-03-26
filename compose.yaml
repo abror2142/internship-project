@@ -1,0 +1,40 @@
+services:
+  db:
+    image: mysql
+    restart: always
+    environment:
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - mysqldata:/var/lib/mysql
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+
+  php:
+    build:
+      context: .
+      dockerfile: ./app/Dockerfile
+      target: app
+    depends_on:
+      db:
+        condition: service_healthy
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
+      target: server
+    ports:
+      - '80:80'
+    depends_on:
+      - php
+      - db
+
+volumes:
+  mysqldata:
