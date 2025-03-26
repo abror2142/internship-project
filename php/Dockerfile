@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y \
     zlib1g-dev \
     libzip-dev \
     unzip \
+    npm \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install zip pdo pdo_mysql
@@ -22,6 +23,10 @@ COPY ./app/composer.* .
 RUN composer install --prefer-dist --no-dev --no-scripts --no-progress --no-interaction
 
 COPY ./app .
+
+RUN npm install
+
+RUN npm run build
 
 RUN composer dump-autoload --optimize
 
