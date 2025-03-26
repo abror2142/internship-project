@@ -47,10 +47,24 @@ cp app/.env.example app/.env
 
 ** Update environment variables as needed.
 
-### 📦 Docker Compose
+### 3. 📦 Docker Compose
 
-`docker compose up`
+To Run In **DEVELOPMENT** Mode:
 
+```bash
+ docker compose -f compose.dev.yaml up
+```
+
+** In **Development** Mode:
+ - HotLoading is enabled! 
+ - Xdebug is installed and can be configured!
+
+
+To run in **PRODUCTION** Mode:
+
+```bash
+ docker compose up
+```
 
 Visit `http://localhost:80`
 
