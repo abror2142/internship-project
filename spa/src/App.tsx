@@ -1,9 +1,10 @@
-import './App.css'
+import { RouterProvider } from 'react-router-dom';
+import { router } from './Router';
 
 function App() {
   return (
-    <div>
-      <h1>Hello World!</h1>
+    <div className='min-h-screen flex flex-col justify-between'>
+      <RouterProvider router={router} />
     </div>
   )
 }
