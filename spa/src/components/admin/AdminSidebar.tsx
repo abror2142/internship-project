@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 function AdminSidebar () {
     return (
-        <div className="px-8 py-3 bg-indigo-50 flex flex-col justify-between grow-1 max-w-[250px] py-4">
+        <div className="px-8 bg-indigo-50 flex flex-col justify-between grow-1 max-w-[250px] py-4">
             <div className="flex flex-col gap-2">
                 <Link to={"/admin"} className="flex items-center gap-2 text-indigo-400 hover:bg-indigo-100 px-2 py-1 rounded-sm">
                     <FontAwesomeIcon icon={faHome} className="text-lg " />
