@@ -30,6 +30,8 @@ function Header () {
             </div>
 
             <DarkModeToggler />
+
+            
         </div>
     )
 }

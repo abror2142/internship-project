@@ -7,6 +7,8 @@ import Users from "./containers/admin/Users";
 import Tags from "./containers/admin/Tags";
 import Settings from "./containers/admin/Settings";
 import Logs from "./containers/admin/Logs";
+import Login from "./containers/Login";
+import Register from "./containers/Register";
 
 const routes = createRoutesFromElements(
     <Route>
@@ -22,6 +24,9 @@ const routes = createRoutesFromElements(
         {/* User Routes */}
         <Route path="/" element={<Layout />} >
             <Route index element={<Home />} />
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+            
         </Route>
     </Route>
 )
