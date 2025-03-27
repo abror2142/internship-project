@@ -8,9 +8,9 @@ function DarkModeToggler ()  {
     return (
         <div
             onClick={() => toggleTheme()}
-            className="text-xl"
+            className="text-xl dark:text-dark-blue-light"
         >
-            <FontAwesomeIcon icon={isDarkMode ? faSun : faMoon} />
+            <FontAwesomeIcon icon={isDarkMode ? faSun : faMoon}/>
         </div>
     )
 }

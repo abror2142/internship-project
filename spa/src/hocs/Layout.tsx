@@ -5,15 +5,15 @@ import Footer from "../components/Footer";
 function Layout () {
     return (
         <>
-            <header>
+            <header className="dark:bg-dark-blue dark:text-dark-text">
                 <Header />
             </header>
 
-            <main>
+            <main >
                 <Outlet />
             </main>
 
-            <footer>
+            <footer className="dark:bg-dark-blue dark:text-dark-text">
                 <Footer />
             </footer>
         </>

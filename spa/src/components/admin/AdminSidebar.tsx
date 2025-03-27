@@ -5,31 +5,34 @@ import { Link } from "react-router-dom";
 
 function AdminSidebar () {
     return (
-        <div className="px-8 bg-indigo-50 flex flex-col justify-between grow-1 max-w-[250px] py-4">
+        <div 
+            className="px-8 py-4 flex flex-col justify-between grow-1 max-w-[250px] 
+                    bg-indigo-50 text-indigo-400 dark:bg-dark-blue "
+        >
             <div className="flex flex-col gap-2">
-                <Link to={"/admin"} className="flex items-center gap-2 text-indigo-400 hover:bg-indigo-100 px-2 py-1 rounded-sm">
-                    <FontAwesomeIcon icon={faHome} className="text-lg " />
-                    <p className="text-gray-600">Dashboard</p>
+                <Link to={"/admin"} className="flex items-center gap-2 hover:bg-indigo-100 dark:hover:bg-dark-bg-contrast px-2 py-1 rounded-sm">
+                    <FontAwesomeIcon icon={faHome} className="text-lg" />
+                    <p className="text-gray-600 dark:text-dark-text">Dashboard</p>
                 </Link>
-                <Link to={"/admin/users"} className="flex items-center gap-2 text-indigo-400 hover:bg-indigo-100 px-2 py-1 rounded-sm">
+                <Link to={"/admin/users"} className="flex items-center gap-2 hover:bg-indigo-100 dark:hover:bg-dark-bg-contrast px-2 py-1 rounded-sm">
                     <FontAwesomeIcon icon={faUsers} className="text-lg " />
-                    <p className="text-gray-600">Users</p>
+                    <p className="text-gray-600 dark:text-dark-text">Users</p>
                 </Link>
-                <Link to={"/admin/tags"} className="flex items-center gap-2 text-indigo-400 hover:bg-indigo-100 px-2 py-1 rounded-sm">
+                <Link to={"/admin/tags"} className="flex items-center gap-2 hover:bg-indigo-100 dark:hover:bg-dark-bg-contrast px-2 py-1 rounded-sm">
                     <FontAwesomeIcon icon={faHashtag} className="text-lg " />
-                    <p className="text-gray-600">Tags</p>
+                    <p className="text-gray-600 dark:text-dark-text">Tags</p>
                 </Link>
-                <Link to={"/admin/settings"} className="flex items-center gap-2 text-indigo-400 hover:bg-indigo-100 px-2 py-1 rounded-sm">
+                <Link to={"/admin/settings"} className="flex items-center gap-2 hover:bg-indigo-100 dark:hover:bg-dark-bg-contrast px-2 py-1 rounded-sm">
                     <FontAwesomeIcon icon={faGears} className="text-lg " />
-                    <p className="text-gray-600">App Settings</p>
+                    <p className="text-gray-600 dark:text-dark-text">App Settings</p>
                 </Link>
-                <Link to={"/admin/logs"} className="flex items-center gap-2 text-indigo-400 hover:bg-indigo-100 px-2 py-1 rounded-sm">
+                <Link to={"/admin/logs"} className="flex items-center gap-2 hover:bg-indigo-100 dark:hover:bg-dark-bg-contrast px-2 py-1 rounded-sm">
                     <FontAwesomeIcon icon={faClockRotateLeft} className="text-lg " />
-                    <p className="text-gray-600">System Logs</p>
+                    <p className="text-gray-600 dark:text-dark-text">System Logs</p>
                 </Link>
             </div>
             <div>
-                <Link to={"/"} className="flex items-center gap-2 text-gray-500 hover:bg-indigo-100 py-1 px-4 rounded-full border border-indigo-300 max-w-min">
+                <Link to={"/"} className="flex items-center gap-2 hover:bg-indigo-100 dark:hover:bg-dark-bg-contrast py-1 px-4 rounded-full border border-indigo-300 max-w-min">
                     <FontAwesomeIcon icon={faArrowLeft} />
                     <p>Homepage</p>
                 </Link>

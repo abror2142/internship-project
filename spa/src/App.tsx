@@ -5,7 +5,7 @@ import { useTheme } from './hooks/useTheme';
 function App() {
   const { isDarkMode } = useTheme();
   return (
-    <div className={`min-h-screen flex flex-col justify-between ${isDarkMode && 'dark'} dark:bg-gray-700`}>
+    <div className={`min-h-screen flex flex-col justify-between ${isDarkMode && 'dark'} dark:bg-dark-bg`}>
       <RouterProvider router={router} />
     </div>
   )
