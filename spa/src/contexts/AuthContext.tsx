@@ -3,8 +3,10 @@ import { User } from "../types/User";
 
 interface AuthContextInterface {
     user: User | null;
-    login: () => void;
+    login: (json: string) => void;
     logout: () => void;
+    register: (json: string) => void;
+    me: () => void;
 }
 
 export const AuthContext = createContext<AuthContextInterface | undefined>(undefined);

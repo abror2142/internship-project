@@ -3,9 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Formik, Field, Form } from 'formik';
 import { useState } from 'react';
 import * as Yup from 'yup';
- 
+import { useAuth } from '../hooks/useAuth';
+
 const SignupSchema = Yup.object().shape({
-    fullName: Yup.string()
+    name: Yup.string()
         .min(2, 'Too Short!')
         .max(50, 'Too Long!')
         .required('Required'),
@@ -14,13 +15,14 @@ const SignupSchema = Yup.object().shape({
         .required('No password provided.') 
         .min(8, 'Password must be 8 chars minimum.')
         .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.'),
-    confirmPassword: Yup.string()
+    password_confirmation: Yup.string()
         .oneOf([Yup.ref("password")], "Passwords must match")
         .required("Required")
 });
 
 function Register () {
     const [show, setShow] = useState(false);
+    const { register } = useAuth();
 
     return (
         <div 
@@ -33,28 +35,28 @@ function Register () {
             <p className="text-center text-2xl ">Sign Up</p>
             <Formik
                 initialValues={{
-                    fullName: '',
+                    name: '',
                     email: '',
                     password: '',
-                    confirmPassword: '',
+                    password_confirmation: '',
                 }}
                 validationSchema={SignupSchema}
                 onSubmit={async (values) => {
-                    await new Promise((r) => setTimeout(r, 500));
-                    alert(JSON.stringify(values, null, 2));
+                    const json = JSON.stringify(values);
+                    register(json);
                 }}
                 >
                 {({ errors, touched }) => (<Form className='flex flex-col gap-2'>
                     <div className="flex flex-col gap-1">
-                        <label htmlFor="fullName" className="dark:text-indigo-400">Full Name</label>
+                        <label htmlFor="name" className="dark:text-indigo-400">Full Name</label>
                         <Field 
-                            id="fullName" 
-                            name="fullName" 
+                            id="name" 
+                            name="name" 
                             placeholder="Jane Doe" 
                             className="dark:bg-dark-blue outline-none px-2 py-1 rounded-sm"
                         />
-                        {errors.fullName && touched.fullName ? (
-                            <p className="text-sm text-red-400 px-2">{errors.fullName}</p>
+                        {errors.name && touched.name ? (
+                            <p className="text-sm text-red-400 px-2">{errors.name}</p>
                         ) : null}
                     </div>
 
@@ -96,23 +98,22 @@ function Register () {
                     </div>
 
                     <div className="flex flex-col gap-1">
-                        <label htmlFor="confirmPassword" className="dark:text-indigo-400">Confirm Password</label>
+                        <label htmlFor="password_confirmation" className="dark:text-indigo-400">Confirm Password</label>
                         <Field 
-                            id="confirmPassword" 
-                            name="confirmPassword"
+                            id="password_confirmation" 
+                            name="password_confirmation"
                             className="dark:bg-dark-blue outline-none px-2 py-1 rounded-sm"
                             type={show ? "text" : "password"}
                         />
-                        {errors.confirmPassword && touched.confirmPassword ? (
-                            <p className="text-sm text-red-400 px-2">{errors.confirmPassword}</p>
+                        {errors.password_confirmation && touched.password_confirmation ? (
+                            <p className="text-sm text-red-400 px-2">{errors.password_confirmation}</p>
                         ) : null}
                     </div>
 
                     <button 
                         type="submit"
                         className={`px-3 py-1 mt-2 dark:bg-indigo-500 dark:text-dark-text-highlighted 
-                                    max-w-min mx-auto rounded-sm dark:hover:bg-indigo-600 ${errors && "cursor-not-allowed"}`}
-                        disabled={!!errors}
+                                    max-w-min mx-auto rounded-sm dark:hover:bg-indigo-600 ${ (!touched || Object.keys(errors).length > 0) && 'cursor-not-allowed'}`}
                     >Submit</button>
                 </Form>
                 )}
