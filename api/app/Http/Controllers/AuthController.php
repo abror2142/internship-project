@@ -95,12 +95,10 @@ class AuthController extends Controller
     public function refresh()
     {
         try {
-
             $token = auth()->refresh();
             $user = auth()->user();
             return response()->json(['token'=>$token]);
         } catch (\Throwable $th) {
-            dd($th);
             return response()->json([
                 'message' => 'Unauthenticated!'
             ], 401);

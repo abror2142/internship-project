@@ -2,8 +2,11 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DarkModeToggler from "./DarkModeToggler";
 import { faHardDrive, faSearch, faSliders } from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "../hooks/useAuth";
 
 function Header () {
+    const { user, logout } = useAuth();
+
     return (
         <div className="flex justify-between items-center py-4 px-8 border-b border-gray-200 dark:border-dark-border">
             <Link 
@@ -14,7 +17,7 @@ function Header () {
                 <p className="text-2xl dark:text-dark-text">Drive</p>
             </Link>
 
-            <div className="flex gap-2 items-center border dark:border-dark-accent px-2 py-0.5 rounded-full grow-1 max-w-md">
+            <div className="flex gap-2 items-center dark:bg-dark-blue px-2 py-0.5 rounded-full grow-1 max-w-md">
                 <FontAwesomeIcon icon={faSearch} className="text-lg dark:text-dark-blue-light dark:hover:bg-dark-bg rounded-full p-2"/>
                 <input 
                     className="w-full outline-none grow-1"
@@ -29,7 +32,26 @@ function Header () {
                 </div>
             </div>
 
-            <DarkModeToggler />
+            <div className="flex gap-4 dark:text-dark-text-highlighted items-center">
+                <DarkModeToggler />
+                { 
+                    user 
+                    ? <div className="flex gap-2 items-center ">
+                        <p className="underline">{user?.name}</p>
+                        <button onClick={() => logout()}
+                                className="px-3 py-1.5 bg-gray-300 dark:bg-dark-blue rounded-sm dark:hover:bg-blue-900"
+                            >Logout</button>
+                    </div>
+                    : <div className="flex gap-2 items-center">
+                        <Link to={"/login"}
+                            className="px-3 py-1.5 bg-gray-300 dark:bg-dark-blue rounded-sm dark:hover:bg-blue-900"
+                        >Login</Link>
+                        <Link to={"/register"}
+                            className="px-3 py-1.5 bg-gray-300 dark:bg-dark-blue rounded-sm dark:hover:bg-blue-900"
+                        >Register</Link>
+                    </div>
+                }
+            </div>
 
             
         </div>

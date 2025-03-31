@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 function Layout () {
     return (
         <>
-            <header className="dark:bg-dark-blue dark:text-dark-text">
+            <header className="dark:bg-dark-bg-contrast dark:text-dark-text">
                 <Header />
             </header>
 
