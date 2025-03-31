@@ -22,7 +22,11 @@ class AuthController extends Controller
         $token = Auth::login($user);
         
         return response()->json([
-            'user' => $user,
+            'user' => [
+                'id' => $user['id'],
+                'name' => $user['name'],
+                'image' => ''
+            ],
             'token' => $token
         ]);
     }
@@ -40,7 +44,8 @@ class AuthController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        return $this->respondWithToken($token);
+        $user = auth()->user();
+        return $this->respondWithToken($token, $user);
     }
 
     /**
@@ -51,6 +56,23 @@ class AuthController extends Controller
     public function me()
     {
         return response()->json(auth()->user());
+    }
+
+    /**
+     * Get the authenticated User.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function user()
+    {
+        $user = auth()->user(); 
+        return response()->json([
+            'user' => [
+                'id' => $user['id'],
+                'name' => $user['name'],
+                'image' => ''
+            ]
+        ]);
     }
 
     /**
@@ -73,9 +95,12 @@ class AuthController extends Controller
     public function refresh()
     {
         try {
+
             $token = auth()->refresh();
-            return $this->respondWithToken($token);
+            $user = auth()->user();
+            return response()->json(['token'=>$token]);
         } catch (\Throwable $th) {
+            dd($th);
             return response()->json([
                 'message' => 'Unauthenticated!'
             ], 401);
@@ -89,12 +114,15 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function respondWithToken($token)
+    protected function respondWithToken($token, $user)
     {
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'user' => [
+                'id' => $user['id'],
+                'name' => $user['name'],
+                'image' => ''
+            ],
+            'token' => $token,
         ]);
     }
 }

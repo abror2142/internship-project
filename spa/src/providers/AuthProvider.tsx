@@ -42,9 +42,9 @@ function AuthProvider ({children} :PropsWithChildren) {
     }
 
     const fetchUser = async () => {
-        if(token && !isTokenExpired(token)) {
+        if(token) {
             try {
-                const resp = await userApi(token);
+                const resp = await userApi();
                 const validatedData = AuthUserResponse.parse(resp.data);
                 setUser(validatedData.user);
             } catch(e) {
@@ -59,7 +59,7 @@ function AuthProvider ({children} :PropsWithChildren) {
 
     useEffect(() => {
         fetchUser();
-    }, [token])
+    }, [])
 
     const login = async (json: string) => {
         try {
@@ -79,7 +79,7 @@ function AuthProvider ({children} :PropsWithChildren) {
     const logout = async () => {
         if (token){
             try {
-                await logoutApi(token);
+                await logoutApi();
                 removeAuth();
             } catch (e) {
                 console.log(e);
@@ -93,7 +93,7 @@ function AuthProvider ({children} :PropsWithChildren) {
             const validatedData = AuthResponse.parse(resp.data);
             setAuth(validatedData.token, validatedData.user);
         } catch (e) {
-            removeAuth()
+            // removeAuth()
             if(e instanceof z.ZodError) {
                 console.log("Validation Error: ", e.errors);
             } else {
@@ -105,7 +105,7 @@ function AuthProvider ({children} :PropsWithChildren) {
     const me = async () => {
         if(token){
             try {
-                const resp = await meApi(token);
+                const resp = await meApi();
                 const validatedData = AuthMeResponse.parse(resp.data);
                 return validatedData;
             } catch (e) {
