@@ -17,7 +17,9 @@ class AuthController extends Controller
             'password' => 'required|confirmed'
         ]);
 
+        $fields['storage'] = config(key: 'settings.storage_size_limit');
         $user = User::create($fields);
+        $user->assignRole(roles: 'user');
 
         $token = Auth::login($user);
         

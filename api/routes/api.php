@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
@@ -16,3 +18,21 @@ Route::get('/files/{file}', [FileController::class, 'show']);
 Route::delete('/files/{file}', [FileController::class, 'destroy'])->middleware('auth:api');
 Route::post('/files', [FileController::class, 'store'])->middleware('auth:api');
 Route::put('/files/{file}', [FileController::class, 'update'])->middleware('auth:api');
+
+# Admin operations.
+Route::middleware(['auth:api', 'role:admin'])->group(function(): void {
+
+    # System configuration.
+    Route::post('/settings', [SettingsController::class, 'update']);
+
+
+    # Individual Operations on a user.
+    Route::post('/user/{user}/activate', [UserController::class, 'activateUser']);
+    Route::post('/user/{user}/deactivate', [UserController::class, 'deactivateUser']);
+    Route::post('/user/{user}/storage', [UserController::class, 'updateStorage']);
+    Route::post('/user/{user}/make-admin', [UserController::class, 'addAdminRole']);
+    Route::post('/user/{user}/remove-admin', [UserController::class, 'removeAdminRole']);
+
+    # CRUD Operations on users
+   Route::resource('users', UserController::class)->except(['edit']); 
+});
