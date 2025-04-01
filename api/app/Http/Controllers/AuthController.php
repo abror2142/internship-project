@@ -27,7 +27,8 @@ class AuthController extends Controller
             'user' => [
                 'id' => $user['id'],
                 'name' => $user['name'],
-                'image' => ''
+                'image' => '',
+                'roles' => $user->roles->pluck('name')
             ],
             'token' => $token
         ]);
@@ -72,7 +73,8 @@ class AuthController extends Controller
             'user' => [
                 'id' => $user['id'],
                 'name' => $user['name'],
-                'image' => ''
+                'image' => '',
+                'roles' => $user->roles->pluck('name')
             ]
         ]);
     }
@@ -120,7 +122,8 @@ class AuthController extends Controller
             'user' => [
                 'id' => $user['id'],
                 'name' => $user['name'],
-                'image' => ''
+                'image' => '',
+                'roles' => $user->roles->pluck('name')
             ],
             'token' => $token,
         ]);

@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreTagRequest;
-use App\Http\Requests\UpdateTagRequest;
+use Illuminate\Http\Request;
 use App\Models\Tag;
 
 class TagController extends Controller
@@ -13,15 +12,29 @@ class TagController extends Controller
      */
     public function index()
     {
-        //
+        // Return list of all tags;
+        $tags = Tag::all();
+        return response([
+            'tags' => $tags
+        ], 200);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTagRequest $request)
+    public function store(Request $request)
     {
-        //
+        // Create a tag.
+        $fields = $request->validate([
+            'name' => 'required|max:50'
+        ]);
+
+        $tag = Tag::create($fields);
+
+        return response()->json([
+            'message' => 'Tag created successfully.',
+            'tag' => $tag
+        ], 201);
     }
 
     /**
@@ -29,22 +42,60 @@ class TagController extends Controller
      */
     public function show(Tag $tag)
     {
-        //
+        // Display a tag.
+        return response()->json(['tag' => $tag], 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTagRequest $request, Tag $tag)
+    public function update(Request $request, Tag $tag)
     {
-        //
-    }
+        // Update a tag.
+        $fields = $request->validate([
+            'name' => 'required|max:50'
+        ]);
+
+        $tag->update($fields);
+
+        return response()->json([
+            'message' => 'Tag updated successfully!'
+        ], 200);
+    }  
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Tag $tag)
     {
-        //
+        // Delete a tag.
+        $tag->delete();
+        return response()->json([
+            'message' => 'Tag deleted successfully!'
+        ], 204);
+    }
+
+    public function merge(Request $request)
+    {
+        $request->validate([
+            'from' => 'required|max:50|exists:tags,name',
+            'to' => 'required|max:50|exists:tags,name'
+        ]);
+
+        $tagToKeep = Tag::where('name', $request->to)->first();
+        $tagToRemove = Tag::where('name', $request->from)->first();
+
+        if($tagToKeep && $tagToRemove) {
+            $tagToRemove->files()->update(['tag_id' => $tagToKeep->id]);
+            
+            $tagToRemove->delete();
+            return response()->json([
+                'message' => 'Tags merged successfully!'
+            ], 200);
+        }
+        
+        return response()->json([
+            'message' => 'Tag not found.'
+        ], 400);
     }
 }

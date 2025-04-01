@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -19,12 +20,17 @@ Route::delete('/files/{file}', [FileController::class, 'destroy'])->middleware('
 Route::post('/files', [FileController::class, 'store'])->middleware('auth:api');
 Route::put('/files/{file}', [FileController::class, 'update'])->middleware('auth:api');
 
+Route::resource('tags', TagController::class)->except(['destroy', 'merge', 'edit']);
+
 # Admin operations.
 Route::middleware(['auth:api', 'role:admin'])->group(function(): void {
 
+    # Tag management.
+    Route::post('/tags/merge', [TagController::class, 'merge']);
+    Route::delete('/tags', [TagController::class, 'destroy']);
+
     # System configuration.
     Route::post('/settings', [SettingsController::class, 'update']);
-
 
     # Individual Operations on a user.
     Route::post('/user/{user}/activate', [UserController::class, 'activateUser']);
