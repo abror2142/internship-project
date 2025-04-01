@@ -26,7 +26,7 @@ const isTokenExpired = (token: string | null) => {
 }
 
 function AuthProvider ({children} :PropsWithChildren) {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<User | null | undefined>(undefined);
     const [token, setToken] = useState<string | null>(getToken())
 
     const setAuth = (token: string, user: User) => {
@@ -117,6 +117,7 @@ function AuthProvider ({children} :PropsWithChildren) {
             }
         }
     }
+    
 
     return (
         <AuthContext.Provider value={{user, login, logout, register, me}}>

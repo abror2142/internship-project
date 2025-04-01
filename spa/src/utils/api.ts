@@ -1,5 +1,5 @@
 const BASE_URL = 'http://localhost:8000';
-import axios, {axiosAuth, api} from "./axios";
+import { api } from "./axios";
 
 const URLs = (id: number | null = null) => ({
     REGISTER: BASE_URL + '/api/register',
@@ -7,6 +7,14 @@ const URLs = (id: number | null = null) => ({
     LOGOUT: BASE_URL + '/api/logout',
     ME: BASE_URL + '/api/me',
     USER: BASE_URL + '/api/user',
+
+    USERS: BASE_URL + '/api/users',
+    USERS_UNBLOCK: BASE_URL + '/api/users/unblock',
+    USERS_BLOCK: BASE_URL + '/api/users/block',
+    USERS_DELETE: BASE_URL + '/api/users/delete-list',
+    USERS_MAKE_ADMIN: BASE_URL + '/api/users/make-admin',
+    USERS_REMOVE_ADMIN: BASE_URL + '/api/users/remove-admin',
+    USERS_UPDATE_STORAGE: BASE_URL + '/api/users/storage',
 })
 
 const CONTENT_TYPE_CONFIG = {
@@ -34,4 +42,37 @@ export const meApi = () => {
 
 export const userApi = () => {
     return api.get(URLs().USER);
+}
+
+export const getUsersList = (page: number | null = null) => {
+    if(page !== null){
+        const url = new URL(URLs().USERS);
+        url.searchParams.set("page", page.toString());
+        return api.get(url.toString());
+    }
+    return api.get(URLs().USERS);
+}
+
+export const blockUsers = (json: string) => {
+    return api.post(URLs().USERS_BLOCK, json);
+}
+
+export const unblockUsers = (json: string) => {
+    return api.post(URLs().USERS_UNBLOCK, json);
+}
+
+export const deleteUsers = (json: string) => {
+    return api.post(URLs().USERS_DELETE, json);
+}
+
+export const makeAdmin = (json: string) => {
+    return api.post(URLs().USERS_MAKE_ADMIN, json);
+}
+
+export const removeAdmin = (json: string) => {
+    return api.post(URLs().USERS_REMOVE_ADMIN, json);
+}
+
+export const updateStorage = (json: string) => {
+    return api.post(URLs().USERS_UPDATE_STORAGE, json);
 }

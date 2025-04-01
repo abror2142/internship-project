@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Formik, Field, Form } from 'formik';
 import { useState } from 'react';
 import * as Yup from 'yup';
+import { useAuth } from '../hooks/useAuth';
  
 const SignupSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email').required('Required'),
@@ -14,6 +15,7 @@ const SignupSchema = Yup.object().shape({
 
 function Login () {
     const [show, setShow] = useState(false);
+    const { login } = useAuth();
 
     return (
         <div 
@@ -31,8 +33,8 @@ function Login () {
                 }}
                 validationSchema={SignupSchema}
                 onSubmit={async (values) => {
-                    await new Promise((r) => setTimeout(r, 500));
-                    alert(JSON.stringify(values, null, 2));
+                    const json = JSON.stringify(values);
+                    login(json);
                 }}
                 >
                 {({ errors, touched }) => (<Form className='flex flex-col gap-2'>
@@ -77,8 +79,7 @@ function Login () {
                     <button 
                         type="submit"
                         className={`px-3 py-1 mt-2 dark:bg-indigo-500 dark:text-dark-text-highlighted 
-                                    max-w-min mx-auto rounded-sm dark:hover:bg-indigo-600 ${errors && "cursor-not-allowed"}`}
-                        disabled={!!errors}
+                                    max-w-min mx-auto rounded-sm dark:hover:bg-indigo-600 ${ (!touched || Object.keys(errors).length > 0) && 'cursor-not-allowed'}`}
                     >Submit</button>
                 </Form>
                 )}

@@ -33,11 +33,12 @@ Route::middleware(['auth:api', 'role:admin'])->group(function(): void {
     Route::post('/settings', [SettingsController::class, 'update']);
 
     # Individual Operations on a user.
-    Route::post('/user/{user}/activate', [UserController::class, 'activateUser']);
-    Route::post('/user/{user}/deactivate', [UserController::class, 'deactivateUser']);
-    Route::post('/user/{user}/storage', [UserController::class, 'updateStorage']);
-    Route::post('/user/{user}/make-admin', [UserController::class, 'addAdminRole']);
-    Route::post('/user/{user}/remove-admin', [UserController::class, 'removeAdminRole']);
+    Route::post('/users/unblock', [UserController::class, 'activateUser']);
+    Route::post('/users/block', [UserController::class, 'deactivateUser']);
+    Route::post('/users/storage', [UserController::class, 'updateStorage']);
+    Route::post('/users/make-admin', [UserController::class, 'addAdminRole']);
+    Route::post('/users/remove-admin', [UserController::class, 'removeAdminRole']);
+    Route::post('/users/delete-list', [UserController::class, 'deleteUsers']);
 
     # CRUD Operations on users
    Route::resource('users', UserController::class)->except(['edit']); 

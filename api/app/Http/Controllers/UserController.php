@@ -8,54 +8,105 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    public function deactivateUser (User $user) 
-    {
-        if(!$user->is_active){
-            return response()->json(['message' => 'This user is already not active!'], 400);
-        }
-        $user->update(['is_active' => false]);
-        return response()->json(['message' => 'User has been blocked successfully!'], 200);
-    }
-
-    public function activateUser (User $user)
-    {   
-        if($user->is_active){
-            return response()->json(['message' => 'This user is already active!'], 400);
-        }
-        $user->update(['is_active' => true]);
-        return response()->json(['message' => 'User has been activated successfully!'], 200);
-    }
-
-    public function updateStorage (Request $request, User $user) 
+    public function deactivateUser (Request $request) 
     {
         $request->validate([
-            'storage' => 'required|integer|gt:0'
+            'users' => 'array',
+            'users.*' => 'numeric|exists:users,id'
         ]);
 
+        foreach ($request->users as $id) {
+            $user = User::where('id', $id)->first();
+            if($user && $user->is_active){
+                $user->update(['is_active' => false]);
+            }
+        }
+
+        return response()->json(['message' => 'Users has been deactivated successfully!'], 200);
+    }
+
+    public function activateUser (Request $request)
+    {   
+        $request->validate([
+            'users' => 'array',
+            'users.*' => 'numeric|exists:users,id'
+        ]);
+
+        foreach ($request->users as $id) {
+            $user = User::where('id', $id)->first();
+            if($user && !$user->is_active){
+                $user->update(['is_active' => true]);
+            }
+        }
+
+        return response()->json(['message' => 'Users has been activated successfully!'], 200);
+    }
+
+    public function updateStorage (Request $request) 
+    {
+        $request->validate([
+            'users' => 'array',
+            'users.*' => 'numeric|exists:users,id',
+            'storage' => 'required|string'
+        ]);
+        
         $newStorage = $request->storage;
-
-        $user->update(['storage' => $newStorage]);
-        return response()->json(['message' => 'User Storage updated successfully!'], 200);
+        foreach ($request->users as $id) {
+            $user = User::where('id', $id)->first();
+            if($user){
+                $user->update(['storage' => $newStorage]);
+            }
+        }
+        
+        return response()->json(['message' => 'Users storage updated successfully!'], 200);
     }
 
-    public function addAdminRole (User $user)
+    public function addAdminRole (Request $request)
     {
-        if($user->hasRole('admin')){
-            return response()->json(['message' => 'This user has already admin role.'], 400);
-        }
+        $request->validate([
+            'users' => 'array',
+            'users.*' => 'numeric|exists:users,id'
+        ]);
 
-        $user->assignRole('admin');
-        return response()->json(['message' => "Admin role attached to {$user->name} successfully!"], 200);
+        foreach ($request->users as $id) {
+            $user = User::where('id', $id)->first();
+            if($user && !$user->hasRole('admin')){
+                $user->assignRole('admin');
+            }
+        }
+        return response()->json(['message' => "Admin role attached to users successfully!"], 200);
     }
 
-    public function removeAdminRole (User $user)
+    public function deleteUsers (Request $request)
     {
-        if(!$user->hasRole('admin')){
-            return response()->json(['message' => 'This user does not have admin role.'], 400);
-        }
+        $request->validate([
+            'users' => 'array',
+            'users.*' => 'numeric|exists:users,id'
+        ]);
 
-        $user->removeRole('admin');
-        return response()->json(['message' => "Admin role removed from {$user->name} successfully!"], 200);
+        foreach ($request->users as $id) {
+            $user = User::where('id', $id)->first();
+            if($user){
+                $user->delete();
+            }
+        }
+        return response()->json(['message' => "Users deleted successfully!"], 204);
+    }
+
+    public function removeAdminRole (Request $request)
+    {
+        $request->validate([
+            'users' => 'array',
+            'users.*' => 'numeric|exists:users,id'
+        ]);
+
+        foreach ($request->users as $id) {
+            $user = User::where('id', $id)->first();
+            if($user && $user->hasRole('admin')){
+                $user->removeRole('admin');
+            }
+        }
+        return response()->json(['message' => "Admin role removed from users successfully!"], 200);
     }
 
     /**
@@ -64,7 +115,7 @@ class UserController extends Controller
     public function index()
     {
         // List all users.
-        return response()->json(['users' => User::all()], 200);
+        return response()->json(User::with('roles:name')->paginate(3), 200);
     }
 
     /**
