@@ -16,6 +16,8 @@ class DatabaseSeeder extends Seeder
         $this->call(SettingsSeeder::class);
         $this->call(RoleSeeder::class);
         $this->call(AdminSeeder::class);
+        $this->call(FileTypeSeeder::class);
+        $this->call(FileExtensionSeeder::class);
 
         $user = User::create([
             'email' => 'abror2142@gmail.com',
