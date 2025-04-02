@@ -21,6 +21,7 @@ Route::post('/files', [FileController::class, 'store'])->middleware('auth:api');
 Route::put('/files/{file}', [FileController::class, 'update'])->middleware('auth:api');
 
 Route::resource('tags', TagController::class)->except(['destroy', 'merge', 'edit']);
+Route::get('/settings', [SettingsController::class, 'index'])->middleware('auth:api');
 
 # Admin operations.
 Route::middleware(['auth:api', 'role:admin'])->group(function(): void {
@@ -30,7 +31,6 @@ Route::middleware(['auth:api', 'role:admin'])->group(function(): void {
     Route::delete('/tags', [TagController::class, 'destroy']);
 
     # System configuration.
-    Route::get('/settings', [SettingsController::class, 'index']);
     Route::post('/settings', [SettingsController::class, 'update']);
 
     # Individual Operations on a user.

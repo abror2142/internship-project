@@ -3,7 +3,7 @@ import { getSettings } from "../utils/api";
 import { deleteFile, uploadFile } from "../utils/uploader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
-
+import { byteFormat } from "../utils/utils";
 interface Settings {
     storage_size_limit: string;  
     file_size_limit: string;
@@ -122,6 +122,9 @@ function FileInput ({ setFileUrl, setFileName }) {
                         {getExtension()?.file_type.name}
                     </p>
                     <p>
+                        {byteFormat(file.size)}
+                    </p>
+                    <p>
                         {file.name}
                     </p>
                     <div 
@@ -139,7 +142,7 @@ function FileInput ({ setFileUrl, setFileName }) {
                             </svg>
                             <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
                             <p className="text-xs text-gray-500 dark:text-gray-400">{parsedExtentions()}</p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">(MAX. {settings?.file_size_limit}MB)</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">(MAX. {settings && byteFormat(settings.file_size_limit)})</p>
                         </div>
                         <input 
                             id="dropzone-file" 

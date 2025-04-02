@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Settings;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class SettingsSeeder extends Seeder
@@ -14,7 +13,7 @@ class SettingsSeeder extends Seeder
     public function run(): void
     {
         // Settings Seeder.
-        Settings::create(['key' => 'storage_size_limit', 'value' => '1GB']);
-        Settings::create(['key' => 'file_size_limit', 'value' => '10MB']);
+        Settings::create(['key' => 'storage_size_limit', 'value' => 1 * 1024 * 1024 * 1024]);
+        Settings::create(['key' => 'file_size_limit', 'value' => 10 * 1024 * 1024]);
     }
 }

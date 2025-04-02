@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreFileRequest;
-use App\Http\Requests\UpdateFileRequest;
 use Illuminate\Http\Request;
 use App\Models\File;
 use App\Models\Tag;
@@ -43,8 +41,8 @@ class FileController extends Controller
             'user_id' => $user->getAuthIdentifier()
         ]);
 
-        $tags = collect($request->tags)->map(function ($tagName) {
-            return Tag::firstOrCreate(attributes: ['name' => $tagName])->id;
+        $tags = collect($request->tags)->map(function ($tag) {
+            return Tag::firstOrCreate(['name' => $tag['value']])->id;
         });
 
         $file->tags()->sync($tags);
