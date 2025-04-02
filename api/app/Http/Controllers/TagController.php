@@ -13,10 +13,8 @@ class TagController extends Controller
     public function index()
     {
         // Return list of all tags;
-        $tags = Tag::all();
-        return response([
-            'tags' => $tags
-        ], 200);
+        $tags = Tag::select("id", "name")->get();
+        return response($tags, 200);
     }
 
     /**

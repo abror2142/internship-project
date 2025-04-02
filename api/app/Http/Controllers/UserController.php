@@ -115,7 +115,7 @@ class UserController extends Controller
     public function index()
     {
         // List all users.
-        return response()->json(User::with('roles:name')->paginate(3), 200);
+        return response()->json(User::with('roles:name')->paginate(10), 200);
     }
 
     /**

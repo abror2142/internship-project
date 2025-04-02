@@ -30,6 +30,7 @@ Route::middleware(['auth:api', 'role:admin'])->group(function(): void {
     Route::delete('/tags', [TagController::class, 'destroy']);
 
     # System configuration.
+    Route::get('/settings', [SettingsController::class, 'index']);
     Route::post('/settings', [SettingsController::class, 'update']);
 
     # Individual Operations on a user.

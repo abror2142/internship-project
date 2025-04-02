@@ -15,6 +15,9 @@ const URLs = (id: number | null = null) => ({
     USERS_MAKE_ADMIN: BASE_URL + '/api/users/make-admin',
     USERS_REMOVE_ADMIN: BASE_URL + '/api/users/remove-admin',
     USERS_UPDATE_STORAGE: BASE_URL + '/api/users/storage',
+
+    SETTINGS: BASE_URL + '/api/settings',
+    TAGS: BASE_URL + '/api/tags',
 })
 
 const CONTENT_TYPE_CONFIG = {
@@ -75,4 +78,16 @@ export const removeAdmin = (json: string) => {
 
 export const updateStorage = (json: string) => {
     return api.post(URLs().USERS_UPDATE_STORAGE, json);
+}
+
+export const updateSettings = (json: string) => {
+    return api.post(URLs().SETTINGS, json);
+}
+
+export const getSettings = () => {
+    return api.get(URLs().SETTINGS);
+}
+
+export const getTags = () => {
+    return api.get(URLs().TAGS);
 }

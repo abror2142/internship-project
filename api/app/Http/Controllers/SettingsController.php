@@ -7,6 +7,15 @@ use App\Models\Settings;
 
 class SettingsController extends Controller
 {
+    public function index ()
+    {   
+        $settings = Settings::select("key","value")->get();
+        $json = $settings->map(function ($setting) {
+            return [$setting->key => $setting->value]; 
+        });
+        return response()->json($json);
+    }
+
     public function update(Request $request)
     {
         $request->validate([
