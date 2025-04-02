@@ -40,6 +40,7 @@ function TagSelection ({setTags}) {
             isMulti 
             options={options}
             onChange={handleChange}
+            className="min-w-sm"
         />
     )
 }

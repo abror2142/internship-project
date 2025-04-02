@@ -11,4 +11,8 @@ class FileType extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'isEnabled', 'image'];
+
+    public function fileExtensions () {
+        return $this->hasMany(FileExtension::class);
+    }
 }

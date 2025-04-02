@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FileExtension;
 use Illuminate\Http\Request;
 use App\Models\Settings;
 
@@ -13,7 +14,13 @@ class SettingsController extends Controller
         $json = $settings->map(function ($setting) {
             return [$setting->key => $setting->value]; 
         });
-        return response()->json($json);
+        
+        $extensions = FileExtension::with('fileType:id,name,image')->select('name','file_type_id')->get();
+
+        return response()->json([
+            'settings' => $json,
+            'extensions' => $extensions
+        ]);
     }
 
     public function update(Request $request)
