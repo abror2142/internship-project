@@ -5,6 +5,7 @@ import { Tag } from "./TagSelection";
 import { Formik, Form, Field } from "formik";
 import * as Yup from 'yup';
 import { createFile } from "../utils/api";
+import StorageIndicator from "./StorageIndicator";
 
 const FileSchema = Yup.object().shape({
     name: Yup.string()
@@ -17,6 +18,9 @@ const FileSchema = Yup.object().shape({
     path: Yup.string()
         .nonNullable()
         .required(),
+    size: Yup.number()
+        .nonNullable()
+        .required(),
     tags: Yup.array()
         .required()
 }); 
@@ -25,6 +29,7 @@ function UploadFile () {
     const [open, setOpen] = useState(false);
     const [fileUrl, setFileUrl] = useState<string | null>(null);
     const [fileName, setFileName] = useState<string | null>(null);
+    const [fileSize, setFileSize] = useState<BigInt | null>(null);
     const [tags, setTags] = useState<Tag[]>([]);
     const [loading, setLoading] = useState(false);
 
@@ -55,6 +60,7 @@ function UploadFile () {
                             name: fileName,
                             description: '',
                             path: fileUrl,
+                            size: fileSize,
                             tags: tags,
                         }}
                         enableReinitialize
@@ -68,8 +74,11 @@ function UploadFile () {
                         <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
                             <div className="bg-white space-y-4 dark:bg-dark-blue p-6 rounded-lg shadow-xl relative dark:text-dark-text">
                                 <p className="text-3xl mb-6 font-semibold dark:text-indigo-400 text-center">Upload a File</p>
+                                <div className="">
+                                    <StorageIndicator />
+                                </div>
                                 <div className="flex gap-5">
-                                    <FileInput setFileUrl={setFileUrl} setFileName={setFileName}/>
+                                    <FileInput setFileUrl={setFileUrl} setFileName={setFileName} setFileSize={setFileSize}/>
                                     <div className="flex flex-col gap-4">
                                         <div className="flex flex-col gap-1">
                                             <label htmlFor="name">File Name:</label>

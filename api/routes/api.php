@@ -13,6 +13,7 @@ Route::post('/logout',[AuthController::class, 'logout'])->middleware(['auth:api'
 Route::get('/me',[AuthController::class, 'me'])->middleware('auth:api');
 Route::get('/user',[AuthController::class, 'user'])->middleware('auth:api');
 Route::post('/refresh',[AuthController::class, 'refresh']);
+Route::get('/user/storage-info',[UserController::class, 'storageInfo'])->middleware('auth:api');
 
 Route::get('/files', [FileController::class, 'index']);
 Route::get('/files/{file}', [FileController::class, 'show']);

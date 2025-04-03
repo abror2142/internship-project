@@ -15,6 +15,7 @@ const URLs = (id: number | null = null) => ({
     USERS_MAKE_ADMIN: BASE_URL + '/api/users/make-admin',
     USERS_REMOVE_ADMIN: BASE_URL + '/api/users/remove-admin',
     USERS_UPDATE_STORAGE: BASE_URL + '/api/users/storage',
+    USERS_STORAGE_INFO: BASE_URL + '/api/user/storage-info',
 
     SETTINGS: BASE_URL + '/api/settings',
     TAGS: BASE_URL + '/api/tags',
@@ -47,6 +48,10 @@ export const meApi = () => {
 
 export const userApi = () => {
     return api.get(URLs().USER);
+}
+
+export const getStorageInfo = () => {
+    return api.get(URLs().USERS_STORAGE_INFO);
 }
 
 export const getUsersList = (page: number | null = null) => {

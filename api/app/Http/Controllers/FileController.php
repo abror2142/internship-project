@@ -29,15 +29,17 @@ class FileController extends Controller
             'name' => 'required|max:255',
             'description' => 'nullable|max:255',
             'path' => 'string',
+            'size' => 'integer',
             'tags' => 'array'
         ]);
         
         $user = auth()->user();
-
+        // dd($request);
         $file = File::create([
             'name' => $request->name,
             'description' => $request->description,
             'path' => $request->path,
+            'size' => $request->size,
             'user_id' => $user->getAuthIdentifier()
         ]);
 

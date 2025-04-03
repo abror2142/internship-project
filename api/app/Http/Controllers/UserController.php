@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\File;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
@@ -192,6 +193,17 @@ class UserController extends Controller
         // Delete a user.
         $user->delete();
         return response()->json(['message' => 'User has been deleted.'], 204);
+    }
+
+    public function storageInfo () 
+    {
+        $user = auth()->user();
+        $used = File::where('user_id', $user->id)->sum('size');
+        $total = $user->storage;
+        return response()->json([
+            'used' => $used,
+            'total' => $total
+        ]);
     }
 
 }

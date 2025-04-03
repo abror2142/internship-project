@@ -19,7 +19,7 @@ interface Extensions {
     }
 }
 
-function FileInput ({ setFileUrl, setFileName }) {
+function FileInput ({ setFileUrl, setFileName, setFileSize }) {
     const [file, setFile] = useState<File | null>(null);
     const [url, setUrl] = useState<string | null>(null);
     const [settings, setSettings] = useState<Settings | null>(null);
@@ -74,7 +74,8 @@ function FileInput ({ setFileUrl, setFileName }) {
                 if(fileUrl) {
                     setUrl(fileUrl)
                     setFileUrl(fileUrl);
-                    setFileName(file.name)
+                    setFileName(file.name);
+                    setFileSize(file.size);
                 }
             } catch(e) {
                 console.log(e);
@@ -100,6 +101,7 @@ function FileInput ({ setFileUrl, setFileName }) {
         setFile(null);
         setFileUrl("");
         setFileName("");
+        setFileSize(null);
         setLoading(false);
     }
 
