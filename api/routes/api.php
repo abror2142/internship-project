@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\FileUrlController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
@@ -15,11 +16,13 @@ Route::get('/user',[AuthController::class, 'user'])->middleware('auth:api');
 Route::post('/refresh',[AuthController::class, 'refresh']);
 Route::get('/user/storage-info',[UserController::class, 'storageInfo'])->middleware('auth:api');
 
-Route::get('/files', [FileController::class, 'index']);
-Route::get('/files/{file}', [FileController::class, 'show']);
-Route::delete('/files/{file}', [FileController::class, 'destroy'])->middleware('auth:api');
 Route::post('/files', [FileController::class, 'store'])->middleware('auth:api');
-Route::put('/files/{file}', [FileController::class, 'update'])->middleware('auth:api');
+
+Route::get('/files-url', [FileUrlController::class, 'index']);
+Route::get('/files-url/{file}', [FileUrlController::class, 'show']);
+Route::delete('/files-url/{file}', [FileUrlController::class, 'destroy'])->middleware('auth:api');
+Route::post('/files-url', [FileUrlController::class, 'store'])->middleware('auth:api');
+Route::put('/files-url/{file}', [FileUrlController::class, 'update'])->middleware('auth:api');
 
 Route::resource('tags', TagController::class)->except(['destroy', 'merge', 'edit']);
 Route::get('/settings', [SettingsController::class, 'index'])->middleware('auth:api');

@@ -22,6 +22,20 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Firebase service register.
+        // e.g. app('firebase_storage') will be available inside controller
+        $this->app->bind('firebase_storage', function ($app) {
+            return new \App\Services\FirebaseStorage();
+        });
+
+        // LocalStorage service register. 
+        // e.g. app('local_storage') will be available inside controller
+        $this->app->bind('local_storage', function ($app) {
+            return new \App\Services\LocalStorage();
+        });
+
+        // This is used to provide settings in config globally.
+        // e.g. config('file_size_limit') will be available
         if (Schema::hasTable('settings')) {
             $settings = Settings::all();
             foreach ($settings as $setting) {

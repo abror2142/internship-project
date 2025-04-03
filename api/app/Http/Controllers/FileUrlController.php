@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\File;
 use App\Models\Tag;
 
-class FileController extends Controller
+class FileUrlController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -28,34 +28,30 @@ class FileController extends Controller
         $request->validate([
             'name' => 'required|max:255',
             'description' => 'nullable|max:255',
-            // 'tags' => 'array'
+            'path' => 'string',
+            'size' => 'integer',
+            'tags' => 'array'
         ]);
-
-        $file = $request->file('file');
-        $extension = $file->getExtension();
-
-        $path = app('firebase_storage')->upload($file, env('FIREBASE_DEFAULT_PATH'));
-
-        if($path === null) {
-            return response()->json(['message' => 'File not uploaded!'], 400);
-        }
-
+        
+        $user = auth()->user();
+        // dd($request);
         $file = File::create([
             'name' => $request->name,
             'description' => $request->description,
-            'path' => $path,
-            'size' => $file->getSize(),
-            'user_id' => auth()->user()->getAuthIdentifier()
+            'path' => $request->path,
+            'size' => $request->size,
+            'user_id' => $user->getAuthIdentifier()
         ]);
 
-        $tags = [];
+        $tags = collect($request->tags)->map(function ($tag) {
+            return Tag::firstOrCreate(['name' => $tag['value']])->id;
+        });
 
         $file->tags()->sync($tags);
 
         return response()->json([
             'file' => $file,
-            'message' => 'Successfully uploded!',
-            'extension' => $extension
+            'message' => 'Successfully uploded!'
         ], 201);
     }
 
