@@ -34,7 +34,8 @@ class FileController extends Controller
         $file = $request->file('file');
         $extension = $file->getExtension();
 
-        $path = app('local_storage')->upload($file, env('DEFAULT_FILE_PATH'));
+        $path = app('firebase_storage')->upload($file, env('DEFAULT_FILE_PATH'));
+        
         if($path === null) {
             return response()->json(['message' => 'File not uploaded!'], 400);
         }
@@ -63,7 +64,7 @@ class FileController extends Controller
      */
     public function show(File $file)
     {
-        $url = app('local_storage')->download($file['path']);
+        $url = app('firebase_storage')->download($file['path']);
         return response()->json([
             'file' => $file,
             'url' => $url
@@ -107,7 +108,7 @@ class FileController extends Controller
     public function destroy(File $file)
     {
         // Delete given file
-        app('local_storage')->delete($file->path);
+        app('firebase_storage')->delete($file->path);
         $file->delete();
         return response()->json([
             'message' => 'File deleted successfully!'
