@@ -8,6 +8,12 @@ use App\Models\Tag;
 
 class FileController extends Controller
 {
+    protected $storage;
+
+    public function __construct(){
+        $this->storage = app(config('settings.storage'));
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -34,8 +40,8 @@ class FileController extends Controller
         $file = $request->file('file');
         $extension = $file->getExtension();
 
-        $path = app('firebase_storage')->upload($file, env('DEFAULT_FILE_PATH'));
-        
+        $path = $this->storage->upload($file, env('DEFAULT_FILE_PATH'));
+
         if($path === null) {
             return response()->json(['message' => 'File not uploaded!'], 400);
         }
@@ -45,6 +51,7 @@ class FileController extends Controller
             'description' => $request->description,
             'path' => str($path),
             'size' => $file->getSize(),
+            'storage' => config('settings.storage'),
             'user_id' => auth()->user()->getAuthIdentifier()
         ]);
 
@@ -64,7 +71,7 @@ class FileController extends Controller
      */
     public function show(File $file)
     {
-        $url = app('firebase_storage')->download($file['path']);
+        $url = $this->storage->download($file['path']);
         return response()->json([
             'file' => $file,
             'url' => $url
@@ -108,7 +115,7 @@ class FileController extends Controller
     public function destroy(File $file)
     {
         // Delete given file
-        app('firebase_storage')->delete($file->path);
+        $this->storage->delete($file->path);
         $file->delete();
         return response()->json([
             'message' => 'File deleted successfully!'

@@ -24,13 +24,13 @@ class AppServiceProvider extends ServiceProvider
     {
         // Firebase service register.
         // e.g. app('firebase_storage') will be available inside controller
-        $this->app->bind('firebase_storage', function ($app) {
+        $this->app->bind('firebase', function ($app) {
             return new \App\Services\FirebaseStorage();
         });
 
         // LocalStorage service register. 
         // e.g. app('local_storage') will be available inside controller
-        $this->app->bind('local_storage', function ($app) {
+        $this->app->bind('local', function ($app) {
             return new \App\Services\LocalStorage();
         });
 

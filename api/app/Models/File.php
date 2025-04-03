@@ -10,7 +10,7 @@ class File extends Model
     /** @use HasFactory<\Database\Factories\FileFactory> */
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'path', 'user_id', 'size'];
+    protected $fillable = ['name', 'description', 'path', 'user_id', 'size', 'storage'];
 
     public function user() 
     {

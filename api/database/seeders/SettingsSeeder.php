@@ -15,5 +15,6 @@ class SettingsSeeder extends Seeder
         // Settings Seeder.
         Settings::create(['key' => 'storage_size_limit', 'value' => 1 * 1024 * 1024 * 1024]);
         Settings::create(['key' => 'file_size_limit', 'value' => 10 * 1024 * 1024]);
+        Settings::create(['key' => 'storage', 'value' => env('DEFAULT_STORAGE', 'local')]);
     }
 }
