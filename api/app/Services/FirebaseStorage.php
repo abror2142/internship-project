@@ -22,7 +22,7 @@ class FirebaseStorage implements StorageInterface {
 
     public function download($filePath)
     {
-
+    
     }
 
     public function delete($filePath)

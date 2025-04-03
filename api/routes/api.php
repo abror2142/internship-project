@@ -17,6 +17,8 @@ Route::post('/refresh',[AuthController::class, 'refresh']);
 Route::get('/user/storage-info',[UserController::class, 'storageInfo'])->middleware('auth:api');
 
 Route::post('/files', [FileController::class, 'store'])->middleware('auth:api');
+Route::get('/files/{file}', [FileController::class, 'show'])->middleware('auth:api');
+Route::delete('/files/{file}', [FileController::class, 'destroy'])->middleware('auth:api');
 
 Route::get('/files-url', [FileUrlController::class, 'index']);
 Route::get('/files-url/{file}', [FileUrlController::class, 'show']);
