@@ -34,7 +34,7 @@ class FileController extends Controller
         $file = $request->file('file');
         $extension = $file->getExtension();
 
-        $path = app('firebase_storage')->upload($file, env('FIREBASE_DEFAULT_PATH'));
+        $path = app('local_storage')->upload($file, env('FIREBASE_DEFAULT_PATH'));
 
         if($path === null) {
             return response()->json(['message' => 'File not uploaded!'], 400);
