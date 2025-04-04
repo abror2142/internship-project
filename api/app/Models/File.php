@@ -10,7 +10,7 @@ class File extends Model
     /** @use HasFactory<\Database\Factories\FileFactory> */
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'path', 'user_id', 'size', 'storage'];
+    protected $fillable = ['name', 'description', 'path', 'user_id', 'size', 'storage', 'file_type_id'];
 
     public function user() 
     {
@@ -20,5 +20,10 @@ class File extends Model
     public function tags()
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    public function fileType()
+    {
+        return $this->belongsTo(FileType::class);
     }
 }

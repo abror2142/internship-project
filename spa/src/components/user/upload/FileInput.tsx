@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { getSettings } from "../utils/api";
-import { deleteFile, uploadFile } from "../utils/uploader";
+import { uploadFile, deleteFile } from "../../../utils/uploader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
-import { byteFormat } from "../utils/utils";
+import { getSettings } from "../../../utils/api";
+
 interface Settings {
     storage_size_limit: string;  
     file_size_limit: string;

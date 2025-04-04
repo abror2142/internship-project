@@ -20,7 +20,8 @@ const URLs = (id: number | null = null) => ({
     SETTINGS: BASE_URL + '/api/settings',
     TAGS: BASE_URL + '/api/tags',
 
-    FILES: BASE_URL + '/api/files'
+    FILES: BASE_URL + '/api/files',
+    FILES_RECENT: BASE_URL + '/api/files/recent',
 })
 
 const CONTENT_TYPE_CONFIG = {
@@ -101,4 +102,12 @@ export const getTags = () => {
 
 export const createFile = (json: string) => {
     return api.post(URLs().FILES, json);
+}
+
+export const getFiles = () => {
+    return api.get(URLs().FILES);
+}
+
+export const getRecentFiles = () => {
+    return api.get(URLs().FILES_RECENT);
 }

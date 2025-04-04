@@ -1,9 +1,8 @@
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import DarkModeToggler from "./DarkModeToggler";
 import { faHardDrive, faSearch, faSliders } from "@fortawesome/free-solid-svg-icons";
-import { useAuth } from "../hooks/useAuth";
-import StorageIndicator from "./StorageIndicator";
+import DarkModeToggler from "../DarkModeToggler";
+import { useAuth } from "../../hooks/useAuth";
 
 function Header () {
     const { user, logout } = useAuth();
@@ -18,7 +17,6 @@ function Header () {
                     <FontAwesomeIcon icon={faHardDrive} className="text-2xl dark:text-dark-blue-light"/>
                     <p className="text-2xl dark:text-dark-text">Drive</p>
                 </Link>
-                { user && <StorageIndicator /> }
             </div>
 
             <div className="flex gap-2 items-center dark:bg-dark-blue px-2 py-0.5 rounded-full grow-1 max-w-md">

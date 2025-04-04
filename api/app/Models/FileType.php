@@ -15,4 +15,9 @@ class FileType extends Model
     public function fileExtensions () {
         return $this->hasMany(FileExtension::class);
     }
+
+    public function files()
+    {
+        return $this->hasMany(File::class);
+    }
 }

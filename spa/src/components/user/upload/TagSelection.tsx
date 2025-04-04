@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import CreatableSelect from 'react-select/creatable';
-import { getTags } from '../utils/api';
+import { getTags } from '../../../utils/api';
 
 interface Data {
     id: number;
