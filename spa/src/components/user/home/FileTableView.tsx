@@ -36,14 +36,14 @@ function FileTableView({files} : {files: File[]}) {
                         <th scope="col" className="px-4 py-3">
                             Size
                         </th>
-                        <th scope="col" className="px-4 py-3">
+                        <th scope="col" className="px-4 py-3 text-center">
                             Storage
                         </th>
                         <th scope="col" className="px-4 py-3 text-center">
                             Tag(s)
                         </th>
-                        <th scope="col" className="px-4 py-3">
-                            Active
+                        <th scope="col" className="px-4 py-3 text-center">
+                            More
                         </th>
                     </tr>
                 </thead>
