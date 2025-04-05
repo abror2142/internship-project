@@ -53,8 +53,11 @@ function UploadFile () {
         <div className="relative" >
             <div
                 onClick={() => setOpen(prev => !prev)}
-                className="dark:text-indigo-200 cursor-pointer flex items-center justify-center text-4xl dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:hover:border-indigo-500 w-37 h-27 border dark:border-indigo-400 rounded-md"
-            ><FontAwesomeIcon icon={faPlus} /></div>
+                className="dark:text-white border border-dark-border px-4 py-2 max-w-min cursor-pointer flex items-center justify-center gap-2 dark:bg-dark-bg dark:hover:border-indigo-500 rounded-md"
+            >  
+                <FontAwesomeIcon icon={faPlus} className="text-xl"/>
+                <p>New</p>
+            </div>
             {
                 open
                 && <Formik

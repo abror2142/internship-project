@@ -47,11 +47,14 @@ function FileView () {
     }, [])
 
     return (
-        <div className="grow-1 dark:text-dark-text m-5 flex flex-col gap-4">
+        <div className="dark:text-dark-text mx-6 flex flex-col gap-4 grow max-h-full ">
             <div className="flex items-center text-white text-xl rounded-full justify-end">
                 <FontAwesomeIcon icon={faGrip} onClick={() => setView('gallery')} className="pl-5 pr-4 py-2 border-r bg-blue-600 rounded-s-full" />
                 <FontAwesomeIcon icon={faListUl} onClick={() => setView('table')}  className="pr-5 pl-4 py-2 bg-dark-blue rounded-e-full" />
             </div>
+            <div className="grow overflow-auto 
+                 scrollbar-thin scrollbar-track-gray-300 scrollbar-thumb-gray-500 dark:scrollbar-track-gray-700 dark:scrollbar-thumb-gray-400
+            ">
             {
                 view === 'gallery'
                 ? <FileGalleryView files={files} />
@@ -59,6 +62,7 @@ function FileView () {
                 ? <FileTableView files={files} />
                 : <p>Unsupported view format!</p>
             }
+            </div>
         </div>
     )
 }   

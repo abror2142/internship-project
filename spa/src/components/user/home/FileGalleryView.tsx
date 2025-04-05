@@ -3,7 +3,7 @@ import { File } from "./FileView";
 
 function FileGalleryView ({files}: {files: File[]}) {
     return (
-        <div className="grid grid-cols-4 gap-8">
+        <div className="flex-1 grid grid-cols-4 gap-6">
             {files.map(file => <FileCard file={file} />)}
         </div>
     )

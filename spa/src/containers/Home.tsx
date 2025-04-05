@@ -4,10 +4,10 @@ import HomeHeader from "../components/user/home/HomeHeader";
 
 function Home () {
     return (
-        <div className="h-full flex flex-col grow-1 ">
-            <HomeHeader />
-            <div className="flex gap-4 grow-1">
-                <InfoBar />
+        <div className="flex grow max-h-full">
+            <InfoBar />
+            <div className="flex flex-col grow max-h-full">
+                <HomeHeader />
                 <FileView />
             </div>
         </div>

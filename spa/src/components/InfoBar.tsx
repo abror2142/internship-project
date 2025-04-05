@@ -2,11 +2,13 @@ import { Link } from "react-router-dom";
 import { faHardDrive, faHome, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import StorageInfoFull from "./user/home/StorageInfoFull";
+import UploadFile from "./user/upload/UploadFile";
 
 function InfoBar() {
 
     return (
-        <div className="flex flex-col gap-4 dark:bg-dark-blue px-8 py-4 dark:text-dark-text min-w-64">
+        <div className="flex flex-col gap-4 dark:bg-dark-blue px-8 py-4 dark:text-dark-text min-w-72">
+            <UploadFile />
             <Link 
                 to={"/"} 
                 className="flex gap-2 items-center dark:bg-dark-bg px-3 py-1 rounded-sm 
