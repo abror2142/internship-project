@@ -16,9 +16,9 @@ function Layout () {
                 <Outlet />
             </main>
 
-            <footer className="dark:bg-dark-blue dark:text-dark-text">
+            {/* <footer className="dark:bg-dark-blue dark:text-dark-text">
                 <Footer />
-            </footer>
+            </footer> */}
         </div>
     )
 }

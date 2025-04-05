@@ -21,13 +21,13 @@ function HomeHeader () {
     }, [])
     
     return (
-        <div className="bg-blue-950 px-7 pt-4 pb-8">
+        <div className="bg-blue-950 px-7 pt-3 pb-6">
             <div className="max-w-[1240px] mx-auto flex gap-4">
-                <div className="flex flex-col gap-2 flex-grow-1 text-lg">
-                    <p className="dark:text-white text-end">Recent Uploads</p>
-                    <div className="flex">
+                <div className="flex flex-col gap-2 flex-grow-1">
+                    <p className="dark:text-white font-semibold">Recent Uploads</p>
+                    <div className="flex gap-4">
                         {
-                            files.slice(0, 5).map(file => <FileHeaderCard file={file} />)
+                            files.slice(0, 6).map(file => <FileHeaderCard file={file} />)
                         }
                     </div>
                 </div>

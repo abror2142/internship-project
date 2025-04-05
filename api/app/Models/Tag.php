@@ -11,6 +11,7 @@ class Tag extends Model
     use HasFactory;
 
     protected $fillable = ['name'];
+    protected $hidden = ['pivot'];
 
     public function files()
     {

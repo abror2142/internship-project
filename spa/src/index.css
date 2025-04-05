@@ -2,6 +2,26 @@
 @plugin 'tailwind-scrollbar';
 @custom-variant dark (&:where(.dark, .dark *));
 
+.react-select__control {
+    @apply min-h-[42px] py-1 text-sm;
+  }
+  
+  .react-select__menu {
+    @apply text-sm;
+  }
+  
+  .react-select__option {
+    @apply px-4 py-2;
+  }
+  
+  .react-select__value-container {
+    @apply px-3;
+  }
+  
+  .react-select__indicators {
+    @apply pr-2;
+}
+
 @theme {
     --color-dark-bg: #101214;
     --color-dark-bg-contrast: #0f1214;

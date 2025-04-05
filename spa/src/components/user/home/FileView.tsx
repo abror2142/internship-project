@@ -4,6 +4,7 @@ import FileGalleryView from "./FileGalleryView";
 import FileTableView from "./FileTableView";
 import { getFiles } from "../../../utils/api";
 import FileViewToggler from "./FileViewToggler";
+import Filters from "./Filters";
 
 export interface File {
     id: number;
@@ -48,7 +49,12 @@ function FileView () {
 
     return (
         <div className="dark:text-dark-text mx-6 mb-4 flex flex-col gap-4 grow max-h-full">
-            <FileViewToggler view={view} setView={setView}/>
+            <div className="flex items-center justify-between">
+                <div>
+                    <Filters />
+                </div>
+                <FileViewToggler view={view} setView={setView}/>
+            </div>
             <div className="grow overflow-auto scrollbar-thin scrollbar-track-gray-300 
                 scrollbar-thumb-gray-500 dark:scrollbar-track-gray-700 dark:scrollbar-thumb-gray-400"
             >
