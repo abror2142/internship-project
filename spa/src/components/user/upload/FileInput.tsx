@@ -3,7 +3,7 @@ import { uploadFile, deleteFile } from "../../../utils/uploader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { getSettings } from "../../../utils/api";
-
+import { byteFormat } from "../../../utils/utils";
 interface Settings {
     storage_size_limit: string;  
     file_size_limit: string;
@@ -74,7 +74,7 @@ function FileInput ({ setFileUrl, setFileName, setFileSize }) {
                 if(fileUrl) {
                     setUrl(fileUrl)
                     setFileUrl(fileUrl);
-                    setFileName(file.name);
+                    setFileName(file.name.split('.').slice(0, -1).join('.'));
                     setFileSize(file.size);
                 }
             } catch(e) {
@@ -110,7 +110,7 @@ function FileInput ({ setFileUrl, setFileName, setFileSize }) {
     }, [file])
 
     return (
-        <div className="relative min-w-86">  
+        <div className="relative min-w-86 z-50">  
             {
                 url && file
                 ? <div className="relative flex flex-col items-center justify-center w-full border-2 

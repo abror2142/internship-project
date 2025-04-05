@@ -50,7 +50,7 @@ function UploadFile () {
     }
 
     return (
-        <div className="relative" >
+        <div className="relative z-50" >
             <div
                 onClick={() => setOpen(prev => !prev)}
                 className="dark:text-white border border-dark-border px-4 py-2 max-w-min cursor-pointer flex items-center justify-center gap-2 dark:bg-dark-bg dark:hover:border-indigo-500 rounded-md"

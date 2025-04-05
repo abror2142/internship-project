@@ -20,9 +20,6 @@ const sizeOptions = [
     {label: "GB", value: 'GB'}
 ]
 
-
-
-
 function Filters () {
     const { isDarkMode } = useTheme()
 
