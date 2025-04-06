@@ -6,6 +6,7 @@ use App\Models\FileType;
 use Illuminate\Http\Request;
 use App\Models\File;
 use App\Models\Tag;
+use function PHPUnit\Framework\isInt;
 
 class FileController extends Controller
 {
@@ -28,6 +29,52 @@ class FileController extends Controller
         return File::where('user_id', $user->id)->with(['tags:id,name', 'fileType:id,name,image'])->get();
     }
 
+    /**
+     * Display a listing of the resource.
+     */
+    public function search(Request $request)
+    {
+        // Return all files
+        $user = auth()->user();
+
+        $query = File::where('user_id', $user->id)->with(['tags:id,name', 'fileType:id,name,image']);
+        
+        if($request->query('tag')) {
+            $query->whereHas('tags', function ($q) use ($request) {
+                $q->where('name', $request->query('tag'));
+            });
+        }
+
+        if($request->query('type')) {
+            $query->whereHas('fileType', function ($q) use ($request) {
+                $q->where('name', $request->query('type'));
+            });
+        }
+
+        $metric = 1;
+        if($request->query('metric')){
+            if($request->query('metric') === 'kb'){
+                $metric = 1024;
+            } else if ($request->query('metric') === 'mb') {
+                $metric = 1024 * 1024;
+            } else if ($request->query('metric') === 'gb') {
+                $metric = 1024 * 1024 * 1024;
+            }
+        }
+
+        if($request->query('min') && is_numeric($request->query('min'))) {
+            $min = $metric * $request->query('min');
+            $query->where('size', '>', $min); 
+        }
+
+        if($request->query('max') && is_numeric($request->query('max'))) {
+            $min = $metric * $request->query('max');
+            $query->where('size', '<', $min); 
+        }
+
+        return $query->paginate(10);
+    }
+
     public function recent()
     {
         // Return all files
@@ -36,7 +83,7 @@ class FileController extends Controller
         if($user->hasRole('admin')){
             return File::with(['tags:id,name', 'fileType:id,name,image'])->orderBy('created_at')->get();
         }
-        return File::where('user_id', $user->id)->with(['tags:id,name', 'fileType:id,name,image'])->orderByDesc('created_at')->get();
+        return File::where('user_id', $user->id)->with(['tags:id,name', 'ype:id,name,image'])->orderByDesc('created_at')->get();
     }
 
     /**

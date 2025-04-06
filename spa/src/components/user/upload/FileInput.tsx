@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { getSettings } from "../../../utils/api";
 import { byteFormat } from "../../../utils/utils";
+
 interface Settings {
     storage_size_limit: string;  
     file_size_limit: string;

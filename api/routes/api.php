@@ -5,6 +5,7 @@ use App\Http\Controllers\FileUrlController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\ActionLogger;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
@@ -17,10 +18,11 @@ Route::post('/refresh',[AuthController::class, 'refresh']);
 Route::get('/user/storage-info',[UserController::class, 'storageInfo'])->middleware('auth:api');
 
 Route::get('/files/recent', [FileController::class, 'recent'])->middleware('auth:api');
-Route::get('/files', [FileController::class, 'index'])->middleware('auth:api');
-Route::post('/files', [FileController::class, 'store'])->middleware('auth:api');
+Route::get('/files', [FileController::class, 'index'])->middleware(['auth:api']);
+Route::post('/files', [FileController::class, 'store'])->middleware(['auth:api', ActionLogger::class . ':upload']);
 Route::get('/files/{file}', [FileController::class, 'show'])->middleware('auth:api');
-Route::delete('/files/{file}', [FileController::class, 'destroy'])->middleware('auth:api');
+Route::delete('/files/{file}', [FileController::class, 'destroy'])->middleware(['auth:api', ActionLogger::class . ':delete']);
+Route::get('/search', [FileController::class, 'search'])->middleware(['auth:api', ActionLogger::class . ':search']);
 
 Route::get('/files-url', [FileUrlController::class, 'index']);
 Route::get('/files-url/{file}', [FileUrlController::class, 'show']);
