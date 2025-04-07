@@ -10,6 +10,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { customStyles } from "./Filters";
 import { useTheme } from "../../../hooks/useTheme";
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 export interface Tag {
     label: string;
@@ -42,6 +44,14 @@ function FileInfoModal({setShowInfo, file, modalMode='show'}: {setShowInfo: Disp
         setSelected(value);
     }
 
+    const handleUpdate = async (json: string) => {
+        console.log(json);
+    }
+
+    const handleDelete = async () => {
+        
+    }
+
     return (
         <OutsideCickDetector toggler={setShowInfo}>
             <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md bg-gray-950/80">
@@ -53,9 +63,21 @@ function FileInfoModal({setShowInfo, file, modalMode='show'}: {setShowInfo: Disp
                         tags: selected
                     }}
                     onSubmit={async (values) => {
-                        await new Promise((r) => setTimeout(r, 500));
-                        alert(JSON.stringify(values, null, 2));
-                    }}
+                        const json = JSON.stringify(values, null, 2);
+                        confirmAlert({
+                            title: 'Confirm to update',
+                            message: 'Are you sure to update this file.',
+                            buttons: [
+                              {
+                                label: 'Yes',
+                                onClick: () => handleUpdate(json)
+                              },
+                              {
+                                label: 'No',
+                              }
+                            ]
+                          });
+                        }}
                     >
                     <Form
                         className="flex flex-col gap-4 min-w-sm"
@@ -140,7 +162,23 @@ function FileInfoModal({setShowInfo, file, modalMode='show'}: {setShowInfo: Disp
                             </p>
                         </div>
                         <div className="flex items-center justify-between">
-                            <div className="text-red-500 hover:underline hover:text-red-600">Delete</div>
+                            <div 
+                                className="text-red-500 hover:underline hover:text-red-600"
+                                onClick={() => {
+                                    confirmAlert({
+                                        title: 'Confirm to delete',
+                                        message: 'Are you sure to delete this file.',
+                                        buttons: [
+                                          {
+                                            label: 'Yes'
+                                          },
+                                          {
+                                            label: 'No',
+                                          }
+                                        ]
+                                    });
+                                }}
+                            >Delete</div>
                             {
                                 mode === 'show' 
                                 && <div 
