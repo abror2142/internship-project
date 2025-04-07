@@ -6,6 +6,7 @@ import { getFiles } from "../../../utils/api";
 import FileViewToggler from "./FileViewToggler";
 import Filters from "./Filters";
 import { useSearchParams } from "react-router-dom";
+
 export interface File {
     id: number;
     name: string;

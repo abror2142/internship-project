@@ -14,7 +14,7 @@ export interface Tag {
 }
 
 function TagSelection ({setTags}) {
-    const [options, setOptions] = useState<Tag[]>([]);
+    const [options, setOptions] = useState<Tag[]>();
 
     const handleChange = (newValue: Tag[]) => {
         setTags(newValue);
