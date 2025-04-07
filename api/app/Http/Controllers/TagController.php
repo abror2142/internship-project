@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\File;
 use Illuminate\Http\Request;
 use App\Models\Tag;
 
@@ -15,6 +16,23 @@ class TagController extends Controller
         // Return list of all tags;
         $tags = Tag::select("id", "name")->get();
         return response($tags, 200);
+    }
+
+    public function usedTags() 
+    {
+        $user = auth()->user();
+        $files = File::where('user_id', $user->getAuthIdentifier())->get();
+        $tags = [];
+
+        foreach ($files as $file) {
+            foreach ($file->tags as $tag) {
+                if(!in_array($tag->name, $tags))
+                    array_push($tags, $tag->name);
+                # code...
+            }
+            # code...
+        }
+        return $tags;
     }
 
     /**

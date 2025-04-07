@@ -7,6 +7,7 @@ const URLs = (id: number | null = null) => ({
     LOGOUT: BASE_URL + '/api/logout',
     ME: BASE_URL + '/api/me',
     USER: BASE_URL + '/api/user',
+    USER_TAGS: BASE_URL + '/api/my-tags',
 
     USERS: BASE_URL + '/api/users',
     USERS_UNBLOCK: BASE_URL + '/api/users/unblock',
@@ -104,10 +105,14 @@ export const createFile = (json: string) => {
     return api.post(URLs().FILES, json);
 }
 
-export const getFiles = () => {
-    return api.get(URLs().FILES);
+export const getFiles = (params: string) => {
+    return api.get(URLs().FILES + params);
 }
 
 export const getRecentFiles = () => {
     return api.get(URLs().FILES_RECENT);
+}
+
+export const getUserTags = () => {
+    return api.get(URLs().USER_TAGS);
 }

@@ -1,8 +1,10 @@
-import {} from "react-select";
 import Select from 'react-select';
 import { useTheme } from "../../../hooks/useTheme";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { getUserTags } from "../../../utils/api";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleMinus } from "@fortawesome/free-solid-svg-icons";
 
 const typeOptions = [
     {label: "Image", value: 'image'},
@@ -25,25 +27,77 @@ const metricOptions = [
     {label: "GB", value: 'gb'}
 ]
 
+interface Option {
+  label: string;
+  value: string;
+}
 
 function Filters () {
   const { isDarkMode } = useTheme()
   const [searchParams, setSearchParams] = useSearchParams();
+  const [tags, setTags] = useState<Option[]>([]);
+  const [tag, setTag] = useState(searchParams.has('tag') ? tags.filter((type) => type.value === searchParams.get('tag')) : null);
+  const [type, setType] = useState(searchParams.has('type') ? typeOptions.filter((type) => type.value === searchParams.get('type'))[0] : null);
+  const [storage, setStorage] = useState(searchParams.has('storage') ? storageOptions.filter((type) => type.value === searchParams.get('storage')) : null);
+  const [metric, setMetric] = useState(searchParams.has('metric') ? metricOptions.filter((type) => type.value === searchParams.get('metric')) : metricOptions[2]);
+  const [min, setMin] = useState<string | null>(searchParams.has('min') ? searchParams.get('min') : null);
+  const [max, setMax] = useState<string | null>(searchParams.has('max') ? searchParams.get('max') : null);
 
-  const manageUrl = (e,) => {
-    
-  }
-  
-  const handleType = (e, paramName) => {
+  const handleType = (e, paramName: string, set) => {
     const params = new URLSearchParams(searchParams);
-    if(e === null) 
+    if(e === null) {
       params.delete(paramName); 
-    else
+      set(null)
+    }
+    else{
       params.set(paramName, e.value);
+      set(e)
+    }
     setSearchParams(params);
-  
   }
-  
+
+  const handleReset = () => {
+    handleType(null, 'storage', setStorage);
+    handleType(null, 'type', setType);
+    handleType(null, 'tag', setTag);
+    handleType(metricOptions[2], 'metric', setMetric);
+    setMin(null);
+    setMax(null);
+    setSearchParams([]);
+  }
+
+  const fetchUserTags = async () => {
+    try {
+      const resp = await getUserTags();
+      const options = resp.data.map((tag: string) => ({label: tag, value: tag}));
+      setTags(options);
+    } catch(e) {
+      console.log(e);
+    }
+  }
+
+  useEffect(() => {
+    fetchUserTags();
+  }, [])
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    if(min)
+      params.set('min', min);
+    else
+      params.delete('min');
+    setSearchParams(params);
+  }, [min])
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    if(max)
+      params.set('max', max);
+    else
+      params.delete('max');
+    setSearchParams(params);
+  }, [max])
+
     const customStyles = {
         control: (provided) => ({
           ...provided,
@@ -103,10 +157,9 @@ function Filters () {
                 className="react-select-container"
                 classNamePrefix="react-select"
                 isClearable={true}
-                name="color"
                 options={typeOptions}
-                defaultValue={searchParams.has('type') ? typeOptions.filter((type) => type.value === searchParams.get('type')) : null}
-                onChange={(e) => handleType(e, 'type')}
+                value={type}
+                onChange={(e) => handleType(e, 'type', setType)}
                 placeholder="Type"
             />
 
@@ -115,20 +168,43 @@ function Filters () {
                 className="react-select-container"
                 classNamePrefix="react-select"
                 isClearable={true}
-                defaultValue={searchParams.has('storage') ? storageOptions.filter((type) => type.value === searchParams.get('storage')) : null}
-                name="color"
                 options={storageOptions}
-                onChange={(e) => handleType(e, 'storage')}
+                value={storage}
+                onChange={(e) => handleType(e, 'storage', setStorage)}
                 placeholder="Storage"
+            />
+
+            <Select
+                styles={customStyles}
+                className="react-select-container"
+                classNamePrefix="react-select"
+                isClearable={true}
+                options={tags}
+                value={tag}
+                onChange={(e) => handleType(e, 'tag', setTag)}
+                placeholder="Tag"
             />
 
             <div className="dark:text-white text-sm flex gap-2 items-end">
                 <div className="flex flex-col">
                     <p>Limit Size</p>
                     <div className="flex gap-2">
-                        <input type="number" placeholder="min" className="dark:bg-dark-blue field-sizing-content min-w-8 outline-none px-2 py-1 "/>
-                        <input type="number" placeholder="min" className="dark:bg-dark-blue field-sizing-content min-w-4 outline-none px-2 py-1"/>
+                        <input 
+                          type="number" 
+                          placeholder="min" 
+                          className="dark:bg-dark-blue field-sizing-content min-w-8 outline-none px-2 py-1 "
+                          onChange={(e) => setMin(e.target.value)}
+                          value={min ? min : 0}
+                        />
+                        <input 
+                          type="number" 
+                          placeholder="max" 
+                          className="dark:bg-dark-blue field-sizing-content min-w-4 outline-none px-2 py-1"
+                          onChange={(e) =>setMax(e.target.value)}
+                          value={min ? min : 0}
+                        />
                     </div>
+
                 </div>
                 <Select
                     styles={customStyles}
@@ -143,10 +219,20 @@ function Filters () {
                         menu: () => '!text-xs',
                         option: () => '!py-1 !text-xs'
                     }}
-                    defaultValue={searchParams.has('metric') ? metricOptions.filter((type) => type.value === searchParams.get('metric')) : metricOptions[2]}
+                    value={metric}
                     options={metricOptions}
-                    onChange={(e) => handleType(e, 'metric')}
+                    onChange={(e) => handleType(e, 'metric', setMetric)}
                 />
+                {
+                  searchParams.size > 0
+                  && <div 
+                      className="flex gap-2 items-center dark:text-indigo-500 px-3 py-2 rounded-md dark:bg-dark-blue dark:hover:bg-blue-950"
+                      onClick={() => handleReset()}
+                  >
+                    <FontAwesomeIcon icon={faCircleMinus} />
+                    <p>Reset</p>
+                  </div>
+                } 
             </div>
         </div>
     )

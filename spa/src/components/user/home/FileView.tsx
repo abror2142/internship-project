@@ -5,7 +5,7 @@ import FileTableView from "./FileTableView";
 import { getFiles } from "../../../utils/api";
 import FileViewToggler from "./FileViewToggler";
 import Filters from "./Filters";
-
+import { useSearchParams } from "react-router-dom";
 export interface File {
     id: number;
     name: string;
@@ -33,10 +33,11 @@ export interface File {
 function FileView () {
     const [files, setFiles] = useState<File[]>([]);
     const [view, setView] = useState('gallery');
+    const [searchParams, _] = useSearchParams();
 
     const fetchFiles = async () => {
         try { 
-            const resp = await getFiles();
+            const resp = await getFiles('?' + searchParams.toString());
             setFiles(resp.data);
         } catch(e) {
             console.log(e);
@@ -45,7 +46,7 @@ function FileView () {
 
     useEffect(() => {
         fetchFiles();
-    }, [])
+    }, [searchParams]);
 
     return (
         <div className="dark:text-dark-text mx-6 mb-4 flex flex-col gap-4 grow max-h-full">

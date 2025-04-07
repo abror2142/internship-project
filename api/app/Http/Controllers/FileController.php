@@ -40,6 +40,10 @@ class FileController extends Controller
                 $q->where('name', $request->query('type'));
             });
         }
+        
+        if($request->query('storage')) {
+            $query->where('storage', $request->query('storage'));
+        }
 
         $metric = 1024 * 1024; // Default Value is MegaByte
         if($request->query('metric')){
@@ -69,11 +73,10 @@ class FileController extends Controller
     {
         // Return all files
         $user = auth()->user();
-        // dd( File::with(['tags:id,name', 'type:id,name,image'])->orderBy('created_at')->get());
         if($user->hasRole('admin')){
             return File::with(['tags:id,name', 'fileType:id,name,image'])->orderBy('created_at')->get();
         }
-        return File::where('user_id', $user->id)->with(['tags:id,name', 'ype:id,name,image'])->orderByDesc('created_at')->get();
+        return File::where('user_id', $user->id)->with(['tags:id,name', 'fileType:id,name,image'])->orderByDesc('created_at')->get();
     }
 
     /**

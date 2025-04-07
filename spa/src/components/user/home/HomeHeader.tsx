@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { File } from "./FileView";
 import FileHeaderCard from "./FileHeaderCard";
 import { getRecentFiles } from "../../../utils/api";
-
+import { v4 as uuid } from "uuid";
 
 function HomeHeader () {
     const [files, setFiles] = useState<File[]>([]);
@@ -27,7 +27,7 @@ function HomeHeader () {
                     <p className="dark:text-white font-semibold">Recent Uploads</p>
                     <div className="flex gap-4">
                         {
-                            files.slice(0, 6).map(file => <FileHeaderCard file={file} />)
+                            files.slice(0, 6).map(file => <FileHeaderCard file={file} key={uuid()} />)
                         }
                     </div>
                 </div>
