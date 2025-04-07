@@ -1,6 +1,8 @@
 import {} from "react-select";
 import Select from 'react-select';
 import { useTheme } from "../../../hooks/useTheme";
+import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 const typeOptions = [
     {label: "Image", value: 'image'},
@@ -9,20 +11,39 @@ const typeOptions = [
     {label: "Document", value: 'document'},
     {label: "Other", value: 'other'}
 ]
+
 const storageOptions = [
     {label: "Local", value: 'local'},
     {label: "Firebase", value: 'firebase'},
     {label: "Api", value: 'api'}
 ]
-const sizeOptions = [
-    {label: "KB", value: 'KB'},
-    {label: "MB", value: 'MB'},
-    {label: "GB", value: 'GB'}
+
+const metricOptions = [
+    {label: "B", value: 'b'},
+    {label: "KB", value: 'kb'},
+    {label: "MB", value: 'mb'},
+    {label: "GB", value: 'gb'}
 ]
 
-function Filters () {
-    const { isDarkMode } = useTheme()
 
+function Filters () {
+  const { isDarkMode } = useTheme()
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const manageUrl = (e,) => {
+    
+  }
+  
+  const handleType = (e, paramName) => {
+    const params = new URLSearchParams(searchParams);
+    if(e === null) 
+      params.delete(paramName); 
+    else
+      params.set(paramName, e.value);
+    setSearchParams(params);
+  
+  }
+  
     const customStyles = {
         control: (provided) => ({
           ...provided,
@@ -84,6 +105,8 @@ function Filters () {
                 isClearable={true}
                 name="color"
                 options={typeOptions}
+                defaultValue={searchParams.has('type') ? typeOptions.filter((type) => type.value === searchParams.get('type')) : null}
+                onChange={(e) => handleType(e, 'type')}
                 placeholder="Type"
             />
 
@@ -92,8 +115,10 @@ function Filters () {
                 className="react-select-container"
                 classNamePrefix="react-select"
                 isClearable={true}
+                defaultValue={searchParams.has('storage') ? storageOptions.filter((type) => type.value === searchParams.get('storage')) : null}
                 name="color"
                 options={storageOptions}
+                onChange={(e) => handleType(e, 'storage')}
                 placeholder="Storage"
             />
 
@@ -118,8 +143,9 @@ function Filters () {
                         menu: () => '!text-xs',
                         option: () => '!py-1 !text-xs'
                     }}
-                    options={sizeOptions}
-                    defaultValue={sizeOptions[1]}
+                    defaultValue={searchParams.has('metric') ? metricOptions.filter((type) => type.value === searchParams.get('metric')) : metricOptions[2]}
+                    options={metricOptions}
+                    onChange={(e) => handleType(e, 'metric')}
                 />
             </div>
         </div>

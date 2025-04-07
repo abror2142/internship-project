@@ -6,7 +6,6 @@ use App\Models\FileType;
 use Illuminate\Http\Request;
 use App\Models\File;
 use App\Models\Tag;
-use function PHPUnit\Framework\isInt;
 
 class FileController extends Controller
 {
@@ -19,23 +18,14 @@ class FileController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         // Return all files
         $user = auth()->user();
+
         if($user->hasRole('admin')){
             return File::with(['tags:id,name', 'fileType:id,name,image'])->get();
         }
-        return File::where('user_id', $user->id)->with(['tags:id,name', 'fileType:id,name,image'])->get();
-    }
-
-    /**
-     * Display a listing of the resource.
-     */
-    public function search(Request $request)
-    {
-        // Return all files
-        $user = auth()->user();
 
         $query = File::where('user_id', $user->id)->with(['tags:id,name', 'fileType:id,name,image']);
         
@@ -51,14 +41,14 @@ class FileController extends Controller
             });
         }
 
-        $metric = 1;
+        $metric = 1024 * 1024; // Default Value is MegaByte
         if($request->query('metric')){
             if($request->query('metric') === 'kb'){
                 $metric = 1024;
-            } else if ($request->query('metric') === 'mb') {
-                $metric = 1024 * 1024;
             } else if ($request->query('metric') === 'gb') {
                 $metric = 1024 * 1024 * 1024;
+            } else if($request->query('metric') === 'b') {
+                $metric = 1;
             }
         }
 
@@ -72,7 +62,7 @@ class FileController extends Controller
             $query->where('size', '<', $min); 
         }
 
-        return $query->paginate(10);
+        return $query->get();
     }
 
     public function recent()
