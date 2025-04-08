@@ -20,7 +20,9 @@ Route::get('/user/storage-info',[UserController::class, 'storageInfo'])->middlew
 Route::get('/files/recent', [FileController::class, 'recent'])->middleware('auth:api');
 Route::get('/files', [FileController::class, 'index'])->middleware(['auth:api']);
 Route::post('/files', [FileController::class, 'store'])->middleware(['auth:api', ActionLogger::class . ':upload']);
+Route::put('/files/{file}', [FileController::class, 'update'])->middleware('auth:api');
 Route::get('/files/{file}', [FileController::class, 'show'])->middleware('auth:api');
+Route::get('/files/{file}/download', [FileController::class, 'download'])->middleware('auth:api');
 Route::delete('/files/{file}', [FileController::class, 'destroy'])->middleware(['auth:api', ActionLogger::class . ':delete']);
 Route::get('/search', [FileController::class, 'search'])->middleware(['auth:api', ActionLogger::class . ':search']);
 Route::get('/my-tags', [TagController::class, 'usedTags'])->middleware(['auth:api']);

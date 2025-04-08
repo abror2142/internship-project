@@ -27,7 +27,7 @@ class FirebaseStorage implements StorageInterface {
     public function download($filePath)
     {
         $expires = new \DateTime('tomorrow');
-        $object = $this->bucket->object($filePath);
+        $object = $this->bucket->object(env('FILE_PATH') . '/' . $filePath);
         if($object->exists()){
             return $object->signedUrl($expires);
         }

@@ -26,9 +26,9 @@ class LocalStorage implements StorageInterface {
 
     public function download($filePath)
     {   
-        $path = env('DEFAULT_FILE_PATH') . '/'. $filePath;
+        $path = env('FILE_PATH') . '/'. $filePath;
         if($this->storage->exists($path)){
-            return  env('BASE_URL') . '/' . $path;
+            return  $this->storage->download($path, 'download');
         }
         return null;
     }

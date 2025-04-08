@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import OutsideCickDetector from "../../../hooks/useOutsideClickDetector";
 import { File } from "./FileView";
 import { Formik, Field, Form } from "formik";
 import CreatableSelect from 'react-select/creatable';
@@ -12,6 +11,7 @@ import { customStyles } from "./Filters";
 import { useTheme } from "../../../hooks/useTheme";
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+import { updateFile, deleteFile } from "../../../utils/api";
 
 export interface Tag {
     label: string;
@@ -19,7 +19,7 @@ export interface Tag {
     __isNew__?: boolean;
 }
 
-function FileInfoModal({setShowInfo, file, modalMode='show'}: {setShowInfo: Dispatch<SetStateAction<boolean>>, file: File, modalMode: string}) {
+function FileInfoModal({setShow, file, modalMode='show'}: {setShow: Dispatch<SetStateAction<string | null>>, file: File, modalMode: string}) {
     const [options, setOptions] = useState([]);
     const [mode, setMode] = useState(modalMode)
     const [selected, setSelected] = useState(file.tags.map((tag) => ({label: tag.name, value: tag.name})))
@@ -45,25 +45,35 @@ function FileInfoModal({setShowInfo, file, modalMode='show'}: {setShowInfo: Disp
     }
 
     const handleUpdate = async (json: string) => {
-        console.log(json);
+        try {
+            const resp = await updateFile(file.id, json);
+            console.log(resp);
+        } catch(e) {
+            console.log(e);
+        }
     }
 
     const handleDelete = async () => {
-        
+        try {
+            const resp = await deleteFile(file.id);
+            console.log(resp);
+        } catch(e) {
+            console.log(e);
+        }
     }
 
     return (
-        <OutsideCickDetector toggler={setShowInfo}>
             <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md bg-gray-950/80">
                 <div className="relative space-y-4 bg-white dark:bg-dark-card-light border dark:border-dark-border px-6 py-4 rounded-lg shadow-lg">
                 <Formik
                     initialValues={{
                         name: file.name,
-                        description: file.description,
-                        tags: selected
+                        description: file.description
                     }}
                     onSubmit={async (values) => {
-                        const json = JSON.stringify(values, null, 2);
+                        const tags = selected.map(tag => tag.value);
+                        const data = {...values, tags: tags};
+                        const json = JSON.stringify(data);
                         confirmAlert({
                             title: 'Confirm to update',
                             message: 'Are you sure to update this file.',
@@ -86,7 +96,7 @@ function FileInfoModal({setShowInfo, file, modalMode='show'}: {setShowInfo: Disp
                             {mode === 'edit' ? "Edit File" : "File Info"}
                         </p>
                         <div
-                            onClick={() => setShowInfo(false)}
+                            onClick={() => setShow(null)}
                             className="absolute top-4 right-8 text-red-600 text-lg hover:text-red-700"
                         >
                             <FontAwesomeIcon icon={faX} />
@@ -127,7 +137,7 @@ function FileInfoModal({setShowInfo, file, modalMode='show'}: {setShowInfo: Disp
 
                             <div>
                                 {
-                                    mode === 'show' 
+                                    mode === 'view' 
                                     ? <div className="flex  gap-2">
                                         {file.tags.map((tag) => {
                                             return (
@@ -170,10 +180,11 @@ function FileInfoModal({setShowInfo, file, modalMode='show'}: {setShowInfo: Disp
                                         message: 'Are you sure to delete this file.',
                                         buttons: [
                                           {
-                                            label: 'Yes'
+                                            label: 'Yes',
+                                            onClick: () => handleDelete()
                                           },
                                           {
-                                            label: 'No',
+                                            label: 'No'
                                           }
                                         ]
                                     });
@@ -200,7 +211,6 @@ function FileInfoModal({setShowInfo, file, modalMode='show'}: {setShowInfo: Disp
                     </Formik>
                 </div>
             </div>
-        </OutsideCickDetector>
     );
 }
 

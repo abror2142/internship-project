@@ -6,13 +6,18 @@ use App\Models\FileType;
 use Illuminate\Http\Request;
 use App\Models\File;
 use App\Models\Tag;
+use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {
     protected $storage;
 
     public function __construct(){
-        $this->storage = app(config('settings.storage'));
+        if(config('settings.storage') !== 'api'){
+            $this->storage = app(config('settings.storage'));
+        } else {
+            $this->storage = null;
+        }
     }
 
     /**
@@ -88,39 +93,48 @@ class FileController extends Controller
         $request->validate([
             'name' => 'required|max:255',
             'description' => 'nullable|max:255',
-            'type' => 'required|exists:file_types,name'
-            // 'tags' => 'array'
+            'type' => 'required|exists:file_types,name',
+            'tags' => 'array',
+            'path' => 'nullable|string',
+            'size' => 'nullable|integer'
         ]);
 
-        $file = $request->file('file');
-        $extension = $file->getExtension();
-        
-        
-        $path = $this->storage->upload($file, env('DEFAULT_FILE_PATH'));
-        
+        if(config('settings.storage') !== 'api') {
+            $file = $request->file('file');
+            $extension = $file->getExtension();
+            $path = $this->storage->upload($file, env('FILE_PATH'));
+            $size = $file->getSize();
+        } else {
+            $path = $request->path;
+            $size = $request->size;
+        }
+          
         if($path === null) {
             return response()->json(['message' => 'File not uploaded!'], 400);
         }
+
         $type = FileType::where('name', $request->type)->first();
 
         $file = File::create([
             'name' => $request->name,
             'description' => $request->description,
             'path' => str($path),
-            'size' => $file->getSize(),
+            'size' => $size,
             'file_type_id' => $type['id'],
             'storage' => config('settings.storage'),
             'user_id' => auth()->user()->getAuthIdentifier()
         ]);
 
-        $tags = [];
+
+        $tags = collect($request->tags)->map(function ($tagName) {
+            return Tag::firstOrCreate(attributes: ['name' => $tagName])->id;
+        });
 
         $file->tags()->sync($tags);
 
         return response()->json([
             'file' => $file,
-            'message' => 'Successfully uploded!',
-            'extension' => $extension
+            'message' => 'Successfully uploded!'
         ], 201);
     }
 
@@ -129,11 +143,27 @@ class FileController extends Controller
      */
     public function show(File $file)
     {
-        $url = $this->storage->download($file['path']);
+        if(config('settings.storage') === 'api'){
+            $url = $file['path'];
+        }else {
+            $url = $this->storage->download($file['path']);
+        }
         return response()->json([
             'file' => $file,
             'url' => $url
         ]);
+    }
+
+    public function download(File $file)
+    {
+        if($file['storage'] === 'firebase'){
+            return app('firebase')->download($file['path']);
+        } else if ($file['storage'] === 'local') {
+            return app('local')->download($file['path']);
+        } else if ($file['storage'] === 'api') {
+            return $file['path'];
+        }
+        return null;
     }
 
     /**
@@ -173,7 +203,11 @@ class FileController extends Controller
     public function destroy(File $file)
     {
         // Delete given file
-        $this->storage->delete($file->path);
+        if($file['storage'] === 'firebase'){
+            app('firebase')->delete($file['path']);
+        } else if ($file['storage'] === 'local') {
+            app('local')->delete($file['path']);
+        } 
         $file->delete();
         return response()->json([
             'message' => 'File deleted successfully!'

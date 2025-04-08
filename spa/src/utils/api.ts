@@ -22,7 +22,9 @@ const URLs = (id: number | null = null) => ({
     TAGS: BASE_URL + '/api/tags',
 
     FILES: BASE_URL + '/api/files',
+    FILE_DETAIL: BASE_URL + `/api/files/${id}`,
     FILES_RECENT: BASE_URL + '/api/files/recent',
+    FILES_DOWNLOAD: BASE_URL + `/api/files/${id}/download`,
 })
 
 const CONTENT_TYPE_CONFIG = {
@@ -107,6 +109,18 @@ export const createFile = (json: string) => {
 
 export const getFiles = (params: string) => {
     return api.get(URLs().FILES + params);
+}
+
+export const updateFile = (id: number, json: string) => {
+    return api.put(URLs(id).FILE_DETAIL, json);
+}
+
+export const deleteFile = (id: number) => {
+    return api.delete(URLs(id).FILE_DETAIL);
+}
+
+export const downloadFile = (id: number) => {
+    return api.get(URLs(id).FILES_DOWNLOAD);
 }
 
 export const getRecentFiles = () => {
