@@ -35,6 +35,8 @@ interface Option {
 export const customStyles = (isDarkMode: boolean) => ({
   control: (provided) => ({
     ...provided,
+    margin: 0,
+    padding: 0,
     backgroundColor: isDarkMode ? '#1f2937' : '#fff',
     borderColor: isDarkMode ? '#374151' : '#e5e7eb',
     borderRadius: '0.375rem',
@@ -65,6 +67,8 @@ export const customStyles = (isDarkMode: boolean) => ({
   }),
   input: (provided) => ({
     ...provided,
+    margin: 0,   // remove extra margin that may affect height
+    padding: 0,  // remove extra padding if necessary
     color: isDarkMode ? '#fff' : '#111827',
   }),
   dropdownIndicator: (provided) => ({

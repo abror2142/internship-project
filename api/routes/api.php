@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\FileController;
-use App\Http\Controllers\FileUrlController;
+use App\Http\Controllers\FileTypeController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
@@ -40,6 +40,8 @@ Route::get('/my-tags', [TagController::class, 'usedTags'])->middleware(['auth:ap
 
 Route::resource('tags', TagController::class)->except(['destroy', 'merge', 'edit']);
 Route::get('/settings', [SettingsController::class, 'index'])->middleware('auth:api');
+
+Route::get('/types', [FileTypeController::class, 'index']);
 
 # Admin operations.
 Route::middleware(['auth:api', 'role:admin'])->group(function(): void {

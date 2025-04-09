@@ -191,7 +191,7 @@ function FileInfoModal({setShow, file, modalMode='show'}: {setShow: Dispatch<Set
                                 }}
                             >Delete</div>
                             {
-                                mode === 'show' 
+                                mode === 'view' 
                                 && <div 
                                 className="text-indigo-500 hover:underline hover:text-indigo-600"
                                 onClick={() => setMode('edit')}

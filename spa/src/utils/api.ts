@@ -20,6 +20,8 @@ const URLs = (id: number | null = null) => ({
 
     SETTINGS: BASE_URL + '/api/settings',
     TAGS: BASE_URL + '/api/tags',
+    TYPES: BASE_URL + '/api/types',
+    EXTENTIONS: BASE_URL + '/api/extensions',
 
     FILES: BASE_URL + '/api/files',
     FILE_DETAIL: BASE_URL + `/api/files/${id}`,
@@ -101,6 +103,14 @@ export const getSettings = () => {
 
 export const getTags = () => {
     return api.get(URLs().TAGS);
+}
+
+export const getTypes = () => {
+    return api.get(URLs().TYPES);
+}
+
+export const createExtension = (json: string) => {
+    return api.post(URLs().EXTENTIONS, json);
 }
 
 export const createFile = (json: string) => {

@@ -120,7 +120,7 @@ function FileCard ({file}: {file: File}) {
                     </div>
                     <div 
                         className="flex gap-4 items-center py-0.5 px-3 dark:hover:bg-dark-blue rounded-sm"
-                        onClick={() => setShow("update")}
+                        onClick={() => setShow("edit")}
                     >
                         <div className="w-4">
                             <FontAwesomeIcon icon={faPencil} />

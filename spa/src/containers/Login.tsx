@@ -9,8 +9,6 @@ const SignupSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email').required('Required'),
     password: Yup.string()
         .required('No password provided.') 
-        .min(8, 'Password must be 8 chars minimum.')
-        .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.'),
 });
 
 function Login () {

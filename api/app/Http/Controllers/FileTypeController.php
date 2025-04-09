@@ -13,7 +13,8 @@ class FileTypeController extends Controller
      */
     public function index()
     {
-        //
+        // Return file type
+        return FileType::all();
     }
 
     /**

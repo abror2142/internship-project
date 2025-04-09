@@ -15,7 +15,7 @@ class SettingsController extends Controller
             return [$setting->key => $setting->value]; 
         });
         
-        $extensions = FileExtension::with('fileType:id,name,image')->select('name','file_type_id')->get();
+        $extensions = FileExtension::with('fileType:id,name,image')->select('id','name','isEnabled','file_type_id')->get();
 
         return response()->json([
             'settings' => $json,

@@ -1,24 +1,79 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Extension from "../../assets/extension.png";
-import Size from "../../assets/size.png";
-import Storage from "../../assets/storage.png";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faArrowAltCircleLeft, faArrowAltCircleRight, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { getSettings, updateSettings } from "../../utils/api";
-import { v4 } from "uuid";
+import { Field, Form, Formik } from "formik";
+import Select from 'react-select'
+import CreatableExtension from "../../components/admin/CreatableExtension";
+import { customStyles } from "../../components/user/home/Filters";
+import { useTheme } from "../../hooks/useTheme";
+import { byteFormat, byteLevel } from "../../utils/utils";
 
-
-type SettingsData = {
-   key: string;
-   value: string
+type Setting = {
+    key: string;
+        value: string
 }
 
+type Extension = {
+    id: number;
+    name: string;
+    isEnabled: number;
+    file_type_id: number;
+    file_type: {
+        id: number;
+        name: string;
+        image: string;
+    }
+}
+
+type Data = {
+    extensions: Extension[];
+    settings: Setting[];
+}
+
+type Option = {
+    label: string;
+    value: number;
+}
+
+type Level = {
+    size: number;
+    level: number;
+}
+
+const options = [
+    { value: 'local', label: 'local' },
+    { value: 'firebase', label: 'firebase' },
+    { value: 'api', label: 'api' }
+]
+
+const sizeOptions = [
+    {label: 'B', value: 1},
+    {label: 'KB', value: 1024},
+    {label: 'MB', value: 1024 * 1024},
+    {label: 'GB', value:  1024 * 1024 * 1024},
+    {label: 'TB', value: 1024 * 1024 * 1024 * 1024}
+]
+
+
 function Settings () {
-    const [data, setData] = useState<SettingsData[] | []>([]);
-    const [val, setVal] = useState("")
-    const [extension, setExtension] = useState("");
-    const [file, setFile] = useState("");
-    const [storage, setStorage] = useState("");
+    const [fileSize, setFileSize] = useState<number | null>(null);
+    const [storageSize, setStorageSize] = useState<number | null>(null);
+    const [storage, setStorage] = useState<number | null>(null);
+    const [extensions, setExtensions] = useState<Extension[]>([]);
+    const [fileSizeOption, setFileSizeOption] = useState<Option>(sizeOptions[2]);
+    const [storageSizeOption, setStorageSizeOption] = useState<Option>(sizeOptions[3]);
+    const [current, setCurrent] = useState<number[]>([]);
+
+    const { isDarkMode } = useTheme();
+
+    const setData = (data) => {
+        setStorage(data.settings.filter((setting) => setting?.storage)[0]?.storage);
+        setExtensions(data?.extensions);
+        setFileSize(data.settings.filter(setting => setting?.file_size_limit)[0]?.file_size_limit);
+        setStorageSize(data.settings.filter(setting => setting?.storage_size_limit)[0]?.storage_size_limit);
+    }
 
     const fetchSettings = async () => {
         try {
@@ -31,140 +86,150 @@ function Settings () {
 
     useEffect(() => {
         fetchSettings();
-    }, [])
+    }, []) 
 
-    const parseExtensions = (ext: string) => {
-        return ext.split(',');
+    const toggleExtension  = (id: number) => {
+        current.includes(id) 
+            ? setCurrent(prev => prev.filter(item => item !== id)) 
+            : setCurrent(prev => [...prev, id]);
     }
 
-    const update = async (key: string) => {
-        if(key) {
-            const value = key == "file_extentions" ? extension : key == 'storage_size_limit' ? storage + 'GB' : file + 'MB';
-            const json = JSON.stringify({
-                key: key,
-                value: value
-            });
-            try {
-                const resp = await updateSettings(json);
-                console.log(resp.data);
-                fetchSettings();
-            } catch(e) {
-                console.log(e);
-            }
+    const allow = () => {
+        if(current){
+            setExtensions(prev => prev.map(ext => current.includes(ext.id) ? ({ ...ext, isEnabled: 1 }) : ext));
+            setCurrent([]);
         }
     }
 
-    console.log(data)
+    const limit = () => {
+        if(current){
+            setExtensions(prev => prev.map(ext => current.includes(ext.id) ? ({ ...ext, isEnabled: 0 }) : ext));
+            setCurrent([]);
+        }
+    }
 
     return (
         <div className="flex flex-col gap-4">
-            <div className="mt-5 flex gap-4">
-                <div className="bg-dark-blue-light flex flex-col text-black px-8 py-4 rounded-md">
-                    <p className="text-2xl font-semibold text-center">Storage Limit</p>
-                    <div className="flex items-center gap-2">
-                        <FontAwesomeIcon icon={faInfoCircle} />
-                        <p className="text-sm max-w-[250px]">It is default storage limit assigned to every user during registration.</p>
-                    </div>
-                    <div className="flex rounded-md mt-4 gap-2">
-                        <img src={Storage} className="w-18"/>
-                        
-                        <div className="flex flex-col gap-2">
-                                <div className="flex gap-2">
-                                    <p>
-                                        Currently: 
-                                    </p>
-                                    {data.find(setting => setting.key == 'storage_size_limit')?.value}
-                                </div>
-                            <div className="flex items-center dark:bg-dark-blue max-w-min dark:text-dark-blue-light rounded-sm  py-1.5">
-                                <input 
-                                    className=" outline-none pl-3 pr-2 max-w-[150px]"
-                                    type="number"
-                                    value={storage}
-                                    onChange={(e) => setStorage(e.target.value)}
-                                    onBlur={() => setVal("")}
-                                />
-                                <p className="border-l dark:border-dark-blue-light px-2">
-                                    GB
-                                </p>
-                            </div>
-                            <button 
-                                className="bg-green-600 text-white rounded-sm px-2 py-1 max-w-min self-end"
-                                onClick={() => {
-                                    update("storage_size_limit");
-                                }}
-                            >Apply</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="bg-dark-blue-light flex flex-col text-black px-8 py-4 rounded-md">
-                    <p className="text-2xl font-semibold text-center">File Limit</p>
-                    <div className="flex items-center gap-2">
-                        <FontAwesomeIcon icon={faInfoCircle} />
-                        <p className="text-sm max-w-[250px]">It is default size limit in MB per File.</p>
-                    </div>
-                    <div className="flex rounded-md mt-4 gap-2">
-                        <img src={Size} className="w-18"/>
-                        <div className="flex flex-col gap-2">
-                            <div>
-                                <div className="flex gap-2">
-                                    <p>
-                                        Currently: 
-                                    </p>
-                                    {data.find(setting => setting.key == 'file_size_limit')?.value}
-                                </div>
-                            </div>
-                            <div className="flex items-center dark:bg-dark-blue max-w-min dark:text-dark-blue-light rounded-sm  py-1.5">
-                                <input 
-                                    className=" outline-none pl-3 pr-2 max-w-[150px]"
-                                    type="number"
-                                    value={file}
-                                    onChange={(e) => setFile(e.target.value)}
-                                    onBlur={() => setVal("")}
-                                />
-                                <p className="border-l dark:border-dark-blue-light px-2">
-                                    MB
-                                </p>
-                            </div>
-                            <button 
-                                className="bg-green-600 text-white rounded-sm px-2 py-1 max-w-min self-end"
-                                onClick={() => {
-                                    update("file_size_limit");
-                                }}
-                            >Apply</button>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <div className="bg-dark-blue-light flex flex-col text-black px-8 py-4 rounded-md ">
-                <p className="text-2xl font-semibold text-center">File Extensions</p>
-                <div className="flex items-center gap-2">
-                    <FontAwesomeIcon icon={faInfoCircle} />
-                    <p className="text-sm">Allowed file extensions. This restricts user to upload only these type of files.</p>
-                </div>
-                <div className="flex gap-2">
-                    {parseExtensions(data.find(setting => setting.key == 'file_extentions')?.value || "").map(ext => (
-                        <p key={v4()} className="px-2 py-0.5 bg-amber-300 text-black  rounded-sm">{ext}</p>
-                    ))}
-                </div>
-                <div className="flex rounded-md mt-4 gap-2">
-                    <img src={Extension} className="w-18"/>
-                    <div className="flex flex-col gap-2">
-                        <div className="flex items-center dark:bg-dark-blue max-w-min dark:text-dark-blue-light rounded-sm  py-1.5">
-                            <input 
-                                className=" outline-none pl-3 pr-2 max-w-[150px]"
-                                value={extension}
-                                onChange={(e) => setExtension(e.target.value)}
+            <Formik
+                initialValues={{
+                    storageSize: "",
+                    storage: storage,
+                    fileSize: "",
+                    extensions: extensions
+                }}
+                enableReinitialize={true}
+                onSubmit={async (values) => {
+                    await new Promise((r) => setTimeout(r, 500));
+                    alert(JSON.stringify(values, null, 2));
+                }}
+            >
+                <Form className="flex flex-col gap-4 dark:text-dark-text">
+                    <div className="dark:bg-dark-blue px-6 py-3 rounded-md">
+                        <label htmlFor="storageSize">Storage Size</label>
+                        <div className="flex gap-2 items-center justify-between">
+                            <p>{fileSize && byteFormat(fileSize)}</p>
+                            <FontAwesomeIcon icon={faArrowAltCircleRight} />
+                            <Field 
+                                id="storageSize" 
+                                name="storageSize" 
+                                type="number" 
+                                className="dark:bg-dark-bg px-2 py-1 outline-none max-w-32 rounded-sm"
+                                placeholder="0"
+                            />
+                            <Select 
+                                styles={customStyles(isDarkMode)}
+                                className="react-select-container"
+                                classNamePrefix="react-select"
+                                options={sizeOptions}
+                                value={fileSizeOption}
+                                onChange={(e) => e && setFileSizeOption(e)}
                             />
                         </div>
-                        <button 
-                            className="bg-green-600 text-white rounded-sm px-2 py-1 max-w-min self-end"
-                            onClick={() => {
-                                update("file_extentions");
-                            }}
-                        >Apply</button>
+                    </div>
+                    <div className="dark:bg-dark-blue px-6 py-3 rounded-md">
+                        <label htmlFor="fileSize">Max. File Size</label>
+                        <div className="flex gap-2 items-center justify-between">
+                            <p>{storageSize && byteFormat(storageSize)}</p>
+                            <FontAwesomeIcon icon={faArrowAltCircleRight} />
+                            <Field 
+                                name="fileSize" 
+                                id="fileSize"  
+                                type="number" 
+                                className="dark:bg-dark-bg px-2 py-1 outline-none max-w-32 rounded-sm"
+                                placeholder="0"
+                            />
+                            <Select 
+                                styles={customStyles(isDarkMode)}
+                                className="react-select-container"
+                                classNamePrefix="react-select"
+                                options={sizeOptions}
+                                value={storageSizeOption}
+                                onChange={(e) => e && setStorageSizeOption(e)}
+                            />
+                        </div>
+                    </div>
+                    <div className="dark:bg-dark-blue px-6 py-3 rounded-md flex flex-col gap-2 ">
+                        <p>Storage Type</p>
+                        <Select 
+                            options={options} 
+                            value={{label: storage, value: storage}}
+                            onChange={(e) => setStorage(e?.value || null)}
+                            styles={customStyles(isDarkMode)}
+                            className="react-select-container"
+                            classNamePrefix="react-select"
+                        />
+                    </div>
+                </Form>
+            </Formik>
+            <div className="flex flex-col gap-4 dark:bg-dark-blue px-6 py-3">
+                <CreatableExtension />
+                <div>
+                    <div className="flex justify-between items-center bg-dark-card-light px-6 py-2">
+                        <p>Not Allowed</p>
+                        <p>Allowed</p>
+                    </div>
+
+                    <div className="flex justify-between w-full">
+                        <div   
+                            className="px-3 py-2 bg-dark-card-light flex flex-col gap-0.5 max-h-50 overflow-auto grow-1
+                                scrollbar-thin scrollbar-track-gray-300scrollbar-thumb-gray-500 
+                                dark:scrollbar-track-transparent dark:scrollbar-thumb-blue-700"
+                        >
+                            {extensions.map(extension => (
+                                !extension.isEnabled 
+                                ? <p 
+                                className={`px-2 py-0.5 dark:hover:bg-dark-blue ${current.includes(extension.id) && "bg-dark-blue"}`}
+                                    onClick={() => toggleExtension(extension.id)}
+                                >{extension.name}</p> 
+                                : null
+                            ))}
+                        </div>
+                        <div className="flex flex-col justify-center items-center px-2 text-lg gap-4">
+                            <FontAwesomeIcon 
+                                icon={faArrowAltCircleRight} 
+                                className="hover:text-indigo-500"
+                                onClick={allow} 
+                            />
+                            <FontAwesomeIcon 
+                                icon={faArrowAltCircleLeft} 
+                                className="hover:text-red-500"
+                                onClick={limit}
+                            />
+                        </div>
+                        <div 
+                            className="px-3 py-2 bg-dark-card-light flex flex-col gap-0.5 max-h-50 overflow-auto grow-1
+                                scrollbar-thin scrollbar-track-gray-300scrollbar-thumb-gray-500 
+                                dark:scrollbar-track-transparent dark:scrollbar-thumb-blue-700"
+                        >
+                            {extensions.map(extension => (
+                                extension.isEnabled 
+                                ? <p 
+                                    className={`px-2 py-0.5 dark:hover:bg-dark-blue ${current.includes(extension.id) && "bg-dark-blue"}`}
+                                    onClick={() => toggleExtension(extension.id)}    
+                                >{extension.name}</p> 
+                                : null
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
