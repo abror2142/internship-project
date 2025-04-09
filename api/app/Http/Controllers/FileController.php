@@ -101,7 +101,6 @@ class FileController extends Controller
 
         if(config('settings.storage') !== 'api') {
             $file = $request->file('file');
-            $extension = $file->getExtension();
             $path = $this->storage->upload($file, env('FILE_PATH'));
             $size = $file->getSize();
         } else {
@@ -124,7 +123,6 @@ class FileController extends Controller
             'storage' => config('settings.storage'),
             'user_id' => auth()->user()->getAuthIdentifier()
         ]);
-
 
         $tags = collect($request->tags)->map(function ($tagName) {
             return Tag::firstOrCreate(attributes: ['name' => $tagName])->id;

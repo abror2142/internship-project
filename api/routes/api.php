@@ -17,21 +17,26 @@ Route::get('/user',[AuthController::class, 'user'])->middleware('auth:api');
 Route::post('/refresh',[AuthController::class, 'refresh']);
 Route::get('/user/storage-info',[UserController::class, 'storageInfo'])->middleware('auth:api');
 
-Route::get('/files/recent', [FileController::class, 'recent'])->middleware('auth:api');
-Route::get('/files', [FileController::class, 'index'])->middleware(['auth:api']);
-Route::post('/files', [FileController::class, 'store'])->middleware(['auth:api', ActionLogger::class . ':upload']);
-Route::put('/files/{file}', [FileController::class, 'update'])->middleware('auth:api');
-Route::get('/files/{file}', [FileController::class, 'show'])->middleware('auth:api');
-Route::get('/files/{file}/download', [FileController::class, 'download'])->middleware('auth:api');
-Route::delete('/files/{file}', [FileController::class, 'destroy'])->middleware(['auth:api', ActionLogger::class . ':delete']);
+Route::controller(FileController::class)
+    ->prefix('files')
+    ->name('files.')
+    ->middleware(['auth:api'])
+    ->group(function () {
+        Route::get('/recent', 'recent')->name('recent');
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->middleware(ActionLogger::class . ':upload')->name('store');
+        Route::put('/{file}', 'update')->name('update');
+        Route::get('/{file}', 'show')->name('show');
+        Route::get('/{file}/download', 'download')->name('download');
+        Route::delete('/{file}', 'destroy')
+            ->middleware(ActionLogger::class . ':delete')
+            ->name('destroy');
+    }
+);
+
 Route::get('/search', [FileController::class, 'search'])->middleware(['auth:api', ActionLogger::class . ':search']);
 Route::get('/my-tags', [TagController::class, 'usedTags'])->middleware(['auth:api']);
 
-Route::get('/files-url', [FileUrlController::class, 'index']);
-Route::get('/files-url/{file}', [FileUrlController::class, 'show']);
-Route::delete('/files-url/{file}', [FileUrlController::class, 'destroy'])->middleware('auth:api');
-Route::post('/files-url', [FileUrlController::class, 'store'])->middleware('auth:api');
-Route::put('/files-url/{file}', [FileUrlController::class, 'update'])->middleware('auth:api');
 
 Route::resource('tags', TagController::class)->except(['destroy', 'merge', 'edit']);
 Route::get('/settings', [SettingsController::class, 'index'])->middleware('auth:api');
@@ -56,4 +61,8 @@ Route::middleware(['auth:api', 'role:admin'])->group(function(): void {
 
     # CRUD Operations on users
    Route::resource('users', UserController::class)->except(['edit']); 
+});
+
+Route::fallback(function () {
+    return response()->json(['message' => 'Route not found!'], 404);
 });

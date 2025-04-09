@@ -35,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         // This is used to provide settings in config globally.
-        // e.g. config('file_size_limit') will be available
+        // e.g. config('file_size_limit') will be available and live updated with every request
         if (Schema::hasTable('settings')) {
             $settings = Settings::all();
             foreach ($settings as $setting) {
