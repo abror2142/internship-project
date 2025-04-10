@@ -27,8 +27,12 @@ class LogController extends Controller
             $query->where('action', $request->query('action'));
         }
 
-        if($request->has('successful')) {
-            $query->where('successful', (bool) $request->query('successful'));
+        if($request->has('status')) {
+            if($request->get('status') === 'successful'){
+                $query->where('successful', 1);
+            } else if($request->get('status') === 'failed') {
+                $query->where('successful', 0);
+            }
         }
         
         if($request->has('userId')) {

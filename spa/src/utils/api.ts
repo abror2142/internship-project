@@ -142,6 +142,6 @@ export const getUserTags = () => {
     return api.get(URLs().USER_TAGS);
 }
 
-export const getLogs = () => {
-    return api.get(URLs().LOGS);
+export const getLogs = (params: string) => {
+    return api.get(URLs().LOGS + params);
 }
