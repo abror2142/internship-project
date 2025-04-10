@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\FileTypeController;
+use App\Http\Controllers\LogController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
@@ -63,6 +64,9 @@ Route::middleware(['auth:api', 'role:admin'])->group(function(): void {
 
     # CRUD Operations on users
    Route::resource('users', UserController::class)->except(['edit']); 
+
+   # Logs
+   Route::get('/logs', [LogController::class, 'index']);
 });
 
 Route::fallback(function () {

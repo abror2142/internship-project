@@ -181,21 +181,23 @@ function Settings () {
                     </div>
                 </Form>
             </Formik>
-            <div className="flex flex-col gap-4 dark:bg-dark-blue px-6 py-3">
+            <div className="flex flex-col gap-2 dark:bg-dark-blue px-6 py-3">
+                <p>Extension Settings</p>
                 <CreatableExtension />
                 <div>
-                    <div className="flex justify-between items-center bg-dark-card-light px-6 py-2">
+                    <div className="flex justify-between items-center dark:bg-dark-card-light px-6 py-2">
                         <p>Not Allowed</p>
                         <p>Allowed</p>
                     </div>
 
                     <div className="flex justify-between w-full">
                         <div   
-                            className="px-3 py-2 bg-dark-card-light flex flex-col gap-0.5 max-h-50 overflow-auto grow-1
+                            className="px-3 py-2 dark:bg-dark-card-light flex flex-col gap-0.5 max-h-50 overflow-auto grow-1
                                 scrollbar-thin scrollbar-track-gray-300scrollbar-thumb-gray-500 
                                 dark:scrollbar-track-transparent dark:scrollbar-thumb-blue-700"
                         >
-                            {extensions.map(extension => (
+                            {
+                                extensions.map(extension => (
                                 !extension.isEnabled 
                                 ? <p 
                                 className={`px-2 py-0.5 dark:hover:bg-dark-blue ${current.includes(extension.id) && "bg-dark-blue"}`}
@@ -217,11 +219,12 @@ function Settings () {
                             />
                         </div>
                         <div 
-                            className="px-3 py-2 bg-dark-card-light flex flex-col gap-0.5 max-h-50 overflow-auto grow-1
+                            className="px-3 py-2 dark:bg-dark-card-light flex flex-col gap-0.5 max-h-50 overflow-auto grow-1
                                 scrollbar-thin scrollbar-track-gray-300scrollbar-thumb-gray-500 
                                 dark:scrollbar-track-transparent dark:scrollbar-thumb-blue-700"
                         >
-                            {extensions.map(extension => (
+                            {
+                                extensions.map(extension => (
                                 extension.isEnabled 
                                 ? <p 
                                     className={`px-2 py-0.5 dark:hover:bg-dark-blue ${current.includes(extension.id) && "bg-dark-blue"}`}

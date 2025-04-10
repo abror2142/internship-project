@@ -89,7 +89,7 @@ function CreatableExtension () {
             }}
         >
             <Form 
-                className="flex items-center gap-4 dark:bg-dark-blue 
+                className="flex items-center gap-4 dark:bg-dark-blue border dark:border-indigo-800
                     px-4 py-2 rounde-md dark:text-dark-text rounded-md"
             >
                 <Field 

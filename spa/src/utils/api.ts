@@ -22,6 +22,7 @@ const URLs = (id: number | null = null) => ({
     TAGS: BASE_URL + '/api/tags',
     TYPES: BASE_URL + '/api/types',
     EXTENTIONS: BASE_URL + '/api/extensions',
+    LOGS: BASE_URL + '/api/logs',
 
     FILES: BASE_URL + '/api/files',
     FILE_DETAIL: BASE_URL + `/api/files/${id}`,
@@ -139,4 +140,8 @@ export const getRecentFiles = () => {
 
 export const getUserTags = () => {
     return api.get(URLs().USER_TAGS);
+}
+
+export const getLogs = () => {
+    return api.get(URLs().LOGS);
 }
