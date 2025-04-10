@@ -20,6 +20,7 @@ const URLs = (id: number | null = null) => ({
 
     SETTINGS: BASE_URL + '/api/settings',
     TAGS: BASE_URL + '/api/tags',
+    TAG_DETAIL: BASE_URL + `/api/tags/${id}`,
     TAGS_MERGE: BASE_URL + '/api/tags/merge',
     TYPES: BASE_URL + '/api/types',
     EXTENTIONS: BASE_URL + '/api/extensions',
@@ -145,6 +146,10 @@ export const getRecentFiles = () => {
 
 export const getUserTags = () => {
     return api.get(URLs().USER_TAGS);
+}
+
+export const deleteTag = (id: number) => {
+    return api.delete(URLs(id).TAG_DETAIL);
 }
 
 export const getLogs = (params: string) => {

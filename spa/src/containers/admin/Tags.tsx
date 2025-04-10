@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getTags } from "../../utils/api";
+import { deleteTag, getTags } from "../../utils/api";
 import Select from 'react-select';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faCheck, faTrash, faX } from "@fortawesome/free-solid-svg-icons";
@@ -55,8 +55,18 @@ function Tags () {
         fetchTags();
     }, []);
 
+    const handleDelete = async (id: number) => {
+        try {
+            const resp = await deleteTag(id);
+            console.log(resp.data);
+            fetchTags();
+        } catch(e) {
+            console.log(e);
+        }
+    }
+
     return (
-        <div className="flex flex-col max-w-2xl mx-auto mt-5 gap-4">
+        <div className="flex flex-col max-w-2xl m-5 gap-4">
             <div className="flex gap-2 flex-col items-center w-full">
                 <div className="w-full">
                     <Select
@@ -83,40 +93,46 @@ function Tags () {
                         classNamePrefix="react-select" 
                         options={tags.filter(tag => !from.find(fromTag => fromTag.value == tag.name)).map(tag => ({label: tag.name, value: tag.name}))}
                         onChange={(e) => setTo(e)}
+                        isClearable={true}
                     />
                 </div>
             </div>
-            <p className="text-xl font-semibold dark:text-dark-text-highlighted text-center">All Tags</p>
-            <div className="grid grid-cols-4 gap-x-6 gap-y-1 w-full">
-                {tags.map(tag => {
-                    const remove = from.find(fromTag => fromTag.value == tag.name);
-                    const keep =  tag.name === to?.value
-                    return (
-                        <div className="group relative flex gap-2 items-center">
-                            <p 
-                                className={`px-2 py-0.5 rounded-sm max-w-min text-nowrap ${
-                                    keep ? 'bg-green-600 text-white' 
-                                    : remove
-                                    ? 'bg-red-600 text-white' : null
-                                }`}
-                            >
-                                {tag.name}
-                            </p>
-                            <div>
-                            { 
-                                keep 
-                                ? <FontAwesomeIcon icon={faCheck} className="text-green-600"/> 
-                                : remove 
-                                ? <FontAwesomeIcon icon={faX}  className="text-red-600"/> 
-                                : null
-                            }
+            <div className="dark:bg-dark-blue px-3 py-1.5 rounded-md">
+                <p className="text-xl font-semibold dark:text-dark-text-highlighted text-center">All Tags</p>
+                <div className="grid grid-cols-4 gap-x-6 gap-y-1 w-full">
+                    {tags.map(tag => {
+                        const remove = from.find(fromTag => fromTag.value == tag.name);
+                        const keep =  tag.name === to?.value
+                        return (
+                            <div className="group relative flex gap-2 items-center dark:hover:bg-dark-bg px-2">
+                                <p 
+                                    className={`py-0.5 rounded-sm max-w-min text-nowrap ${
+                                        keep ? 'bg-green-600 text-white' 
+                                        : remove
+                                        ? 'bg-red-600 text-white' : null
+                                    }`}
+                                >
+                                    {tag.name}
+                                </p>
+                                <div>
+                                { 
+                                    keep 
+                                    ? <FontAwesomeIcon icon={faCheck} className="text-green-600"/> 
+                                    : remove 
+                                    ? <FontAwesomeIcon icon={faX}  className="text-red-600"/> 
+                                    : null
+                                }
+                                </div>
+                                <div 
+                                    className="group-hover:block hidden absolute right-0 text-red-500 hover:text-red-600"
+                                    onClick={() => handleDelete(tag.id)}
+                                >
+                                    <FontAwesomeIcon icon={faTrash} />
+                                </div>
                             </div>
-                            <div className="group-hover:block hidden absolute right-0 text-red-500">
-                                <FontAwesomeIcon icon={faTrash} />
-                            </div>
-                        </div>
-                    )
-                })}
+                        )
+                    })}
+                </div>
             </div>
         </div>
     )

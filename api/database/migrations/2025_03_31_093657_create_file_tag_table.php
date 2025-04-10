@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('file_tag', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(File::class);
-            $table->foreignIdFor(Tag::class);
+            $table->foreignIdFor(File::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Tag::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

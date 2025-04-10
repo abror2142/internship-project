@@ -49,7 +49,7 @@ Route::middleware(['auth:api', 'role:admin'])->group(function(): void {
 
     # Tag management.
     Route::post('/tags/merge', [TagController::class, 'merge']);
-    Route::delete('/tags', [TagController::class, 'destroy']);
+    Route::delete('/tags/{tag}', [TagController::class, 'destroy']);
 
     # System configuration.
     Route::post('/settings', [SettingsController::class, 'update']);
