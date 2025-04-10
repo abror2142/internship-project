@@ -95,24 +95,27 @@ class TagController extends Controller
     {
         // Merge tags.
         $request->validate([
-            'from' => 'required|max:50|exists:tags,name',
-            'to' => 'required|max:50|exists:tags,name'
+            'from' => 'array',
+            'from.*' => 'required|exists:tags,name',
+            'to' => 'required|exists:tags,name'
         ]);
 
         $tagToKeep = Tag::where('name', $request->to)->first();
-        $tagToRemove = Tag::where('name', $request->from)->first();
+        $tagsToRemove = $request->from;
 
-        if($tagToKeep && $tagToRemove) {
-            $tagToRemove->files()->update(['tag_id' => $tagToKeep->id]);
-            
-            $tagToRemove->delete();
-            return response()->json([
-                'message' => 'Tags merged successfully!'
-            ], 200);
+        foreach ($tagsToRemove as $tagToRemoveName) {
+            $tagToRemove = Tag::where('name', $tagToRemoveName)->first();
+    
+            if($tagToKeep && $tagToRemove) {
+                $tagToRemove->files()
+                    ->where('tag_id', '<>', $tagToKeep->id)
+                    ->update(['tag_id' => $tagToKeep->id]);
+                $tagToRemove->delete();
+            }
         }
         
         return response()->json([
-            'message' => 'Tag not found.'
-        ], 400);
+            'message' => 'Tags merged successfully!'
+        ], 200);
     }
 }

@@ -2,15 +2,26 @@ import { useEffect, useState } from "react";
 import { getTags } from "../../utils/api";
 import Select from 'react-select';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight, faCheck, faX } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faCheck, faTrash, faX } from "@fortawesome/free-solid-svg-icons";
 import { customStyles } from "../../components/user/home/Filters";
 import { useTheme } from "../../hooks/useTheme";
 import { tagsMerge } from "../../utils/api";
 
+
+interface Option {
+    label: string | null;
+    value: string | null;
+}
+
+interface Tag {
+    id: number;
+    name: string;
+}
+
 function Tags () {
-    const [tags, setTags] = useState([]);
-    const [from, setFrom] = useState([]);
-    const [to, setTo] = useState();
+    const [tags, setTags] = useState<Tag[]>([]);
+    const [from, setFrom] = useState<readonly Option[]>([]);
+    const [to, setTo] = useState<Option | null>();
 
     const { isDarkMode } = useTheme();
 
@@ -24,16 +35,19 @@ function Tags () {
     } 
 
     const handleMerge = async () => {
-        try {
-            const json = JSON.stringify({
-                from: from.map(option => option.value),
-                to: to.value
-            });
-            const resp = await tagsMerge(json);
-            console.log(resp.data);
-            fetchTags();
-        } catch(e) {
-            console.log(e);
+        if(to && from.length > 0){
+            try {
+                const json = JSON.stringify({
+                    from: from.map(option => option.value),
+                    to: to.value
+                });
+                await tagsMerge(json);
+                setFrom([]);
+                setTo(null);
+                fetchTags();
+            } catch(e) {
+                console.log(e);
+            }
         }
     }
 
@@ -78,7 +92,7 @@ function Tags () {
                     const remove = from.find(fromTag => fromTag.value == tag.name);
                     const keep =  tag.name === to?.value
                     return (
-                        <div className="flex gap-2 items-center">
+                        <div className="group relative flex gap-2 items-center">
                             <p 
                                 className={`px-2 py-0.5 rounded-sm max-w-min text-nowrap ${
                                     keep ? 'bg-green-600 text-white' 
@@ -96,6 +110,9 @@ function Tags () {
                                 ? <FontAwesomeIcon icon={faX}  className="text-red-600"/> 
                                 : null
                             }
+                            </div>
+                            <div className="group-hover:block hidden absolute right-0 text-red-500">
+                                <FontAwesomeIcon icon={faTrash} />
                             </div>
                         </div>
                     )
