@@ -1,19 +1,14 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Extension from "../../assets/extension.png";
-import { faArrowAltCircleLeft, faArrowAltCircleRight, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faArrowAltCircleLeft, faArrowAltCircleRight } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import { getSettings, updateSettings } from "../../utils/api";
+import { getSettings } from "../../utils/api";
 import { Field, Form, Formik } from "formik";
 import Select from 'react-select'
 import CreatableExtension from "../../components/admin/CreatableExtension";
 import { customStyles } from "../../components/user/home/Filters";
 import { useTheme } from "../../hooks/useTheme";
-import { byteFormat, byteLevel } from "../../utils/utils";
-
-type Setting = {
-    key: string;
-        value: string
-}
+import { byteFormat } from "../../utils/utils";
 
 type Extension = {
     id: number;
@@ -27,19 +22,9 @@ type Extension = {
     }
 }
 
-type Data = {
-    extensions: Extension[];
-    settings: Setting[];
-}
-
 type Option = {
     label: string;
     value: number;
-}
-
-type Level = {
-    size: number;
-    level: number;
 }
 
 const options = [

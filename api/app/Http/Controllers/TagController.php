@@ -20,17 +20,17 @@ class TagController extends Controller
 
     public function usedTags() 
     {
+        // Return the user's used tags.
         $user = auth()->user();
         $files = File::where('user_id', $user->getAuthIdentifier())->get();
         $tags = [];
 
         foreach ($files as $file) {
             foreach ($file->tags as $tag) {
-                if(!in_array($tag->name, $tags))
+                if(!in_array($tag->name, $tags)) {
                     array_push($tags, $tag->name);
-                # code...
+                }
             }
-            # code...
         }
         return $tags;
     }
@@ -93,6 +93,7 @@ class TagController extends Controller
 
     public function merge(Request $request)
     {
+        // Merge tags.
         $request->validate([
             'from' => 'required|max:50|exists:tags,name',
             'to' => 'required|max:50|exists:tags,name'

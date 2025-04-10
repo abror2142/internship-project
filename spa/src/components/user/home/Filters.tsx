@@ -1,10 +1,11 @@
-import Select from 'react-select';
+import Select, { CSSObjectWithLabel } from 'react-select';
 import { useTheme } from "../../../hooks/useTheme";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { getUserTags } from "../../../utils/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleMinus } from "@fortawesome/free-solid-svg-icons";
+import { CSSObjectWithLabel } from 'react';
 
 const typeOptions = [
     {label: "Image", value: 'image'},
@@ -33,7 +34,7 @@ interface Option {
 }
 
 export const customStyles = (isDarkMode: boolean) => ({
-  control: (provided) => ({
+  control: (provided: CSSObjectWithLabel) => ({
     ...provided,
     margin: 0,
     padding: 0,
@@ -45,13 +46,13 @@ export const customStyles = (isDarkMode: boolean) => ({
       borderColor: isDarkMode ? '#4b5563' : '#d1d5db'
     },
   }),
-  menu: (provided) => ({
+  menu: (provided: CSSObjectWithLabel) => ({
     ...provided,
     backgroundColor: isDarkMode ? '#1f2937' : '#fff',
     border: `1px solid ${isDarkMode ? '#374151' : '#e5e7eb'}`,
     borderRadius: '0.375rem',
   }),
-  option: (provided, state) => ({
+  option: (provided: CSSObjectWithLabel, state: any) => ({
     ...provided,
     backgroundColor: state.isFocused 
       ? isDarkMode ? '#374151' : '#f3f4f6'
@@ -61,28 +62,28 @@ export const customStyles = (isDarkMode: boolean) => ({
       backgroundColor: isDarkMode ? '#4b5563' : '#e5e7eb'
     }
   }),
-  singleValue: (provided) => ({
+  singleValue: (provided: CSSObjectWithLabel) => ({
     ...provided,
     color: isDarkMode ? '#fff' : '#111827',
   }),
-  input: (provided) => ({
+  input: (provided: CSSObjectWithLabel) => ({
     ...provided,
     margin: 0,   // remove extra margin that may affect height
     padding: 0,  // remove extra padding if necessary
     color: isDarkMode ? '#fff' : '#111827',
   }),
-  dropdownIndicator: (provided) => ({
+  dropdownIndicator: (provided: CSSObjectWithLabel) => ({
     ...provided,
     color: isDarkMode ? '#9ca3af' : '#6b7280',
     '&:hover': {
       color: isDarkMode ? '#d1d5db' : '#374151'
     }
   }),
-  indicatorSeparator: (provided) => ({
+  indicatorSeparator: (provided: CSSObjectWithLabel) => ({
     ...provided,
     backgroundColor: isDarkMode ? '#374151' : '#e5e7eb',
   }),
-  placeholder: (provided) => ({
+  placeholder: (provided: CSSObjectWithLabel) => ({
     ...provided,
     color: isDarkMode ? '#9ca3af' : '#6b7280',
   }),

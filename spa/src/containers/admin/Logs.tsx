@@ -256,7 +256,8 @@ function Logs () {
                         }
 
                         {
-                            Array.from({ length: data?.last_page }, (_, i) => (
+                            data 
+                            && Array.from({ length: data?.last_page }, (_, i) => (
                                 <li
                                     className={` flex items-center justify-center px-3 h-8  border border-gray-300 bg-blue-50
                                         ${

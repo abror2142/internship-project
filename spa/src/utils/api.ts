@@ -27,7 +27,7 @@ const URLs = (id: number | null = null) => ({
     FILES: BASE_URL + '/api/files',
     FILE_DETAIL: BASE_URL + `/api/files/${id}`,
     FILES_RECENT: BASE_URL + '/api/files/recent',
-    FILES_DOWNLOAD: BASE_URL + `/api/files/${id}/download`,
+    FILES_DOWNLOAD: BASE_URL + `/api/files/${id}/download`
 })
 
 const CONTENT_TYPE_CONFIG = {
