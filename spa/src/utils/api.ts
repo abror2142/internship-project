@@ -20,6 +20,7 @@ const URLs = (id: number | null = null) => ({
 
     SETTINGS: BASE_URL + '/api/settings',
     TAGS: BASE_URL + '/api/tags',
+    TAGS_MERGE: BASE_URL + '/api/tags/merge',
     TYPES: BASE_URL + '/api/types',
     EXTENTIONS: BASE_URL + '/api/extensions',
     LOGS: BASE_URL + '/api/logs',
@@ -104,6 +105,10 @@ export const getSettings = () => {
 
 export const getTags = () => {
     return api.get(URLs().TAGS);
+}
+
+export const tagsMerge = (json: string) => {
+    return api.post(URLs().TAGS_MERGE, json);
 }
 
 export const getTypes = () => {

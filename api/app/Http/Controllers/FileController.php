@@ -6,7 +6,6 @@ use App\Models\FileType;
 use Illuminate\Http\Request;
 use App\Models\File;
 use App\Models\Tag;
-use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {

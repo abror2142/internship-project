@@ -5,7 +5,6 @@ import { useSearchParams } from "react-router-dom";
 import { getUserTags } from "../../../utils/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleMinus } from "@fortawesome/free-solid-svg-icons";
-import { CSSObjectWithLabel } from 'react';
 
 const typeOptions = [
     {label: "Image", value: 'image'},
