@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('action');
             $table->foreignIdFor(User::class);
             $table->boolean('successful')->default(false);
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
         });
     }
 

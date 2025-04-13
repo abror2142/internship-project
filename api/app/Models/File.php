@@ -12,6 +12,8 @@ class File extends Model
 
     protected $fillable = ['name', 'description', 'path', 'user_id', 'size', 'storage', 'file_type_id'];
 
+    protected $hidden = ['user_id', 'file_type_id'];
+
     public function user() 
     {
         return $this->belongsTo(User::class);

@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { faHardDrive, faHome, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import StorageInfoFull from "./user/home/StorageInfoFull";
-import UploadFile from "./user/upload/UploadFile";
+import StorageInfoFull from "../features/file/components/StorageInfoFull";
+import UploadFile from "../features/file/components/upload/UploadFile";
 
 function InfoBar() {
 

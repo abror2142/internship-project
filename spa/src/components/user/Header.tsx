@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHardDrive, faSearch, faSliders } from "@fortawesome/free-solid-svg-icons";
 import DarkModeToggler from "../DarkModeToggler";
-import { useAuth } from "../../hooks/useAuth";
+import { useAuth } from "../../features/shared/hooks/useAuth";
 
 function Header () {
     const { user, logout } = useAuth();

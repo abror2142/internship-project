@@ -139,16 +139,10 @@ class FileController extends Controller
      * Display the specified resource.
      */
     public function show(File $file)
-    {
-        if(config('settings.storage') === 'api'){
-            $url = $file['path'];
-        }else {
-            $url = $this->storage->download($file['path']);
-        }
-        return response()->json([
-            'file' => $file,
-            'url' => $url
-        ]);
+    {  
+        $file->load('fileType:id,name,image');
+        $file->load('tags');
+        return $file;
     }
 
     public function download(File $file)

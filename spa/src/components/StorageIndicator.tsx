@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { getStorageInfo } from "../utils/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloud, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
-import { byteFormat } from "../utils/utils";
-
+import { byteFormat } from "../features/shared/utils/utils";
+import { getStorageInfo } from "../features/shared/utils/api";
 export interface StorageInfo {
     used: number;
     total: number;
@@ -33,7 +32,7 @@ function StorageIndicator () {
               </div>
               <div
                 style={{
-                  width: `${storage && ((storage?.used/storage?.total) * 100).toFixed(0) }%`,
+                  width: `${storage && ((storage?.used/storage?.total) * 100)?.toFixed(0) }%`,
                 }}
                 className={`absolute -z-1 bg-indigo-100 dark:bg-indigo-500 py-0.5 h-full rounded-md`}
               ></div>

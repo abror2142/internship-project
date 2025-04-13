@@ -12,6 +12,8 @@ class FileType extends Model
 
     protected $fillable = ['name', 'isEnabled', 'image'];
 
+    public $timestamps = false;
+
     public function fileExtensions () {
         return $this->hasMany(FileExtension::class);
     }

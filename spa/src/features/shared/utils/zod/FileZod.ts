@@ -1,0 +1,35 @@
+import { z } from "zod";
+
+export const storageInfoSchema = z.object({
+    used: z.number(),
+    total: z.number()
+})
+
+export const fileTypeSchema = z.object({
+    id: z.number(),
+    name: z.string(),
+    image: z.string(),
+});
+
+export const tagSchema = z.object({
+    id: z.number(),
+    name: z.string(),
+    created_at: z.string().optional(),
+    updated_at: z.string().optional()
+});
+
+export const fileSchema = z.object({
+    id: z.number(),
+    name: z.string(),
+    description: z.string().nullable(),
+    path: z.string(),
+    size: z.number(),
+    storage: z.string(),
+    created_at: z.string(),
+    updated_at: z.string(),
+    tags: z.array(tagSchema),
+    file_type: fileTypeSchema
+});
+
+export const fileArraySchema = z.array(fileSchema);
+export const tagsArraySchema = z.array(tagSchema);

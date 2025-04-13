@@ -17,8 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->boolean('isEnabled')->default(true);
             $table->string('image')->nullable();
-            $table->foreignIdFor(FileType::class)->nullable(); 
-            $table->timestamps();
+            $table->foreignIdFor(FileType::class)->nullable();
         });
     }
 
