@@ -7,4 +7,7 @@ export const endpoints = {
     FETCH_DOWNLOAD_URL: (id: number) => `/files/${id}/download`,  // GET 
 
     FETCH_ALL_TAGS: '/tags',  // GET
+
+    FETCH_SETTINGS: '/settings',  // GET
+    FETCH_EXTENSIONS: '/extensions/enabled',  // GET
 }

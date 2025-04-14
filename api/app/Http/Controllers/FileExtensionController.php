@@ -13,7 +13,17 @@ class FileExtensionController extends Controller
      */
     public function index()
     {
-        //
+        // Return all extensions
+        return FileExtension::all();
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function enabled()
+    {
+        // Return all extensions
+        return FileExtension::where('isEnabled', 1)->select(['id', 'name', 'image', 'file_type_id'])->with('fileType:id,name,image')->get();
     }
 
     /**

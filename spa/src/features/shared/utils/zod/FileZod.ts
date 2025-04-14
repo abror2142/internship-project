@@ -8,7 +8,7 @@ export const storageInfoSchema = z.object({
 export const fileTypeSchema = z.object({
     id: z.number(),
     name: z.string(),
-    image: z.string(),
+    image: z.string()
 });
 
 export const tagSchema = z.object({
@@ -31,5 +31,23 @@ export const fileSchema = z.object({
     file_type: fileTypeSchema
 });
 
+export const settingSchema = z.object({
+    key: z.string(),
+    value: z.string()
+});
+
+export const extensionSchema = z.object({
+    id: z.number(),
+    name: z.string(),
+    image: z.string(),
+    file_type: z.object({
+        id: z.number(),
+        name: z.string(),
+        image: z.string()
+    })
+});
+
 export const fileArraySchema = z.array(fileSchema);
 export const tagsArraySchema = z.array(tagSchema);
+export const settingsArraySchema = z.array(settingSchema);
+export const extensionsArraySchema = z.array(extensionSchema);

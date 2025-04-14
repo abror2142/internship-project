@@ -7,6 +7,7 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\ActionLogger;
+use App\Http\Controllers\FileExtensionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
@@ -43,6 +44,7 @@ Route::resource('tags', TagController::class)->except(['destroy', 'merge', 'edit
 Route::get('/settings', [SettingsController::class, 'index'])->middleware('auth:api');
 
 Route::get('/types', [FileTypeController::class, 'index']);
+Route::get('/extensions/enabled', [FileExtensionController::class, 'enabled']);
 
 # Admin operations.
 Route::middleware(['auth:api', 'role:admin'])->group(function(): void {
@@ -53,6 +55,7 @@ Route::middleware(['auth:api', 'role:admin'])->group(function(): void {
 
     # System configuration.
     Route::post('/settings', [SettingsController::class, 'update']);
+    Route::get('/extensions', [FileExtensionController::class, 'index']);
 
     # Individual Operations on a user.
     Route::post('/users/unblock', [UserController::class, 'activateUser']);

@@ -120,8 +120,8 @@ export const createExtension = (json: string) => {
     return api.post(URLs().EXTENTIONS, json);
 }
 
-export const createFile = (json: string) => {
-    return api.post(URLs().FILES, json);
+export const createFile = (json: FormData, config) => {
+    return api.post(URLs().FILES, json, config);
 }
 
 export const getFiles = (params: string) => {

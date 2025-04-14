@@ -12,6 +12,8 @@ class Log extends Model
 
     protected $fillable  = ['action', 'user_id', 'successful'];
 
+    public $timestamps = false;
+
     public function user() {
         return $this->belongsTo(User::class);
     }

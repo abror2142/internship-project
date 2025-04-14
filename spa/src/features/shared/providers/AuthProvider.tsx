@@ -57,6 +57,8 @@ function AuthProvider ({children} :PropsWithChildren) {
         }       
     }
 
+    
+
     useEffect(() => {
         fetchUser();
     }, [])

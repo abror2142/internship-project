@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, use } from "react";
 import TagSelection from "./TagSelection";
 import FileInput from "./FileInput";
 import { Tag } from "./TagSelection";
@@ -8,6 +8,11 @@ import { createFile } from "../../../shared/utils/api";
 import StorageIndicator from "../../../../components/StorageIndicator";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { Extension, SettingsData, Settings } from "../../../shared/types/fileTypes";
+import { fetchSettings, fetchExtensions } from "../../api/fileService";
+import { parseSettings } from "../../utils/utils";
+import { uploadFile } from "../../../shared/utils/uploader";
+import { useNavigate } from "react-router-dom";
 
 const FileSchema = Yup.object().shape({
     name: Yup.string()
@@ -17,9 +22,6 @@ const FileSchema = Yup.object().shape({
     description: Yup.string()
         .min(2, 'Too Short!')
         .max(255, 'Too Long!'),
-    path: Yup.string()
-        .nonNullable()
-        .required(),
     size: Yup.number()
         .nonNullable()
         .required(),
@@ -27,26 +29,104 @@ const FileSchema = Yup.object().shape({
         .required()
 }); 
 
+interface UploadFormValues {
+    name: string;
+    description: string;
+    tags: Tag[];
+    size: number;
+  }
+
 function UploadFile () {
     const [open, setOpen] = useState(false);
-    const [fileUrl, setFileUrl] = useState<string | null>(null);
-    const [fileName, setFileName] = useState<string | null>(null);
-    const [fileSize, setFileSize] = useState<BigInt | null>(null);
+    const [file, setFile] = useState<File | null>(null);
     const [tags, setTags] = useState<Tag[]>([]);
     const [loading, setLoading] = useState(false);
+    const [settings, setSettings] = useState<Settings | null>(null);
+    const [extensions, setExtensions] = useState<Extension[]>([]);
+    const navigate = useNavigate();
 
-    const handleUpload = async (json: string) => {
+    const fetchConfig = async () => {
+        try {
+            const settingsData: SettingsData[] = await fetchSettings();
+            const settingsParsed = parseSettings(settingsData); 
+            setSettings(settingsParsed);
+
+            const extensions: Extension[] = await fetchExtensions();
+            setExtensions(extensions);
+        } catch(e) {
+            console.log(e);
+        }
+    }
+
+    useEffect(() => {
+        fetchConfig();
+    }, [])
+
+    const handleSubmit = async (json: FormData) => {
         try {
             setLoading(true);
-            const resp = await createFile(json);
+            const resp = await createFile(json, {headers: {'Content-Type': 'multipart/form-data'}});
             console.log(resp.data);
+            if(resp.data?.file?.id) {
+                return navigate(`/file/${resp.data.file.id}`)
+            }
         } catch(e) {
             console.log(e);
         } finally {
             setLoading(false);
-            setFileName("");
-            setFileUrl("");
         }
+    }
+
+    const handleApiUpload = async () => {
+        if(file){
+            setLoading(true);
+            try {
+                const fileUrl = await uploadFile(file);
+                return fileUrl;
+            } catch(e) {
+                console.log(e);
+            } finally {
+                setLoading(false);
+            }
+        }
+    }
+
+    const getType = () => {
+        const extension = file?.name.split('.').pop()?.toLowerCase();
+        const type = extensions.find(ext => ext.name === extension || ext.name === '.' + extension)?.file_type;
+        return type;
+    }
+
+    const createFormData = async (values: UploadFormValues) => {
+        const formData = new FormData();
+        formData.append('name', values.name);
+        formData.append('description', values.description);
+        formData.append('size', values.size.toString());
+
+        values.tags.forEach((tag, index) => {
+            formData.append(`tags[${index}]`, tag.value);
+        })
+
+        if(settings && settings.storage === 'api'){
+            const url = await handleApiUpload();
+            if(url) {
+                formData.append('path', url);
+            }
+        } else {
+            if(file){
+                formData.append('file', file);
+            }
+        }
+        const type = getType()?.name;
+        if(type){
+            formData.append('type', type);
+        }
+        
+        return formData;
+    }
+    
+    if(!settings){
+        return <p>No settings Available!</p>
     }
 
     return (
@@ -62,35 +142,35 @@ function UploadFile () {
                 open
                 && <Formik
                         initialValues={{
-                            name: fileName,
+                            name: file?.name || "",
                             description: '',
-                            path: fileUrl,
-                            size: fileSize,
+                            size: file?.size || 0,
                             tags: tags,
                         }}
                         enableReinitialize
                         validationSchema={FileSchema}
                         onSubmit={async (values) => {
-                            const json = JSON.stringify(values, null, 2);
-                            handleUpload(json);
+                            const formData = await createFormData(values);
+                            for (const [key, value] of formData.entries()) {
+                                console.log(`${key}:`, value);
+                            }
+                            handleSubmit(formData);
                         }}
                 >
                     <Form>
                         <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
                             <div className="bg-white space-y-4 dark:bg-dark-blue p-6 rounded-lg shadow-xl relative dark:text-dark-text">
                                 <p className="text-3xl mb-6 font-semibold dark:text-indigo-400 text-center">Upload a File</p>
-                                <div className="">
-                                    <StorageIndicator />
-                                </div>
+                                <StorageIndicator />
                                 <div className="flex gap-5">
-                                    <FileInput setFileUrl={setFileUrl} setFileName={setFileName} setFileSize={setFileSize}/>
+                                    <FileInput file={file} setFile={setFile} settings={settings} extensions={extensions}/>
                                     <div className="flex flex-col gap-4">
                                         <div className="flex flex-col gap-1">
                                             <label htmlFor="name">File Name:</label>
                                             <Field 
                                                 id="name" 
                                                 name="name" 
-                                                placeholder={fileName}
+                                                placeholder={file?.name}
                                                 className="px-2 py-1.5 rounded-sm outline-none dark:bg-dark-bg dark:border dark:border-dark-border" 
                                             />
                                         </div>
@@ -114,11 +194,12 @@ function UploadFile () {
                                         type="button"
                                         onClick={() => setOpen(false)}
                                         className="px-4 py-1.5 bg-red-500 text-white rounded-lg"
-                                        >
+                                    >
                                         Close
                                     </button>
                                     <button
                                         type="submit"
+                                        onClick={() => console.log('Clicked')}
                                         className="px-4 py-1.5 bg-indigo-500 text-white rounded-lg"
                                     >
                                         Save

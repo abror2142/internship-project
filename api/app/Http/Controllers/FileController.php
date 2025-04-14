@@ -95,16 +95,15 @@ class FileController extends Controller
             'type' => 'required|exists:file_types,name',
             'tags' => 'array',
             'path' => 'nullable|string',
-            'size' => 'nullable|integer'
+            'size' => 'integer',
+            'file' => 'file|max:204800'
         ]);
 
         if(config('settings.storage') !== 'api') {
             $file = $request->file('file');
             $path = $this->storage->upload($file, env('FILE_PATH'));
-            $size = $file->getSize();
         } else {
             $path = $request->path;
-            $size = $request->size;
         }
           
         if($path === null) {
@@ -117,7 +116,7 @@ class FileController extends Controller
             'name' => $request->name,
             'description' => $request->description,
             'path' => str($path),
-            'size' => $size,
+            'size' => $request->size,
             'file_type_id' => $type['id'],
             'storage' => config('settings.storage'),
             'user_id' => auth()->user()->getAuthIdentifier()

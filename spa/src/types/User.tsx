@@ -3,4 +3,8 @@ export interface User {
     name: string;
     image: string;
     roles: string[];
+    storage: {
+        allocated: number;
+        used: number;
+    }
 }

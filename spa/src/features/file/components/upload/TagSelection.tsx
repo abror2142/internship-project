@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import CreatableSelect from 'react-select/creatable';
 import { getTags } from '../../../shared/utils/api';
+import { customStyles } from '../Filters';
 
 interface Data {
     id: number;
@@ -37,10 +38,12 @@ function TagSelection ({setTags}) {
 
     return (
         <CreatableSelect 
+            styles={customStyles()}
+            className="react-select-container"
+            classNamePrefix="react-select"
             isMulti 
             options={options}
             onChange={handleChange}
-            className="min-w-sm"
         />
     )
 }

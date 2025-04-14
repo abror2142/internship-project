@@ -74,7 +74,11 @@ class AuthController extends Controller
                 'id' => $user['id'],
                 'name' => $user['name'],
                 'image' => '',
-                'roles' => $user->roles->pluck('name')
+                'roles' => $user->roles->pluck('name'),
+                'storage' => [
+                    'allocated' => (int) $user['storage'],
+                    'used' => $user['used']
+                ]
             ]
         ]);
     }
@@ -123,7 +127,11 @@ class AuthController extends Controller
                 'id' => $user['id'],
                 'name' => $user['name'],
                 'image' => '',
-                'roles' => $user->roles->pluck('name')
+                'roles' => $user->roles->pluck('name'),
+                'storage' => [
+                    'allocated' => (int) $user['storage'],
+                    'used' => $user['used']
+                ]
             ],
             'token' => $token,
         ]);

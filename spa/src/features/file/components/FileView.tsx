@@ -5,6 +5,7 @@ import FileViewToggler from "./file-view/FileViewToggler";
 import Filters from "./Filters";
 import { useLoaderData } from "react-router-dom";
 import { fetchAllFiles } from "../api/fileService";
+import UploadFile from "./upload/UploadFile";
 
 export const loader = async () => {
     try {
@@ -21,6 +22,7 @@ function FileView () {
 
     return (
         <div className="dark:text-dark-text mx-6 mb-4 flex flex-col gap-4 grow max-h-full">
+            <UploadFile/>
             <div className="flex items-center justify-between">
                 <Filters />
                 <FileViewToggler view={view} setView={setView}/>

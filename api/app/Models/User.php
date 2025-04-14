@@ -71,6 +71,11 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    public function getUsedAttribute(): int
+    {
+        return $this->files()->sum('size');
+    }
+
     public function files()
     {
         return $this->hasMany(File::class);

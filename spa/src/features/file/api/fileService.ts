@@ -1,6 +1,6 @@
 import { apiClient } from "../../shared/api/apiClient";
 import { endpoints } from "./endpoints";
-import { fileSchema, fileArraySchema, tagsArraySchema } from "../../shared/utils/zod/FileZod";
+import { fileSchema, fileArraySchema, tagsArraySchema, settingsArraySchema, extensionsArraySchema } from "../../shared/utils/zod/FileZod";
 
 export const fetchAllFiles = async () => {
     try {
@@ -111,6 +111,38 @@ export const fetchDownloadUrl = async (id: number) => {
     try {
         const response = await apiClient(endpoints.FETCH_DOWNLOAD_URL(id));
         return response.data;
+    } catch(error) {
+        throw error;
+    }
+}
+
+export const fetchSettings = async () => {
+    try {
+        const response = await apiClient(endpoints.FETCH_SETTINGS);
+        const parsed = settingsArraySchema.safeParse(response.data);
+
+        if(!parsed.success) {
+            console.error("Validation Error with zod!", parsed.error);
+            throw new Error('Api data mismatch!');
+        }
+
+        return parsed.data;
+    } catch(error) {
+        throw error;
+    }
+}
+
+export const fetchExtensions = async () => {
+    try {
+        const response = await apiClient(endpoints.FETCH_EXTENSIONS);
+        const parsed = extensionsArraySchema.safeParse(response.data);
+
+        if(!parsed.success) {
+            console.error("Validation Error with zod!", parsed.error);
+            throw new Error('Api data mismatch!');
+        }
+
+        return parsed.data;
     } catch(error) {
         throw error;
     }

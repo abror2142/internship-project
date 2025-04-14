@@ -11,6 +11,8 @@ class FileExtension extends Model
     use HasFactory;
     protected $fillable = ['name', 'isEnabled', 'image', 'file_type_id'];
 
+    protected $hidden = ['file_type_id'];
+
     public $timestamps = false;
 
     public function fileType () {
