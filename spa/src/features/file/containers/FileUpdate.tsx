@@ -2,17 +2,17 @@ import { useEffect, useState } from "react";
 import { Formik, Field, Form } from "formik";
 import CreatableSelect from 'react-select/creatable';
 import dayjs from "dayjs";
-import { useTheme } from "../../shared/hooks/useTheme";
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import { fetchAllTags, updateFile } from "../api/fileService";
 import { fetchFile } from "../api/fileService";
-import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
+import { LoaderFunctionArgs, useLoaderData, useNavigate } from "react-router-dom";
 import { fileSchema, tagSchema } from "../../shared/utils/zod/FileZod";
 import { z } from "zod";
 import { customStyles } from "../components/Filters";
 import { tagsToOptions } from "../utils/utils";
 import { Option } from "../../shared/types/select";
+import FileDelete from "../components/FileDelete";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
     const { id } = params;
@@ -35,10 +35,9 @@ interface LoaderDataType {
 
 function FileUpdate() {
     const { file, tags } : LoaderDataType  = useLoaderData();
-
     const [options, setOptions] = useState<Option[]>([]);
     const [selected, setSelected] = useState<Option[]>([]);
-    const { isDarkMode } = useTheme();
+    const navigate = useNavigate();
 
     useEffect(() => {
         setOptions(tagsToOptions(tags));
@@ -47,8 +46,8 @@ function FileUpdate() {
 
     const handleUpdate = async (json: string) => {
         try {
-            const resp = await updateFile(file.id, json);
-            console.log(resp);
+            await updateFile(file.id, json);
+            return navigate(`/file/${file.id}`);
         } catch(e) {
             console.log(e);
         }
@@ -73,7 +72,8 @@ function FileUpdate() {
     return (
         <div 
             className="relative space-y-4 bg-white dark:bg-dark-card-light border 
-                dark:border-dark-border px-6 py-4 rounded-lg shadow-lg"
+                dark:border-dark-border px-6 py-4 rounded-lg shadow-lg max-w-3xl mx-auto 
+                w-full dark:text-dark-text mt-5"
         >
             <Formik
                 initialValues={{
@@ -87,17 +87,17 @@ function FileUpdate() {
                     confirmUpdate(json);
                 }}
             >
-                <Form className="flex flex-col gap-4 min-w-sm">
+                <Form className="flex flex-col gap-5 min-w-sm">
                     <p className="text-2xl text-center dark:text-dark-text-highlighted font-semibold">
                         Edit File
                     </p>
-                    <div className="flex gap-8">
+                    <div className="flex gap-8 mx-auto">
                         <div className="flex flex-col gap-2">
                             <img 
                                 src={file.file_type.image}
                                 className="w-40"
                             />
-                            <p>
+                            <p className="text-center">
                                 Type: {file.file_type.name}
                             </p>
                         </div>
@@ -127,25 +127,28 @@ function FileUpdate() {
                                 value={selected}
                                 onChange={(options) => setSelected([...options])}
                                 isClearable={false}
-                                styles={customStyles(isDarkMode)}
+                                styles={customStyles()}
                                 className="react-select-container"
                                 classNamePrefix="react-select"
                             />
                         </div>
                     </div>
                     <div className="flex justify-between items-center">
-                        <p>
-                            Created at: <span className="text-sm">{dayjs(file.created_at).format('DD.MM.YY HH:mm')}</span>
-                        </p>
-                        <p>
-                            Updated at: <span className="text-sm">{dayjs(file.updated_at).format('DD.MM.YY HH:mm')}</span>
-                        </p>
-                    </div>
-                    <div className="flex items-center justify-between">
-                        <button 
-                            type="submit" 
-                            className="bg-indigo-500 text-white rounded-sm px-3 py-1 max-w-min"
-                        >Save</button>
+                        <div className="flex flex-col items-center">
+                            <p>
+                                Created at: <span className="text-sm">{dayjs(file.created_at).format('DD.MM.YY HH:mm')}</span>
+                            </p>
+                            <p>
+                                Updated at: <span className="text-sm">{dayjs(file.updated_at).format('DD.MM.YY HH:mm')}</span>
+                            </p>
+                        </div>
+                        <div className="flex items-center gap-4 justify-between">
+                            <FileDelete fileId={file.id}/>
+                            <button 
+                                type="submit" 
+                                className="bg-indigo-500 text-white rounded-sm px-3 py-1 max-w-min hover:bg-indigo-600"
+                            >Save</button>
+                        </div>
                     </div>
                 </Form>
             </Formik>
