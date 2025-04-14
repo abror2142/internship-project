@@ -21,7 +21,7 @@ function FileView () {
     const [view, setView] = useState('gallery');
 
     return (
-        <div className="dark:text-dark-text mx-6 mb-4 flex flex-col gap-4 grow max-h-full">
+        <div className="mx-6 mb-4 flex flex-col gap-4 grow max-h-ful dark:text-dark-text">
             <UploadFile/>
             <div className="flex items-center justify-between">
                 <Filters />

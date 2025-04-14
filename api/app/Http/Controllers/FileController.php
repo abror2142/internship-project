@@ -80,7 +80,20 @@ class FileController extends Controller
         if($user->hasRole('admin')){
             return File::with(['tags:id,name', 'fileType:id,name,image'])->orderBy('created_at')->get();
         }
-        return File::where('user_id', $user->id)->with(['tags:id,name', 'fileType:id,name,image'])->orderByDesc('created_at')->get();
+        return File::where('user_id', $user->id)->with()->orderByDesc('created_at')->get();
+    }
+
+    public function related(File $file)
+    {
+        // Return related files by tag name!
+        $tagsIds = $file->tags()->pluck('tag_id')->toArray();
+        $user = auth()->user();
+
+        $files = $user->files()->whereHas('tags', function ($query) use ($tagsIds) {
+            $query->whereIn('tags.id', $tagsIds);
+        })->whereNot('id', $file->id)->with(['tags:id,name', 'fileType:id,name,image'])->get();
+
+        return $files;
     }
 
     /**

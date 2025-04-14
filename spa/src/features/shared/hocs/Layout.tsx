@@ -11,7 +11,8 @@ function Layout () {
                 <Header />
             </header>
 
-            <main className="grow flex flex-col overflow-hidden">
+            <main className="grow flex flex-col overflow-auto scrollbar-thin scrollbar-track-gray-300 
+                scrollbar-thumb-gray-500 dark:scrollbar-track-gray-700 dark:scrollbar-thumb-dark-blue-light">
                 <Outlet />
             </main>
 

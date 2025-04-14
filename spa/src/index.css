@@ -22,6 +22,10 @@
     @apply pr-2;
 }
 
+.slick-slide > div {
+  margin: 0 10px;
+}
+
 @theme {
     --color-dark-bg: #101214;
     --color-dark-bg-contrast: #0f1214;

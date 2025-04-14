@@ -30,8 +30,23 @@ export const createFile = async (json: string) => {
 export const fetchFile = async (id: number) => {
     try {
         const response = await apiClient.get(endpoints.FETCH_FILE(id));
-        console.log(response.data)
         const parsed = fileSchema.safeParse(response.data);
+        
+        if(!parsed.success){
+            console.error("Validation Error with zod!", parsed.error);
+            throw new Error('Api data mismatch!');
+        }
+        return parsed.data;
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+}
+
+export const fetchRelatedFiles = async (id: number) => {
+    try {
+        const response = await apiClient.get(endpoints.FETCH_RELATED_FILES(id));
+        const parsed = fileArraySchema.safeParse(response.data);
         
         if(!parsed.success){
             console.error("Validation Error with zod!", parsed.error);

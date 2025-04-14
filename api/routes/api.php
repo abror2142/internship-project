@@ -25,6 +25,7 @@ Route::controller(FileController::class)
     ->middleware(['auth:api'])
     ->group(function () {
         Route::get('/recent', 'recent')->name('recent');
+        Route::get('/{file}/related', 'related')->name('related');
         Route::get('/', 'index')->name('index');
         Route::post('/', 'store')->middleware(ActionLogger::class . ':upload')->name('store');
         Route::put('/{file}', 'update')->name('update');

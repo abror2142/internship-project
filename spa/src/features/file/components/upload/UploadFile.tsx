@@ -1,4 +1,4 @@
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import TagSelection from "./TagSelection";
 import FileInput from "./FileInput";
 import { Tag } from "./TagSelection";
@@ -34,7 +34,7 @@ interface UploadFormValues {
     description: string;
     tags: Tag[];
     size: number;
-  }
+}
 
 function UploadFile () {
     const [open, setOpen] = useState(false);
@@ -141,70 +141,67 @@ function UploadFile () {
             {
                 open
                 && <Formik
-                        initialValues={{
-                            name: file?.name || "",
-                            description: '',
-                            size: file?.size || 0,
-                            tags: tags,
-                        }}
-                        enableReinitialize
-                        validationSchema={FileSchema}
-                        onSubmit={async (values) => {
-                            const formData = await createFormData(values);
-                            for (const [key, value] of formData.entries()) {
-                                console.log(`${key}:`, value);
-                            }
-                            handleSubmit(formData);
-                        }}
+                    initialValues={{
+                        name: file?.name || "",
+                        description: '',
+                        size: file?.size || 0,
+                        tags: tags,
+                    }}
+                    enableReinitialize
+                    validationSchema={FileSchema}
+                    onSubmit={async (values) => {
+                        const formData = await createFormData(values);
+                        for (const [key, value] of formData.entries()) {
+                            console.log(`${key}:`, value);
+                        }
+                        handleSubmit(formData);
+                    }}
                 >
-                    <Form>
-                        <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-                            <div className="bg-white space-y-4 dark:bg-dark-blue p-6 rounded-lg shadow-xl relative dark:text-dark-text">
-                                <p className="text-3xl mb-6 font-semibold dark:text-indigo-400 text-center">Upload a File</p>
-                                <StorageIndicator />
-                                <div className="flex gap-5">
-                                    <FileInput file={file} setFile={setFile} settings={settings} extensions={extensions}/>
-                                    <div className="flex flex-col gap-4">
-                                        <div className="flex flex-col gap-1">
-                                            <label htmlFor="name">File Name:</label>
-                                            <Field 
-                                                id="name" 
-                                                name="name" 
-                                                placeholder={file?.name}
-                                                className="px-2 py-1.5 rounded-sm outline-none dark:bg-dark-bg dark:border dark:border-dark-border" 
-                                            />
-                                        </div>
-                                        <div className="flex flex-col gap-1">
-                                            <label htmlFor="description">Description (optional):</label>
-                                            <Field 
-                                                id="description" 
-                                                name="description" 
-                                                placeholder="You can provide description here..."
-                                                className="px-2 py-1.5 rounded-sm outline-none dark:bg-dark-bg dark:border dark:border-dark-border" 
-                                            />
-                                        </div>
-                                        <div className="flex flex-col gap-1">
-                                            <label htmlFor="description">Tags: </label>
-                                            <TagSelection setTags={setTags}/> 
-                                        </div>
+                    <Form className="fixed inset-0 bg-black/50 flex items-center justify-center">
+                        <div className="bg-white space-y-4 dark:bg-dark-blue p-6 rounded-lg shadow-xl relative dark:text-dark-text">
+                            <p className="text-3xl mb-6 font-semibold dark:text-indigo-400 text-center">Upload a File</p>
+                            <StorageIndicator />
+                            <div className="flex gap-5">
+                                <FileInput setFile={setFile} settings={settings} extensions={extensions}/>
+                                <div className="flex flex-col gap-4">
+                                    <div className="flex flex-col gap-1">
+                                        <label htmlFor="name">File Name:</label>
+                                        <Field 
+                                            id="name" 
+                                            name="name" 
+                                            placeholder={file?.name}
+                                            className="px-2 py-1.5 rounded-sm outline-none dark:bg-dark-bg dark:border dark:border-dark-border" 
+                                        />
+                                    </div>
+                                    <div className="flex flex-col gap-1">
+                                        <label htmlFor="description">Description (optional):</label>
+                                        <Field 
+                                            id="description" 
+                                            name="description" 
+                                            placeholder="You can provide description here..."
+                                            className="px-2 py-1.5 rounded-sm outline-none dark:bg-dark-bg dark:border dark:border-dark-border" 
+                                        />
+                                    </div>
+                                    <div className="flex flex-col gap-1">
+                                        <label htmlFor="description">Tags: </label>
+                                        <TagSelection setTags={setTags}/> 
                                     </div>
                                 </div>
-                                <div className="flex justify-between">
-                                    <button
-                                        type="button"
-                                        onClick={() => setOpen(false)}
-                                        className="px-4 py-1.5 bg-red-500 text-white rounded-lg"
-                                    >
-                                        Close
-                                    </button>
-                                    <button
-                                        type="submit"
-                                        onClick={() => console.log('Clicked')}
-                                        className="px-4 py-1.5 bg-indigo-500 text-white rounded-lg"
-                                    >
-                                        Save
-                                    </button>
-                                </div>
+                            </div>
+                            <div className="flex justify-between">
+                                <button
+                                    type="button"
+                                    onClick={() => setOpen(false)}
+                                    className="px-4 py-1.5 bg-red-500 text-white rounded-lg"
+                                >
+                                    Close
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="px-4 py-1.5 bg-indigo-500 text-white rounded-lg"
+                                >
+                                    Save
+                                </button>
                             </div>
                         </div>
                     </Form>

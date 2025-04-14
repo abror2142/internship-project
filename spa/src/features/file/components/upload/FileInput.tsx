@@ -4,17 +4,14 @@ import { Extension, Settings } from "../../../shared/types/fileTypes";
 import { useAuth } from "../../../shared/hooks/useAuth";
 
 interface FileInputProps {
-    file: File | null;
     setFile: React.Dispatch<React.SetStateAction<File | null>>;
     settings: Settings;
     extensions: Extension[];
 }
 
-function FileInput ({ file, setFile, settings, extensions }: FileInputProps) {
+function FileInput ({ setFile, settings, extensions }: FileInputProps) {
     const { user } = useAuth();
     const [errors, setErrors] = useState<string[]>([]);
-
-    // console.log();
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setErrors([]);
