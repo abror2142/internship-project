@@ -6,6 +6,8 @@ import Filters from "./Filters";
 import { useLoaderData } from "react-router-dom";
 import { fetchAllFiles } from "../api/fileService";
 import UploadFile from "./upload/UploadFile";
+import { useQueryParamsInterceptor } from "../../shared/hooks/useQueryParamsInterceptor";
+import { File } from "../../shared/types/fileTypes";
 
 export const loader = async () => {
     try {
@@ -17,14 +19,17 @@ export const loader = async () => {
 }
 
 function FileView () {
-    const files = useLoaderData();
+    useQueryParamsInterceptor();
+    const file = useLoaderData();
+    const [files, setFiles] = useState<File[]>(file);
+
     const [view, setView] = useState('gallery');
 
     return (
         <div className="mx-6 mb-4 flex flex-col gap-4 grow max-h-ful dark:text-dark-text">
             <UploadFile/>
             <div className="flex items-center justify-between">
-                <Filters />
+                <Filters setFiles={setFiles} />
                 <FileViewToggler view={view} setView={setView}/>
             </div>
             <div 

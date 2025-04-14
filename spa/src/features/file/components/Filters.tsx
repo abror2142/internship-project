@@ -5,6 +5,7 @@ import { useSearchParams } from "react-router-dom";
 import { getUserTags } from '../../shared/utils/api';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleMinus } from "@fortawesome/free-solid-svg-icons";
+import { fetchAllFiles } from '../api/fileService';
 
 const typeOptions = [
     {label: "Image", value: 'image'},
@@ -92,7 +93,7 @@ export const customStyles = () => {
   }
 };
 
-function Filters () {
+function Filters ({setFiles}) {
   const {  } = useTheme()
   const [searchParams, setSearchParams] = useSearchParams();
   const [tags, setTags] = useState<Option[]>([]);
@@ -157,6 +158,22 @@ function Filters () {
       params.delete('max');
     setSearchParams(params);
   }, [max])
+
+  const fetchFiles = async () => {
+    try {
+      const files = await fetchAllFiles();
+      console.log(files);
+      setFiles(files);
+    } catch(e) {
+      console.log(e);
+    }
+  }
+
+  useEffect(() => {
+    if(searchParams) {
+      fetchFiles();
+    }
+  }, [searchParams])
 
     return (
         <div className="flex gap-4 items-center dark:text-black">

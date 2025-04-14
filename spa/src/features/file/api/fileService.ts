@@ -38,7 +38,6 @@ export const fetchFile = async (id: number) => {
         }
         return parsed.data;
     } catch (error) {
-        console.log(error)
         throw error;
     }
 }
