@@ -1,35 +1,42 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faSliders } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import OutsideCickDetector from "../../hooks/useOutsideClickDetector";
 import TagSearch from "./TagSearch";
+import SimpleSearch from "./SimpleSearch";
+import { Link } from "react-router-dom";
+import { v4 as uuid } from "uuid";
 
 function SearchBar () {
     const [open, setOpen] = useState(false);
+    const [results, setResults] = useState([]);
 
     return (
-        <div className="relative flex gap-2 items-center dark:bg-dark-blue px-2 py-0.5 rounded-full grow-1 max-w-md">
-            <FontAwesomeIcon icon={faSearch} className="text-lg dark:text-dark-blue-light dark:hover:bg-dark-bg rounded-full p-2"/>
-            <input 
-                className="w-full outline-none grow-1"
-                placeholder="Search..."
-            />
-            <OutsideCickDetector toggler={setOpen}>
-                <div 
-                    className="group relative flex items-center"
-                    onClick={() => setOpen(prev => !prev)}
-                >
-                    <FontAwesomeIcon icon={faSliders} className="text-xl dark:text-dark-blue-light dark:hover:bg-dark-bg rounded-full p-2"/>
-                    <p 
-                        className="hidden group-hover:block absolute text-sm text-nowrap 
-                        dark:bg-dark-bg border dark:border-dark-accent px-1 rounded-sm top-9 left-2"
-                    >Advanced Search</p>
+        <div className="relative flex items-center py-0.5 grow-1 max-w-xl">
+            {
+                open
+                ? <TagSearch setOpen={setOpen} setResults={setResults} />
+                : <SimpleSearch setOpen={setOpen} setResults={setResults} />
+            }
+            {
+                results.length > 0
+                && <div 
+                        className="absolute transform -bottom-1 right-0 z-50 flex flex-col translate-y-full 
+                            bg-dark-blue w-full overflow-auto  rounded-sm "
+                    >
+                    {results.map(result => {
+                        return (
+                            <Link 
+                                key={uuid()}
+                                to={`/file/${result?.id}`} 
+                                className="text-indigo-600 flex justify-between px-2 rounded-sm py-0.5 hover:bg-dark-bg"
+                            >
+                                {result?.name}
+                                <div className="flex gap-1 text-green-600">
+                                    {result?.tags.map(tag => (<p>{tag}</p>))}
+                                </div>
+                            </Link>
+                        )
+                    })}
                 </div>
-                {
-                    true
-                    && <TagSearch />
-                }
-            </OutsideCickDetector>
+            }
         </div>
     )
 }

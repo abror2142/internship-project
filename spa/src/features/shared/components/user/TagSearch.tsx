@@ -1,19 +1,16 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { fetchAllTags } from "../../../file/api/fileService";
-import AutoSuggest from "./AutoSugges";
+import AutoSuggest from "./AutoSuggest";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faGear, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 import { client } from "../../../../../algolia";
-import { SearchResult } from "algoliasearch";
-import { Link } from "react-router-dom";
+import OutsideCickDetector from "../../hooks/useOutsideClickDetector";
 
-function TagSearch () {
+function TagSearch ({setOpen, setResults}: {setOpen: React.Dispatch<React.SetStateAction<boolean>>, setResults: React.Dispatch<React.SetStateAction<any>>}) {
     const [operator, setOperator] = useState('and');
     const [tags, setTags] = useState<string[]>([]);
     const [selected, setSelected] = useState<string[]>([]);
-    const [results, setResults] = useState<SearchResult[]>([]);
-    
-    console.log(results);
+    const [showSettings, setShowSettings] = useState(false);
 
     const searchByTags = async () => {
         const filterClause = selected.map(tag => `tags:${tag}`).join(` ${operator.toUpperCase()} `);
@@ -36,7 +33,7 @@ function TagSearch () {
         } else {
             setResults([]);
         }
-    }, [selected])
+    }, [selected, operator])
 
     const fetchTags = async () => {
         try {
@@ -68,59 +65,70 @@ function TagSearch () {
     }
 
     return (
-        <div className="absolute z-50 top-12 px-8 py-4 dark:bg-dark-blue w-full left-0 rounded-md flex flex-col gap-4">
-            <div className="flex gap-2 justify-end  max-w-full text-sm">
+        <div className="relative w-full items-center left-0 rounded-full flex bg-dark-blue px-4 py-1">
+            <div className="border-r border-r-indigo-600 pr-4">
                 <button 
-                    className={`px-4 py-1 rounded-sm ${operator === 'or' ? 'dark:bg-indigo-500 dark:text-dark-bg' : 'dark:bg-dark-bg dark:text-dark-text'}`}
-                    onClick={() => setOperator('or')}
+                    className="flex items-center gap-2 bg-dark-bg rounded-sm px-2 py-1 hover:bg-blue-950 text-sm"
+                    onClick={() => setOpen(prev => !prev)}
                 >
-                    OR
-                </button>
-                <button 
-                    className={`px-4 py-1 rounded-sm ${operator === 'and' ? 'dark:bg-indigo-500 dark:text-dark-bg' : 'dark:bg-dark-bg dark:text-dark-text'}`}
-                    onClick={() => setOperator('and')}
-                >
-                    AND
+                    <FontAwesomeIcon icon={faChevronLeft} />
+                    Back
                 </button>
             </div>
-            <div className="grow-1 flex gap-2 flex-wrap max-w-full items-center">
-                
-                    {
-                        selected
-                        && selected.map((tag, index) => (
-                            <>
-                                <div className="relative px-2 py-0.5 bg-indigo-600 rounded-sm">
-                                    <p className="text-white">{tag}</p>
-                                    <div 
-                                        className="absolute -top-3 -right-1 hover:text-red-600  text-red-500"
-                                        onClick={() => handleCancel(tag)}
-                                    >
-                                        <FontAwesomeIcon icon={faXmarkCircle} className="text-[13px] "/>
-                                    </div>
-                                </div>
-                                { 
-                                    index != selected.length-1
-                                    && <p className="px-1 py-0.5 bg-indigo-500 text-dark-bg text-sm rounded-sm">{operator.toUpperCase()}</p>
-                                }
-                            </>
+            
+            <div 
+                className="grow-1 flex gap-2 max-w-full items-center overflow-auto rounded-md  
+                    py-1 scrollbar-thin scrollbar-track-gray-300 scrollbar-thumb-gray-500 
+                    dark:scrollbar-track-transparent dark:scrollbar-thumb-indigo-600 mx-4"
+            >   
 
-                        ))
-                    }
-                
-                <AutoSuggest tags={tags} handleEnter={handleEnter} />
-            </div>
-            <div className="flex flex-col">
-                {results.map(result => {
-                    return (
-                        <Link to={`/file/${result?.id}`} className="text-indigo-600 flex justify-between px-2 rounded-sm py-0.5 hover:bg-dark-bg">
-                            {result?.name}
-                            <div className="flex gap-1 text-green-600">
-                                {result?.tags.map(tag => (<p>{tag}</p>))}
+                <AutoSuggest tags={tags} handleEnter={handleEnter} /> 
+                {
+                    selected
+                    && selected.map((tag, index) => (
+                        <div className="flex gap-2 items-end">
+                            <div className="relative px-2 py-0.5 bg-indigo-600 rounded-sm">
+                                <p className="text-white">{tag}</p>
+                                <div 
+                                    className="absolute -top-3 -right-1 hover:text-red-600  text-red-500"
+                                    onClick={() => handleCancel(tag)}
+                                    >
+                                    <FontAwesomeIcon icon={faXmarkCircle} className="text-[13px] "/>
+                                </div>
                             </div>
-                        </Link>
-                    )
-                })}
+                            { 
+                                index != selected.length-1
+                                && <p className="px-1 py-0.5 bg-indigo-700 text-white text-[12px] rounded-sm font-semibold">{operator.toUpperCase()}</p>
+                            }
+                        </div>
+                    ))
+                }
+               
             </div>
+            <OutsideCickDetector toggler={setShowSettings}>
+                <div className="w-8 h-8 flex items-center justify-center rounded-full bg-dark-bg hover:text-indigo-600">
+                    <FontAwesomeIcon icon={faGear} onClick={() => setShowSettings(prev => !prev)}/>
+                </div>
+                { 
+                    showSettings
+                    &&<div className="absolute -right-1 top-0 translate-x-full rounded-sm flex gap-2 justify-between bg-dark-blue py-1 px-4 text-sm">
+                        <div className="flex flex-col items-center gap-2">
+                            <button 
+                                className={`px-4 py-1 rounded-sm ${operator === 'or' ? 'dark:bg-indigo-500 dark:text-dark-bg' : 'dark:bg-dark-bg dark:text-dark-text'}`}
+                                onClick={() => setOperator('or')}
+                            >
+                                OR
+                            </button>
+                            <button 
+                                className={`px-4 py-1 rounded-sm ${operator === 'and' ? 'dark:bg-indigo-500 dark:text-dark-bg' : 'dark:bg-dark-bg dark:text-dark-text'}`}
+                                onClick={() => setOperator('and')}
+                            >
+                                AND
+                            </button>
+                        </div>
+                    </div>
+                }
+            </OutsideCickDetector>
         </div>
     )
 }

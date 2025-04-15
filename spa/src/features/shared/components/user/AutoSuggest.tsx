@@ -34,12 +34,12 @@ function AutoSuggest ({tags, handleEnter}: {tags: string[], handleEnter: (tag: s
     }
 
   return (
-    <div className='rounded-md ml-4'>
-        <div className='relative max-w-min bg-indigo-100 dark:bg-dark-bg py-1 px-3 rounded-sm min-w-20'>
+    <div className='rounded-md'>
+        <div className='relative max-w-min py-1  rounded-sm min-w-20'>
             <input 
                 className='relative max-w-min outline-none field-sizing-content min-w-[20px] z-10'
                 onChange={(e) => setValue(e.target.value)}
-                id='input'
+                id='tag-input'
                 onKeyDown={handleKeydown}
                 value={value}
                 autoComplete='off'
@@ -47,7 +47,7 @@ function AutoSuggest ({tags, handleEnter}: {tags: string[], handleEnter: (tag: s
             />
             {
                 suggested 
-                && <p className='absolute top-1/2 bg-indigo-100 dark:bg-dark-bg py-1 pr-3 transform -translate-y-1/2 rounded-sm'>
+                && <p className='absolute top-1/2 py-1 pr-3 transform -translate-y-1/2 rounded-sm'>
                     <span className='text-transparent'>{value}</span>
                     <span className=' text-gray-500'>
                         {suggested}
