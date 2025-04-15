@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloud, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
-import { byteFormat } from "../features/shared/utils/utils";
-import { useAuth } from "../features/shared/hooks/useAuth";
+import { byteFormat } from "../utils/utils";
+import { useAuth } from "../hooks/useAuth";
 export interface StorageInfo {
     used: number;
     total: number;

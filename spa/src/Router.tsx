@@ -8,7 +8,7 @@ import Settings from "./features/dashboard/containers/Settings";
 import Logs from "./features/dashboard/containers/Logs";
 import Login from "./features/authentication/containers/Login";
 import Register from "./features/authentication/containers/Register";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./features/shared/components/ProtectedRoute";
 import Performance from "./features/dashboard/containers/Performance";
 import FileDetail, {loader as FileDetailLoader} from "./features/file/containers/FileDetail";
 import FileUpdate, {loader as FileUpdateLoader} from "./features/file/containers/FileUpdate";

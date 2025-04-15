@@ -1,4 +1,4 @@
-import InfoBar from "../../../components/InfoBar";
+import InfoBar from "../../shared/components/InfoBar";
 import FileView from "../components/FileView";
 
 function Home () {

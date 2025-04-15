@@ -5,7 +5,7 @@ import { Tag } from "./TagSelection";
 import { Formik, Form, Field } from "formik";
 import * as Yup from 'yup';
 import { createFile } from "../../../shared/utils/api";
-import StorageIndicator from "../../../../components/StorageIndicator";
+import StorageIndicator from "../../../shared/components/StorageIndicator";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Extension, SettingsData, Settings } from "../../../shared/types/fileTypes";

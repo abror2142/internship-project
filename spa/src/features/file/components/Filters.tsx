@@ -6,6 +6,8 @@ import { getUserTags } from '../../shared/utils/api';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleMinus } from "@fortawesome/free-solid-svg-icons";
 import { fetchAllFiles } from '../api/fileService';
+import { File } from '../../shared/types/fileTypes';
+import { Option } from '../../shared/types/select';
 
 const typeOptions = [
     {label: "Image", value: 'image'},
@@ -27,11 +29,6 @@ const metricOptions = [
     {label: "MB", value: 'mb'},
     {label: "GB", value: 'gb'}
 ]
-
-interface Option {
-  label: string;
-  value: string;
-}
 
 export const customStyles = () => {
   const { isDarkMode } = useTheme();
@@ -93,7 +90,7 @@ export const customStyles = () => {
   }
 };
 
-function Filters ({setFiles}) {
+function Filters ({setFiles}: {setFiles: React.Dispatch<React.SetStateAction<File[]>>}) {
   const {  } = useTheme()
   const [searchParams, setSearchParams] = useSearchParams();
   const [tags, setTags] = useState<Option[]>([]);
@@ -104,7 +101,7 @@ function Filters ({setFiles}) {
   const [min, setMin] = useState<string | null>(searchParams.has('min') ? searchParams.get('min') : null);
   const [max, setMax] = useState<string | null>(searchParams.has('max') ? searchParams.get('max') : null);
 
-  const handleType = (e, paramName: string, set) => {
+  const handleFilter = (e: any, paramName: string, set: any) => {
     const params = new URLSearchParams(searchParams);
     if(e === null) {
       params.delete(paramName); 
@@ -118,10 +115,10 @@ function Filters ({setFiles}) {
   }
 
   const handleReset = () => {
-    handleType(null, 'storage', setStorage);
-    handleType(null, 'type', setType);
-    handleType(null, 'tag', setTag);
-    handleType(metricOptions[2], 'metric', setMetric);
+    handleFilter(null, 'storage', setStorage);
+    handleFilter(null, 'type', setType);
+    handleFilter(null, 'tag', setTag);
+    handleFilter(metricOptions[2], 'metric', setMetric);
     setMin(null);
     setMax(null);
     setSearchParams([]);
@@ -184,7 +181,7 @@ function Filters ({setFiles}) {
                 isClearable={true}
                 options={typeOptions}
                 value={type}
-                onChange={(e) => handleType(e, 'type', setType)}
+                onChange={(e) => handleFilter(e, 'type', setType)}
                 placeholder="Type"
             />
 
@@ -195,7 +192,7 @@ function Filters ({setFiles}) {
                 isClearable={true}
                 options={storageOptions}
                 value={storage}
-                onChange={(e) => handleType(e, 'storage', setStorage)}
+                onChange={(e) => handleFilter(e, 'storage', setStorage)}
                 placeholder="Storage"
             />
 
@@ -206,7 +203,7 @@ function Filters ({setFiles}) {
                 isClearable={true}
                 options={tags}
                 value={tag}
-                onChange={(e) => handleType(e, 'tag', setTag)}
+                onChange={(e) => handleFilter(e, 'tag', setTag)}
                 placeholder="Tag"
             />
 
@@ -245,7 +242,7 @@ function Filters ({setFiles}) {
                     }}
                     value={metric}
                     options={metricOptions}
-                    onChange={(e) => handleType(e, 'metric', setMetric)}
+                    onChange={(e) => handleFilter(e, 'metric', setMetric)}
                 />
                 {
                   searchParams.size > 0

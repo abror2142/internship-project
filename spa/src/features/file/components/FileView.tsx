@@ -5,9 +5,9 @@ import FileViewToggler from "./file-view/FileViewToggler";
 import Filters from "./Filters";
 import { useLoaderData } from "react-router-dom";
 import { fetchAllFiles } from "../api/fileService";
-import UploadFile from "./upload/UploadFile";
 import { useQueryParamsInterceptor } from "../../shared/hooks/useQueryParamsInterceptor";
 import { File } from "../../shared/types/fileTypes";
+import InfoBar from "../../shared/components/InfoBar";
 
 export const loader = async () => {
     try {
@@ -26,23 +26,25 @@ function FileView () {
     const [view, setView] = useState('gallery');
 
     return (
-        <div className="mx-6 mb-4 flex flex-col gap-4 grow max-h-ful dark:text-dark-text">
-            <UploadFile/>
-            <div className="flex items-center justify-between">
-                <Filters setFiles={setFiles} />
-                <FileViewToggler view={view} setView={setView}/>
-            </div>
-            <div 
-                className="grow overflow-auto scrollbar-thin scrollbar-track-gray-300 
-                scrollbar-thumb-gray-500 dark:scrollbar-track-gray-700 dark:scrollbar-thumb-gray-400"
-            >
-                {
-                    view === 'gallery'
-                    ? <FileGalleryView files={files} />
-                    : view === 'table'
-                    ? <FileTableView files={files} />
-                    : <p>Unsupported view format!</p>
-                }
+        <div className="flex gap-4 grow max-h-ful dark:text-dark-text">
+            <InfoBar />
+            <div className="flex flex-col gap-4 grow-1 my-5 mx-4">
+                <div className="flex items-center justify-between">
+                    <Filters setFiles={setFiles} />
+                    <FileViewToggler view={view} setView={setView}/>
+                </div>
+                <div 
+                    className="grow overflow-auto scrollbar-thin scrollbar-track-gray-300 
+                    scrollbar-thumb-gray-500 dark:scrollbar-track-gray-700 dark:scrollbar-thumb-gray-400"
+                >
+                    {
+                        view === 'gallery'
+                        ? <FileGalleryView files={files} />
+                        : view === 'table'
+                        ? <FileTableView files={files} />
+                        : <p>Unsupported view format!</p>
+                    }
+                </div>
             </div>
         </div>
     )

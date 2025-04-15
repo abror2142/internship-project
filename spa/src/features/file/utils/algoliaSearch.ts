@@ -1,0 +1,2 @@
+import { algoliaClient } from "../../../../algolia"
+

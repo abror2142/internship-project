@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHardDrive, faSearch, faSliders } from "@fortawesome/free-solid-svg-icons";
+import { faHardDrive } from "@fortawesome/free-solid-svg-icons";
 import DarkModeToggler from "../DarkModeToggler";
-import { useAuth } from "../../features/shared/hooks/useAuth";
+import { useAuth } from "../../hooks/useAuth";
+import SearchBar from "./SearchBar";
 
 function Header () {
     const { user, logout } = useAuth();
@@ -19,21 +20,8 @@ function Header () {
                 </Link>
             </div>
 
-            <div className="flex gap-2 items-center dark:bg-dark-blue px-2 py-0.5 rounded-full grow-1 max-w-md">
-                <FontAwesomeIcon icon={faSearch} className="text-lg dark:text-dark-blue-light dark:hover:bg-dark-bg rounded-full p-2"/>
-                <input 
-                    className="w-full outline-none grow-1"
-                    placeholder="Search..."
-                />
-                <div className="group relative flex items-center">
-                    <FontAwesomeIcon icon={faSliders} className="text-xl dark:text-dark-blue-light dark:hover:bg-dark-bg rounded-full p-2"/>
-                    <p 
-                        className="hidden group-hover:block absolute text-sm text-nowrap 
-                        dark:bg-dark-bg border dark:border-dark-accent px-1 rounded-sm top-9 left-2"
-                    >Advanced Search</p>
-                </div>
-            </div>
-
+            <SearchBar />
+            
             <div className="flex gap-4 dark:text-dark-text-highlighted items-center">
                 <DarkModeToggler />
                 { 

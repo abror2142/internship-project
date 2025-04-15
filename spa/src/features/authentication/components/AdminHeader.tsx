@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import DarkModeToggler from "../../../components/DarkModeToggler";
+import DarkModeToggler from "../../shared/components/DarkModeToggler";
 
 function AdminHeader () {
     return (
