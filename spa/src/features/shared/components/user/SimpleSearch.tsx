@@ -36,7 +36,7 @@ function SimpleSearch ({setOpen, setResults}: {setOpen: React.Dispatch<React.Set
                 <FontAwesomeIcon icon={faSearch} className="text-lg dark:text-dark-blue-light rounded-full p-2"/>
                 <input 
                     className="w-full outline-none grow-1"
-                    placeholder="Search..."
+                    placeholder="Search by file name..."
                     onChange={(e) => setTerm(e.target.value)}
                 />
                 <OutsideCickDetector toggler={setOpen}>

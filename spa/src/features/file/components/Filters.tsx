@@ -8,6 +8,7 @@ import { faCircleMinus } from "@fortawesome/free-solid-svg-icons";
 import { fetchAllFiles } from '../api/fileService';
 import { File } from '../../shared/types/fileTypes';
 import { Option } from '../../shared/types/select';
+import { useQueryParamsInterceptor } from '../../shared/hooks/useQueryParamsInterceptor';
 
 const typeOptions = [
     {label: "Image", value: 'image'},
@@ -91,7 +92,7 @@ export const customStyles = () => {
 };
 
 function Filters ({setFiles}: {setFiles: React.Dispatch<React.SetStateAction<File[]>>}) {
-  const {  } = useTheme()
+  useQueryParamsInterceptor();
   const [searchParams, setSearchParams] = useSearchParams();
   const [tags, setTags] = useState<Option[]>([]);
   const [tag, setTag] = useState(searchParams.has('tag') && {label: searchParams.get('tag'), value: searchParams.get('tag')});
