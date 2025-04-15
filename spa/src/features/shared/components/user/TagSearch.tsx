@@ -5,17 +5,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faGear, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 import { client } from "../../../../../algolia";
 import OutsideCickDetector from "../../hooks/useOutsideClickDetector";
+import { useAuth } from "../../hooks/useAuth";
 
 function TagSearch ({setOpen, setResults}: {setOpen: React.Dispatch<React.SetStateAction<boolean>>, setResults: React.Dispatch<React.SetStateAction<any>>}) {
     const [operator, setOperator] = useState('and');
     const [tags, setTags] = useState<string[]>([]);
     const [selected, setSelected] = useState<string[]>([]);
     const [showSettings, setShowSettings] = useState(false);
+    const { user } = useAuth();
 
     const searchByTags = async () => {
-        const filterClause = selected.map(tag => `tags:${tag}`).join(` ${operator.toUpperCase()} `);
+        const filterClause = `user_id:${user.id} AND (` + selected.map(tag => `tags:${tag}`).join(` ${operator.toUpperCase()} `) + ')';
         if(filterClause) {
-            console.log(selected, filterClause)
             const response = await client.search({
                 requests: [{
                     indexName: 'files',

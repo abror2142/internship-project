@@ -1,28 +1,12 @@
 import { PropsWithChildren, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
-import { User } from "../types/User";
 import { registerApi, loginApi, logoutApi, meApi, userApi } from "../utils/api";
 import { AuthResponse, AuthMeResponse, AuthUserResponse } from "../utils/zod";
 import { z } from "zod";
-import { jwtDecode, JwtPayload } from "jwt-decode";
+import { User } from "../types/user";
 
 const getToken = () => {
     return localStorage.getItem('token');
-}
-
-const isTokenExpired = (token: string | null) => {
-    if(!token)
-        return true;
-    try {
-        const decodedToken = jwtDecode<JwtPayload>(token);
-        if(!decodedToken || !decodedToken?.exp)
-            return true;
-        const currentTime = Date.now() / 1000;
-        return decodedToken?.exp < currentTime;
-    } catch (e) {
-        console.log('Error decoding token:', e);
-        return true;
-    }
 }
 
 function AuthProvider ({children} :PropsWithChildren) {
@@ -57,7 +41,7 @@ function AuthProvider ({children} :PropsWithChildren) {
         }       
     }
 
-    
+
 
     useEffect(() => {
         fetchUser();

@@ -3,20 +3,22 @@ import OutsideCickDetector from "../../hooks/useOutsideClickDetector";
 import { faSearch, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { client } from "../../../../../algolia";
+import { useAuth } from "../../hooks/useAuth";
 
 function SimpleSearch ({setOpen, setResults}: {setOpen: React.Dispatch<React.SetStateAction<boolean>>, setResults: React.Dispatch<React.SetStateAction<any>>}) {
     const [term, setTerm] = useState<string>("");
-
+    const { user } = useAuth();
 
     const searchByTerm = async () => {
+        const filterClause = `user_id:${user.id}`;
         const response = await client.search({
             requests: [{
                 indexName: 'files',
                 query: term,
-                restrictSearchableAttributes: ['name']
+                restrictSearchableAttributes: ['name'],
+                filters: filterClause
             }],
         });
-        console.log(response)
         setResults(response.results[0]?.hits);  
     }
 
