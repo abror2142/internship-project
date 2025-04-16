@@ -1,10 +1,4 @@
-export type User = {
-    id: number;
-    name: string;
-    image: string;
-    roles: string[];
-    storage: {
-        used: number;
-        allocated: number;  
-    }
-}
+import { z } from "zod";
+import { userSchema } from "../utils/zod";
+
+export type User = z.infer<typeof userSchema>;

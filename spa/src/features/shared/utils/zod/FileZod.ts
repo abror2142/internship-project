@@ -47,7 +47,29 @@ export const extensionSchema = z.object({
     })
 });
 
+export const countrySchema = z.object({
+    id: z.number(),
+    name: z.string(),
+    code: z.string()
+});
+
+export const userInfoSchema = z.object({
+    id: z.number(),
+    birthdate: z.string().nullable(),
+    job: z.string().nullable(),
+    phoneNumber: z.string().nullable(),
+    address: z.string().nullable(),
+    created_at: z.string(),
+    updated_at: z.string(),
+    country: z.object({
+        id: z.number(),
+        name: z.string(),
+        code: z.string()
+    }).nullable(),
+});
+
 export const fileArraySchema = z.array(fileSchema);
 export const tagsArraySchema = z.array(tagSchema);
 export const settingsArraySchema = z.array(settingSchema);
 export const extensionsArraySchema = z.array(extensionSchema);
+export const countriesArraySchema = z.array(countrySchema)

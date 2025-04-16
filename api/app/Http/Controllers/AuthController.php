@@ -27,7 +27,11 @@ class AuthController extends Controller
             'user' => [
                 'id' => $user['id'],
                 'name' => $user['name'],
-                'image' => '',
+                'image' => $user['image'],
+                'storage' => [
+                    'allocated' => (int) $user['storage'],
+                    'used' => $user['used']
+                ],
                 'roles' => $user->roles->pluck('name')
             ],
             'token' => $token
@@ -70,15 +74,13 @@ class AuthController extends Controller
     {
         $user = auth()->user(); 
         return response()->json([
-            'user' => [
-                'id' => $user['id'],
-                'name' => $user['name'],
-                'image' => '',
-                'roles' => $user->roles->pluck('name'),
-                'storage' => [
-                    'allocated' => (int) $user['storage'],
-                    'used' => $user['used']
-                ]
+            'id' => $user['id'],
+            'name' => $user['name'],
+            'image' => $user['image'],
+            'roles' => $user->roles->pluck('name'),
+            'storage' => [
+                'allocated' => (int) $user['storage'],
+                'used' => $user['used']
             ]
         ]);
     }

@@ -206,4 +206,16 @@ class UserController extends Controller
         ]);
     }
 
+    public function updateImage(Request $request) 
+    {
+        $request->validate([
+            'image' => 'required|string'
+        ]);
+
+        $user = auth()->user();
+        $user->update(['image' => $request->image]);
+
+        return $user;
+    }
+
 }

@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\CountryController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\FileTypeController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserInfoController;
 use App\Http\Middleware\ActionLogger;
 use App\Http\Controllers\FileExtensionController;
 use Illuminate\Support\Facades\Route;
@@ -17,6 +19,7 @@ Route::post('/logout',[AuthController::class, 'logout'])->middleware(['auth:api'
 Route::get('/me',[AuthController::class, 'me'])->middleware('auth:api');
 Route::get('/user',[AuthController::class, 'user'])->middleware('auth:api');
 Route::post('/refresh',[AuthController::class, 'refresh']);
+Route::put('/update/image',[UserController::class, 'updateImage']);
 Route::get('/user/storage-info',[UserController::class, 'storageInfo'])->middleware('auth:api');
 
 Route::controller(FileController::class)
@@ -40,9 +43,11 @@ Route::controller(FileController::class)
 Route::get('/search', [FileController::class, 'search'])->middleware(['auth:api', ActionLogger::class . ':search']);
 Route::get('/my-tags', [TagController::class, 'usedTags'])->middleware(['auth:api']);
 
-
 Route::resource('tags', TagController::class)->except(['destroy', 'merge', 'edit']);
 Route::get('/settings', [SettingsController::class, 'index'])->middleware('auth:api');
+Route::get('/countries', [CountryController::class, 'index']);
+Route::get('/user-info', [UserInfoController::class, 'show'])->middleware(['auth:api']);
+Route::put('/user-info', [UserInfoController::class, 'update'])->middleware(['auth:api']);
 
 Route::get('/types', [FileTypeController::class, 'index']);
 Route::get('/extensions/enabled', [FileExtensionController::class, 'enabled']);

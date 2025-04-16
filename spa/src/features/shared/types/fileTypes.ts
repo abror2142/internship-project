@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { extensionSchema, fileSchema, settingSchema, storageInfoSchema, tagSchema } from "../utils/zod/FileZod";
+import { countrySchema, extensionSchema, fileSchema, settingSchema, storageInfoSchema, tagSchema, userInfoSchema } from "../utils/zod/FileZod";
 
 export type Tag = z.infer<typeof tagSchema>;
 export type File = z.infer<typeof fileSchema>;
@@ -11,3 +11,5 @@ export type Settings = {
     storage: string;
     storageSizeLimit: number;
 }
+export type Country = z.infer<typeof countrySchema>;
+export type UserInfo = z.infer<typeof userInfoSchema>;
