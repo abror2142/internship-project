@@ -13,6 +13,8 @@ import Performance from "./features/dashboard/containers/Performance";
 import FileDetail, {loader as FileDetailLoader} from "./features/file/containers/FileDetail";
 import FileUpdate, {loader as FileUpdateLoader} from "./features/file/containers/FileUpdate";
 import FileView, {loader as FileViewLoader} from "./features/file/components/FileView";
+import Home from "./features/file/containers/Home";
+import LandingPage from "./features/shared/containers/LandingPage";
 
 const routes = createRoutesFromElements(
     <Route>
@@ -30,14 +32,21 @@ const routes = createRoutesFromElements(
             <Route path="performance" element={<Performance />} />
         </Route>
 
+        {/* Guest User  */}
+        <Route path="/">
+            <Route path="info" element={<LandingPage />} />
+        </Route>
+
         {/* User Routes */}
         <Route path="/" element={<Layout />} >
-            <Route index element={<FileView />} loader={FileViewLoader} />
+            <Route index element={<Home />} />
+            <Route path="my-drive" element={<FileView />} loader={FileViewLoader} />
             <Route path="file/:id" element={<FileDetail />} loader={FileDetailLoader} />
             <Route path="file/:id/update" element={<FileUpdate />} loader={FileUpdateLoader} />
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
         </Route>
+
     </Route>
 )
 

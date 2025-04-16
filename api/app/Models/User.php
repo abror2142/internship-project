@@ -23,6 +23,7 @@ class User extends Authenticatable implements JWTSubject
     protected $fillable = [
         'name',
         'email',
+        'image',
         'password',
         'is_active',
         'storage',
@@ -84,5 +85,10 @@ class User extends Authenticatable implements JWTSubject
     public function logs()
     {
         return $this->hasMany(Log::class);
+    }
+
+    public function userInfo()
+    {
+        return $this->hasOne(UserInfo::class);
     }
 }

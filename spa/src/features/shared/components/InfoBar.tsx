@@ -5,7 +5,6 @@ import StorageInfoFull from "../../file/components/StorageInfoFull";
 import UploadFile from "../../file/components/upload/UploadFile";
 
 function InfoBar() {
-
     return (
         <div className="flex flex-col gap-4 dark:bg-dark-blue px-8 py-4 dark:text-dark-text min-w-72">
             <UploadFile />

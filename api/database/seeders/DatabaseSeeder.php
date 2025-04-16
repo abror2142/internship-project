@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call(AdminSeeder::class);
         $this->call(FileTypeSeeder::class);
         $this->call(FileExtensionSeeder::class);
+        $this->call(CountrySeeder::class);
 
         $user = User::create([
             'email' => 'abror2142@gmail.com',
@@ -25,6 +26,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Abrorbek',
             'storage' => config('settings.storage_size_limit')
         ]);
+        
         $user->assignRole('user');
         $this->command->info('User Abrorbek has been created!');
     }
