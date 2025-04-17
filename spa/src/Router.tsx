@@ -15,6 +15,7 @@ import FileUpdate, {loader as FileUpdateLoader} from "./features/file/containers
 import FileView, {loader as FileViewLoader} from "./features/file/components/FileView";
 import Home from "./features/file/containers/Home";
 import LandingPage from "./features/shared/containers/LandingPage";
+import Profile from "./features/profile/containers/Profile";
 
 const routes = createRoutesFromElements(
     <Route>
@@ -40,6 +41,7 @@ const routes = createRoutesFromElements(
         {/* User Routes */}
         <Route path="/" element={<Layout />} >
             <Route index element={<Home />} />
+            <Route path="profile" element={<Profile />}  />
             <Route path="my-drive" element={<FileView />} loader={FileViewLoader} />
             <Route path="file/:id" element={<FileDetail />} loader={FileDetailLoader} />
             <Route path="file/:id/update" element={<FileUpdate />} loader={FileUpdateLoader} />

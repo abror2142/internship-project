@@ -6,7 +6,7 @@ export const userSchema = z.object({
     image: z.string().nullable(),
     roles: z.array(z.string()),
     storage: z.object({
-        used: z.number().nullable(),
+        used: z.number(),
         allocated: z.number()
     })
 });
@@ -23,12 +23,8 @@ export const userMeSchema = z.object({
     email: z.string(),
     created_at: z.string(),
     updated_at: z.string(),
-    email_verified_at: z.string(),
-    roles: z.array(z.string()),
-    storage: z.object({
-        used: z.number().nullable(),
-        allocated: z.number()
-    })
+    email_verified_at: z.string().nullable(),
+    storage: z.string()
 });
 
 

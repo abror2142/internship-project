@@ -1,19 +1,16 @@
 import { Field, Formik, Form } from "formik";
 import { useEffect, useState } from "react";
 import Select from "react-select";
-import { Link } from "react-router-dom";
 import { fetchAllCountries } from "../../shared/api/apiService";
 import { Option } from "../../shared/types/select";
 import { customStyles } from "../../file/components/Filters";
 import { Country, UserInfo } from "../../shared/types/fileTypes";
 import { fetchUserInfo } from "../../shared/api/apiService";
 import { useAuth } from "../../shared/hooks/useAuth";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-import { updateUserInfo } from "../api/authService";
+import { updateUserInfo } from "../../shared/api/apiService";
 import { useNavigate } from "react-router-dom";
 
-function UserInfoForm ({setStep}: {setStep: React.Dispatch<React.SetStateAction<number>>}) {
+function UserInfoForm () {
     const [countries, setCountries] = useState<Country[]>([]);
     const [selected, setSelected] = useState<Option | null>(null);
     const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
@@ -79,11 +76,7 @@ function UserInfoForm ({setStep}: {setStep: React.Dispatch<React.SetStateAction<
                     handleUpdate(json);
                 }}
             >
-                <Form className="flex flex-col gap-4">
-                    <Link to={'/my-drive'}>
-                        skip
-                    </Link>
-                    <p className="text-xl font-semibold dark:text-dark-text-highlighted text-center">Tell us More!</p>
+                <Form className="flex flex-col gap-4 max-w-md">
                     <div className="flex flex-col gap-1">
                         <label>Job</label>
                         <Field name="job" id="job"  className="dark:bg-dark-blue px-2 py-1 rounded-sm outline-none" placeholder="Software Engineer" />
@@ -114,9 +107,6 @@ function UserInfoForm ({setStep}: {setStep: React.Dispatch<React.SetStateAction<
                         <Field id="address" name="address" className="dark:bg-dark-blue px-2 py-1 rounded-sm outline-none" placeholder=""  />
                     </div>
                     <div>
-                        <button onClick={() => setStep(2)} type="button">
-                            <FontAwesomeIcon icon={faChevronLeft} /> Previous
-                        </button>
                         <button type="submit">Complete</button>
                     </div>
                 </Form>

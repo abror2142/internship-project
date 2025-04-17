@@ -33,3 +33,19 @@ export const fetchUserInfo = async () => {
         throw error;
     }
 }
+
+export const updateUserImage = async (json: string) => {
+    try {
+       apiClient.put(endpoints.UPDATE_USER_IMAGE, json); 
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const updateUserInfo = async (json: string) => {
+    try {
+       return apiClient.put(endpoints.UPDATE_USER_INFO, json); 
+    } catch (error) {
+        throw error;
+    }
+}

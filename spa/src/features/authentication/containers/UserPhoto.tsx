@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../../shared/hooks/useAuth";
 import { uploadFile } from "../../shared/utils/uploader";
-import { updateUserImage } from "../api/authService";
+import { updateUserImage } from "../../shared/api/apiService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight, faImage } from "@fortawesome/free-solid-svg-icons";
 

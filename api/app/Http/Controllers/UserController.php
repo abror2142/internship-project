@@ -162,6 +162,17 @@ class UserController extends Controller
         return response()->json(['user' => $user], 200);
     }
 
+        /**
+     * Get the authenticated User.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function me()
+    {
+        $user = auth()->user();
+        return response()->json($user);
+    }
+
     /**
      * Update the specified resource in storage.
      */
