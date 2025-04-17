@@ -37,7 +37,7 @@ function AccountInfo () {
             <Form className="flex flex-col gap-4 grow-1 dark:text-dark-text dark:bg-dark-bg px-6 py-4 rounded-md">
                 <div className="flex items-center gap-4">
                     <FontAwesomeIcon icon={faCircleUser} className="text-2xl text-green-500"/>
-                    <p className="text-xl font-semibold">Account</p>
+                    <p className="text-xl font-semibold dark:text-dark-text-highlighted">Account</p>
                 </div>
                 <div className="flex flex-col gap-1">
                     <label htmlFor="name" >Name</label>

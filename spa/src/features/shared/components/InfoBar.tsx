@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { faHardDrive, faHome, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faHardDrive, faHome, faTrash, faUserGear } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import StorageInfoFull from "../../file/components/StorageInfoFull";
 import UploadFile from "../../file/components/upload/UploadFile";
@@ -27,6 +27,15 @@ function InfoBar() {
                 <p>My Drive</p>
             </Link>
             <Link 
+                to={"/profile"}
+                className="flex gap-2 items-center dark:bg-dark-bg px-3 py-1 rounded-sm 
+                    dark:hover:text-dark-blue-light dark:hover:bg-dark-card-light 
+                    border dark:border-transparent dark:hover:border-dark-blue-light"
+            >
+                <FontAwesomeIcon icon={faUserGear} />
+                <p>Profile</p>
+            </Link>
+            <Link 
                 to={"/trash"}
                 className="flex gap-2 items-center dark:bg-dark-bg px-3 py-1 rounded-sm 
                     dark:hover:text-dark-blue-light dark:hover:bg-dark-card-light 
@@ -35,14 +44,13 @@ function InfoBar() {
                 <FontAwesomeIcon icon={faTrash} />
                 <p>Trash</p>
             </Link>
-            <Link 
-                to={"/storage"}
+            <div 
                 className="flex gap-2 items-center dark:bg-dark-bg px-3 py-1 rounded-sm 
                     dark:hover:text-dark-blue-light dark:hover:bg-dark-card-light 
                     border dark:border-transparent"
             >
                 <StorageInfoFull />
-            </Link>
+            </div>
             <Link 
                 to={"/get-storage"}
                 className="flex gap-2 items-center bg-green-500 text-white max-w-min text-nowrap mx-auto px-3 py-1 rounded-sm 

@@ -10,7 +10,7 @@ function Profile () {
 
     return (
         user
-        && <div className="dark:text-dark-text flex max-w-5xl mx-auto dark:bg-dark-blue w-full px-6 py-4 rounded-lg flex-col gap-4">
+        && <div className="my-5 dark:text-dark-text flex max-w-5xl mx-auto dark:bg-dark-blue w-full px-6 py-4 rounded-lg flex-col gap-4">
             <div className="flex gap-6">
                 <div className="flex items-center flex-col gap-2 self-center  dark:bg-dark-bg px-6 h-full justify-center rounded-md">
                     {

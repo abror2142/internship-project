@@ -9,7 +9,7 @@ function Home () {
             {
                 user && user.id
                 ? <div>
-                    <InfoBar />
+                    
                 </div>
                 : <div>
                     <p className="text-2xl">Welcome to our website!</p>

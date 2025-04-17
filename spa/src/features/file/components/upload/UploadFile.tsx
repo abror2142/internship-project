@@ -133,10 +133,11 @@ function UploadFile () {
         <div className="relative z-50" >
             <div
                 onClick={() => setOpen(prev => !prev)}
-                className="dark:text-white border border-dark-border px-4 py-2 max-w-min cursor-pointer flex items-center justify-center gap-2 dark:bg-dark-bg dark:hover:border-indigo-500 rounded-md"
+                className="dark:text-white border border-dark-border px-4 py-1.5 max-w-min cursor-pointer 
+                flex items-center justify-center gap-2 dark:bg-indigo-500 mx-auto dark:hover:bg-indigo-600 rounded-md"
             >  
                 <FontAwesomeIcon icon={faPlus} className="text-xl"/>
-                <p>New</p>
+                <p className="text-lg">New</p>
             </div>
             {
                 open

@@ -26,8 +26,7 @@ function FileView () {
     const [view, setView] = useState('gallery');
 
     return (
-        <div className="flex gap-4 grow max-h-ful dark:text-dark-text">
-            <InfoBar />
+        <div className="flex gap-4 grow max-h-full dark:text-dark-text">
             <div className="flex flex-col gap-4 grow-1 my-5 mx-4">
                 <div className="flex items-center justify-between">
                     <Filters setFiles={setFiles} />
