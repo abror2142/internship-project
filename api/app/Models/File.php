@@ -11,7 +11,7 @@ class File extends Model
     /** @use HasFactory<\Database\Factories\FileFactory> */
     use HasFactory, Searchable;
 
-    protected $fillable = ['name', 'description', 'path', 'user_id', 'size', 'storage', 'file_type_id'];
+    protected $fillable = ['name', 'description', 'path', 'user_id', 'size', 'storage', 'file_type_id', 'actions'];
 
     protected $hidden = ['user_id', 'file_type_id'];
 

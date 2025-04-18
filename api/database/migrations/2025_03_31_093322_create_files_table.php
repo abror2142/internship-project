@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('path');
             $table->integer('size');
             $table->string('storage');
+            $table->integer('actions')->default(0)->nullable();
             $table->timestamps();
         });
     }

@@ -6,6 +6,7 @@ export const endpoints = {
     UPDATE_FILE: (id: number) => `/files/${id}`,  // PUT, PATCH
     DELETE_FILE: (id: number) => `/files${id}`,  // DELETE
     FETCH_DOWNLOAD_URL: (id: number) => `/files/${id}/download`,  // GET 
+    FETCH_SUGGESTED_FILES: '/files/suggested',  // GET
 
     FETCH_ALL_TAGS: '/tags',  // GET
 

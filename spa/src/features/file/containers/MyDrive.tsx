@@ -1,8 +1,8 @@
 import { useState } from "react";
-import FileGalleryView from "./file-view/gallery/FileGalleryView";
-import FileTableView from "./file-view/table/FileTableView";
-import FileViewToggler from "./file-view/FileViewToggler";
-import Filters from "./Filters";
+import FileGalleryView from "../components/file-view/gallery/FileGalleryView";
+import FileTableView from "../components/file-view/table/FileTableView";
+import FileViewToggler from "../components/file-view/FileViewToggler";
+import Filters from "../components/Filters";
 import { useLoaderData } from "react-router-dom";
 import { fetchAllFiles } from "../api/fileService";
 import { useQueryParamsInterceptor } from "../../shared/hooks/useQueryParamsInterceptor";
@@ -17,7 +17,7 @@ export const loader = async () => {
     }
 }
 
-function FileView () {
+function MyDrive () {
     useQueryParamsInterceptor();
     const file = useLoaderData();
     const [files, setFiles] = useState<File[]>(file);
@@ -48,4 +48,4 @@ function FileView () {
     )
 }   
 
-export default FileView;
+export default MyDrive;

@@ -80,7 +80,17 @@ class FileController extends Controller
         if($user->hasRole('admin')){
             return File::with(['tags:id,name', 'fileType:id,name,image'])->orderBy('created_at')->get();
         }
-        return File::where('user_id', $user->id)->with()->orderByDesc('created_at')->get();
+        return File::where('user_id', $user->id)->with(['tags:id,name', 'fileType:id,name,image'])->orderByDesc('created_at')->get();
+    }
+
+    public function suggested()
+    {
+        // Return all files
+        $user = auth()->user();
+        if($user->hasRole('admin')){
+            return File::with(['tags:id,name', 'fileType:id,name,image'])->orderByDesc('actions')->limit(16)->get();
+        }
+        return File::where('user_id', $user->id)->with(['tags:id,name', 'fileType:id,name,image'])->orderByDesc('actions')->limit(16)->get();
     }
 
     public function related(File $file)
@@ -88,7 +98,7 @@ class FileController extends Controller
         // Return related files by tag name!
         $tagsIds = $file->tags()->pluck('tag_id')->toArray();
         $user = auth()->user();
-
+        
         $files = $user->files()->whereHas('tags', function ($query) use ($tagsIds) {
             $query->whereIn('tags.id', $tagsIds);
         })->whereNot('id', $file->id)->with(['tags:id,name', 'fileType:id,name,image'])->get();
@@ -151,7 +161,10 @@ class FileController extends Controller
      * Display the specified resource.
      */
     public function show(File $file)
-    {  
+    {   
+        // Increment Number of actions on the file
+        $file->increment('actions');
+        // Return file with necessary fields
         $file->load('fileType:id,name,image');
         $file->load('tags');
         return $file;
@@ -159,6 +172,9 @@ class FileController extends Controller
 
     public function download(File $file)
     {
+         // Increment Number of actions on the file
+        $file->increment('actions');
+        // Return Download path/file or null
         if($file['storage'] === 'firebase'){
             return app('firebase')->download($file['path']);
         } else if ($file['storage'] === 'local') {
@@ -174,6 +190,8 @@ class FileController extends Controller
      */
     public function update(Request $request, File $file)
     {
+        // Increment Number of actions on the file
+        $file->increment('actions');
         // Update file
         $request->validate([
             'name' => 'required|max:255',

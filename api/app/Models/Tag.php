@@ -10,8 +10,9 @@ class Tag extends Model
     /** @use HasFactory<\Database\Factories\TagFactory> */
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'created_at'];
     protected $hidden = ['pivot'];
+    public $timestamps = false;
 
     public function files()
     {

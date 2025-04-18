@@ -12,7 +12,7 @@ import ProtectedRoute from "./features/shared/components/ProtectedRoute";
 import Performance from "./features/dashboard/containers/Performance";
 import FileDetail, {loader as FileDetailLoader} from "./features/file/containers/FileDetail";
 import FileUpdate, {loader as FileUpdateLoader} from "./features/file/containers/FileUpdate";
-import FileView, {loader as FileViewLoader} from "./features/file/components/FileView";
+import MyDrive, {loader as MyDriveLoader} from "./features/file/containers/MyDrive";
 import Home from "./features/file/containers/Home";
 import LandingPage from "./features/shared/containers/LandingPage";
 import Profile from "./features/profile/containers/Profile";
@@ -42,7 +42,7 @@ const routes = createRoutesFromElements(
         <Route path="/" element={<Layout />} >
             <Route index element={<Home />} />
             <Route path="profile" element={<Profile />}  />
-            <Route path="my-drive" element={<FileView />} loader={FileViewLoader} />
+            <Route path="my-drive" element={<MyDrive />} loader={MyDriveLoader} />
             <Route path="file/:id" element={<FileDetail />} loader={FileDetailLoader} />
             <Route path="file/:id/update" element={<FileUpdate />} loader={FileUpdateLoader} />
             <Route path="login" element={<Login />} />
