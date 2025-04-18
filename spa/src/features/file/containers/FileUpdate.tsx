@@ -73,7 +73,7 @@ function FileUpdate() {
         <div 
             className="relative space-y-4 bg-white dark:bg-dark-card-light border 
                 dark:border-dark-border px-6 py-4 rounded-lg shadow-lg max-w-3xl mx-auto 
-                w-full dark:text-dark-text mt-5"
+                w-full dark:text-dark-text mt-5 max-h-min"
         >
             <Formik
                 initialValues={{

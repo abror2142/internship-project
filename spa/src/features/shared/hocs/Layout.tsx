@@ -9,7 +9,7 @@ function Layout () {
 
     return (
         <AuthProvider>
-            <div className={`flex flex-col ${isDarkMode && 'dark'} dark:bg-dark-bg min-h-screen `}>
+            <div className={`flex flex-col ${isDarkMode && 'dark'} dark:bg-dark-bg h-screen`}>
                 <header className="dark:bg-dark-bg-contrast dark:text-dark-text">
                     <Header />
                 </header>

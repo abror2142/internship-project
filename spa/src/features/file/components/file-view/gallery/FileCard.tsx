@@ -12,7 +12,7 @@ function FileCard ({file}: {file: File}) {
     const [open, setOpen] = useState(false);
 
     return (
-        <div className="relative dark:bg-dark-blue px-3 py-3 flex gap-2 flex-col rounded-xl">
+        <div className="relative dark:bg-dark-blue px-3 py-3 flex gap-2 flex-col rounded-x max-w-80">
             <OutsideCickDetector toggler={setOpen}>
                 <div className="flex justify-between">
                     <p>{file.name}</p>

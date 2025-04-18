@@ -29,7 +29,8 @@ function FileDetail() {
     const {file, relatedFiles}: DataType = useLoaderData();
 
     return (
-        <div className="grow-1 flex justify-between flex-col">
+        <div className="grow-1 flex justify-between flex-col max-h-full overflow-auto scrollbar-thin scrollbar-track-gray-300 
+                    scrollbar-thumb-gray-500 dark:scrollbar-track-gray-700 dark:scrollbar-thumb-dark-blue-light">
             <div 
                 className="relative space-y-4 bg-white dark:bg-dark-card-light border 
                     dark:border-dark-border px-6 py-4 rounded-lg shadow-lg dark:text-dark-text w-full 
