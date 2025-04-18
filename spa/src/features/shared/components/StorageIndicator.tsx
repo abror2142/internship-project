@@ -1,7 +1,6 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCloud, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { byteFormat } from "../utils/utils";
 import { useAuth } from "../hooks/useAuth";
+import PlansModal from "./PlansModal";
 
 export interface StorageInfo {
     used: number;
@@ -33,17 +32,7 @@ function StorageIndicator () {
               <p className="pr-2 dark:text-indigo-300">{available}%</p>
             </label>
             <div className="relative pr-3 py-1">
-                <div>
-                    <FontAwesomeIcon icon={faCloud} className="text-indigo-500 text-2xl" />
-                </div>
-                <div className="absolute text-sm text-blue-400 top-0 right-0 hover:text-blue-700">
-                    <div className="group relative" >
-                        <FontAwesomeIcon icon={faInfoCircle} />
-                        <div className="hidden group-hover:block absolute -bottom-4 left-4 bg-dark-bg text-dark-text px-2 py-0.1 text-nowrap">
-                            Get more storage
-                        </div>
-                    </div>
-                </div>
+                <PlansModal />
             </div>
         </div>
     )

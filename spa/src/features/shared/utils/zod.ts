@@ -27,4 +27,16 @@ export const userMeSchema = z.object({
     storage: z.string()
 });
 
+export const planSchema = z.object({
+    id: z.number(),
+    name: z.string(),
+    description: z.string(),
+    price: z.number(),
+    billingPeriod: z.string(),
+    duration: z.string(),
+    sizeLabel: z.string(),
+    created_at: z.string(),
+    updated_at: z.string()
+});
 
+export const plansArraySchema = z.array(planSchema);

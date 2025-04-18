@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\FileType;
+use App\Models\Plan;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -13,16 +13,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('files', function (Blueprint $table) {
+        Schema::create('storage_claims', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class);
-            $table->foreignIdFor(FileType::class);
-            $table->string('name');
-            $table->string('description')->nullable();
-            $table->string('path');
-            $table->unsignedBigInteger('size');
-            $table->string('storage');
-            $table->integer('actions')->default(0)->nullable();
+            $table->foreignIdFor(Plan::class);
             $table->timestamps();
         });
     }
@@ -32,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('files');
+        Schema::dropIfExists('storage_claims');
     }
 };

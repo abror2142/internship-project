@@ -12,7 +12,7 @@ function FileCard ({file}: {file: File}) {
     const [open, setOpen] = useState(false);
 
     return (
-        <div className="relative dark:bg-dark-blue px-3 py-3 flex gap-2 flex-col rounded-x max-w-80">
+        <div className="relative dark:bg-dark-blue px-3 py-3 flex gap-2 flex-col rounded-md max-w-80">
             <OutsideCickDetector toggler={setOpen}>
                 <div className="flex justify-between">
                     <p>{file.name}</p>
@@ -53,8 +53,10 @@ function FileCard ({file}: {file: File}) {
                 className="w-full max-w-36 mx-auto"
             />
             <div className="flex gap-4 items-center justify-between">
-                <div className="flex gap-2 overflow-auto  scrollbar-thin scrollbar-track-gray-300 
-            scrollbar-thumb-gray-500 dark:scrollbar-track-transparent dark:scrollbar-thumb-blue-700">
+                <div 
+                    className="flex gap-2 overflow-auto  scrollbar-thin scrollbar-track-gray-300 
+                        scrollbar-thumb-gray-500 dark:scrollbar-track-transparent dark:scrollbar-thumb-blue-700"
+                >
                     {file.tags.map(tag => {
                         return (
                             <p 
@@ -63,7 +65,7 @@ function FileCard ({file}: {file: File}) {
                         )
                     })}
                 </div>
-                <p className="text-sm text-end">{byteFormat(file.size)}</p>
+                <p className="text-sm text-end text-nowrap">{byteFormat(file.size)}</p>
             </div>
         </div>
     )

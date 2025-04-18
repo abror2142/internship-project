@@ -5,6 +5,7 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\FileTypeController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\StorageClaimController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserInfoController;
@@ -12,6 +13,7 @@ use App\Http\Middleware\ActionLogger;
 use App\Http\Controllers\FileExtensionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PlanController;
 
 Route::post('/register',[AuthController::class, 'register']);
 Route::post('/login',[AuthController::class, 'login']);
@@ -21,6 +23,9 @@ Route::get('/user',[AuthController::class, 'user'])->middleware('auth:api');
 Route::post('/refresh',[AuthController::class, 'refresh']);
 Route::put('/update/image',[UserController::class, 'updateImage']);
 Route::get('/user/storage-info',[UserController::class, 'storageInfo'])->middleware('auth:api');
+
+Route::get('/plans', [PlanController::class, 'index']);
+Route::post('/claim-storage', [StorageClaimController::class, 'store'])->middleware(['auth:api']);
 
 Route::controller(FileController::class)
     ->prefix('files')

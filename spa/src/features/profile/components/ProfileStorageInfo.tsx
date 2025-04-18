@@ -2,6 +2,7 @@ import { useAuth } from "../../shared/hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloud, faDatabase, faRecycle } from "@fortawesome/free-solid-svg-icons";
 import { byteFormat } from "../../shared/utils/utils";
+import PlansModal from "../../shared/components/PlansModal";
 
 function ProfileStorageInfo () {
     const { user } = useAuth();
@@ -18,9 +19,7 @@ function ProfileStorageInfo () {
                             <p className="dark:text-dark-text-highlighted text-xl font-semibold">Storage Info</p>
                         </div>
                         <div>
-                            <button className="bg-green-600 text-white px-2 py-1 rounded-sm text-sm hover:bg-green-700">
-                                Claim more storage
-                            </button>
+                            <PlansModal />
                         </div>
                     </div>
                         <div className="flex justify-between">

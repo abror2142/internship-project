@@ -10,7 +10,11 @@ function Profile () {
 
     return (
         user
-        && <div className="my-5 dark:text-dark-text flex max-w-5xl mx-auto dark:bg-dark-blue w-full px-6 py-4 rounded-lg flex-col gap-4">
+        && <div 
+            className=" dark:text-dark-text flex  mx-5 dark:bg-dark-blue w-full px-6 py-4 
+                rounded-lg flex-col gap-4 max-h-full overflow-auto scrollbar-thin scrollbar-track-gray-300 
+                scrollbar-thumb-gray-500 dark:scrollbar-track-gray-700 dark:scrollbar-thumb-dark-blue-light"
+        >
             <div className="flex gap-6">
                 <div className="flex items-center flex-col gap-2 self-center  dark:bg-dark-bg px-6 h-full justify-center rounded-md">
                     {

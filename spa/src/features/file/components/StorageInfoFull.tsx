@@ -4,6 +4,7 @@ import { byteFormat } from "../../shared/utils/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloud, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { StorageInfoType } from "../../shared/types/fileTypes";
+import PlansModal from "../../shared/components/PlansModal";
 
 function StorageInfoFull () {
     const [storage, setStorage] = useState<StorageInfoType | null>(null);
@@ -34,12 +35,7 @@ function StorageInfoFull () {
                         </div>
                 </div>
                 <div className="absolute text-sm text-blue-400 top-0 right-0 hover:text-blue-700">
-                    <div className="group relative" >
-                        <FontAwesomeIcon icon={faInfoCircle} />
-                        <div className="hidden group-hover:block absolute -bottom-4 left-4 bg-dark-bg text-dark-text px-2 py-0.1 text-nowrap">
-                            Get more storage
-                        </div>
-                    </div>
+                    <PlansModal />
                 </div>
             </div>
 
