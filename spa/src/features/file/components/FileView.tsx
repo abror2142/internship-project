@@ -7,7 +7,6 @@ import { useLoaderData } from "react-router-dom";
 import { fetchAllFiles } from "../api/fileService";
 import { useQueryParamsInterceptor } from "../../shared/hooks/useQueryParamsInterceptor";
 import { File } from "../../shared/types/fileTypes";
-import InfoBar from "../../shared/components/InfoBar";
 
 export const loader = async () => {
     try {
