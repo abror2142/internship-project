@@ -41,7 +41,6 @@ const sizeOptions = [
     {label: 'TB', value: 1024 * 1024 * 1024 * 1024}
 ]
 
-
 function Settings () {
     const [fileSize, setFileSize] = useState<number | null>(null);
     const [storageSize, setStorageSize] = useState<number | null>(null);

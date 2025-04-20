@@ -1,6 +1,7 @@
-import { faArrowLeft, faChartLine, faClockRotateLeft, faGears, faHashtag, faHome, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faBell, faChartLine, faClockRotateLeft, faGears, faHashtag, faHome, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
+import ClaimsBell from "../../dashboard/containers/ClaimsBell";
 
 
 function AdminSidebar () {
@@ -33,6 +34,10 @@ function AdminSidebar () {
                 <Link to={"/admin/performance"} className="flex items-center gap-2 hover:bg-indigo-100 dark:hover:bg-dark-bg-contrast px-2 py-1 rounded-sm">
                     <FontAwesomeIcon icon={faChartLine} className="text-lg " />
                     <p className="text-gray-600 dark:text-dark-text">Performance</p>
+                </Link>
+                <Link to={"/admin/claims"} className="flex items-center gap-2 text-lg hover:bg-indigo-100 dark:hover:bg-dark-bg-contrast px-2 py-1 rounded-sm">
+                    <ClaimsBell />
+                    <p className="text-gray-600 dark:text-dark-text">Claims</p>
                 </Link>
             </div>
             <div>

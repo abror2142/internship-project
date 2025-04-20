@@ -6,7 +6,6 @@ import { useTheme } from "../../shared/hooks/useTheme";
 import { customStyles } from "../../file/components/Filters";
 import { tagsMerge, deleteTag, getTags } from "../../shared/utils/api";
 
-
 interface Option {
     label: string | null;
     value: string | null;

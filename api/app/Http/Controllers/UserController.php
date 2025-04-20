@@ -159,7 +159,8 @@ class UserController extends Controller
     public function show(User $user)
     {
         // Displays one user.
-        return response()->json(['user' => $user], 200);
+        $user->load(['roles:id,name']);
+        return response()->json($user, 200);
     }
 
         /**

@@ -8,7 +8,6 @@ import Settings from "./features/dashboard/containers/Settings";
 import Logs from "./features/dashboard/containers/Logs";
 import Login from "./features/authentication/containers/Login";
 import Register from "./features/authentication/containers/Register";
-import ProtectedRoute from "./features/shared/components/ProtectedRoute";
 import Performance from "./features/dashboard/containers/Performance";
 import FileDetail, {loader as FileDetailLoader} from "./features/file/containers/FileDetail";
 import FileUpdate, {loader as FileUpdateLoader} from "./features/file/containers/FileUpdate";
@@ -16,6 +15,7 @@ import MyDrive, {loader as MyDriveLoader} from "./features/file/containers/MyDri
 import Home from "./features/file/containers/Home";
 import LandingPage from "./features/shared/containers/LandingPage";
 import Profile from "./features/profile/containers/Profile";
+import Claims from "./features/dashboard/containers/Claims";
 
 const routes = createRoutesFromElements(
     <Route>
@@ -27,6 +27,7 @@ const routes = createRoutesFromElements(
             <Route path="settings" element={<Settings />} />
             <Route path="logs" element={<Logs />} />
             <Route path="performance" element={<Performance />} />
+            <Route path="claims" element={<Claims />} />
         </Route>
 
         {/* Guest User  */}

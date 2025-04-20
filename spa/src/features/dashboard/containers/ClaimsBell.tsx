@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { fetchNewClaimsCount } from "../api/dashboardService";
+import { Link } from "react-router-dom";
 
 function ClaimsBell () {
     const [count, setCount] = useState<number>(0);
@@ -22,15 +23,15 @@ function ClaimsBell () {
     console.log(count)
 
     return (
-        <div className="relative">
-            <FontAwesomeIcon icon={faBell} className="text-2xl" />
+        <Link to={"/admin/claims"} className="relative hover:text-indigo-500">
+            <FontAwesomeIcon icon={faBell} />
             {
                 count 
                 && <div className="absolute text-[12px] font-semibold rounded-full bg-red-500 w-3.5 h-3.5 flex items-center justify-center -top-2 -right-2 text-white z-10">
                     {count}
                 </div>
             }
-        </div>  
+        </Link>  
     )
 }
 

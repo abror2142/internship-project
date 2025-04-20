@@ -16,7 +16,7 @@ class StorageClaimController extends Controller
     public function index()
     {
         //
-        return StorageClaim::with(['user:id,name,storage', 'plan:id,name,sizeLabel', 'claimStatus:id,name'])->get();
+        return StorageClaim::with(['user:id,name,storage', 'plan:id,name,sizeLabel', 'claimStatus:id,name'])->paginate(10);
     }
 
     /**
