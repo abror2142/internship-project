@@ -4,10 +4,11 @@ import { fetchClaims } from "../api/dashboardService";
 import { byteFormat } from "../../shared/utils/utils";
 import { v4 as uuid } from "uuid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { faArrowAltCircleRight, faChevronUp, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { useQueryParamsInterceptor } from "../../shared/hooks/useQueryParamsInterceptor";
 import { useSearchParams } from "react-router-dom";
 import UserCard from "../components/UserCard";
+import ClaimCard from "../components/ClaimCard";
 
 function Claims () {
     useQueryParamsInterceptor();
@@ -52,14 +53,14 @@ function Claims () {
                         <th scope="col" className="px-4 py-3">
                             Email
                         </th>
-                        <th scope="col" className="px-4 py-3">
-                            Name
+                        <th scope="col" className="px-4 py-3 text-center">
+                            Current Storage
                         </th>
                         <th scope="col" className="px-4 py-3 text-center">
-                            Storage
+                            Claimed Plan
                         </th>
                         <th scope="col" className="px-4 py-3 text-center">
-                            Role(s)
+                            Claimed Plan Storage
                         </th>
                         <th scope="col" className="px-4 py-3 text-center">
                             Status
@@ -83,7 +84,7 @@ function Claims () {
                                 <td scope="row" className="px-6 py-2 text-gray-900 whitespace-nowrap dark:text-white">
                                     {claim.user.name}
                                 </td>
-                                <td className="px-4 py-2">
+                                <td className="px-4 py-2 text-center">
                                     {byteFormat(claim.user.storage)}
                                 </td>
                                 <td className="px-4 py-2 text-center">
@@ -99,7 +100,7 @@ function Claims () {
                                     className="px-4 py-2 text-center"
                                     onClick={() => toggleShow(claim.id)}
                                 >
-                                    <FontAwesomeIcon icon={faChevronDown} />
+                                    <FontAwesomeIcon icon={show == claim.id ? faChevronUp : faChevronDown} />
                                 </td>
                             </tr>
                             {
@@ -110,14 +111,16 @@ function Claims () {
                                     key={uuid()}
                                 >
                                     <td colSpan={7} className="td-full px-4 py-4 space-y-4">
-                                        <div>
+                                        <div className="flex gap-6 items-center">
                                             <UserCard id={claim.user.id} />
+                                            <FontAwesomeIcon icon={faArrowAltCircleRight} className="text-2xl dark:text-dark-text-highlighted"/>
+                                            <ClaimCard claim={claim} />
                                         </div>
-                                        <div className="flex gap-4">
-                                            <button className="px-4 py-1 bg-green-500 hover:bg-green-600 rounded-sm text-white text-sm">
+                                        <div className="flex w-full gap-4 justify-center">
+                                            <button className="px-4 py-1 grow-1 max-w-sm bg-green-500 hover:bg-green-600 rounded-sm text-white text-sm">
                                                 Approve
                                             </button>
-                                            <button className="px-4 py-1 bg-red-500 hover:bg-red-600 rounded-sm text-white font-semibold">
+                                            <button className="px-4 py-1 grow-1 max-w-sm bg-red-500 hover:bg-red-600 rounded-sm text-white font-semibold">
                                                 Reject
                                             </button>
                                         </div>
@@ -134,7 +137,7 @@ function Claims () {
             >
                 <span 
                     className="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 
-                    block w-full md:inline md:w-auto">Showing 
+                        block w-full md:inline md:w-auto">Showing 
                     <span className="font-semibold text-gray-900 dark:text-white">
                          {claims?.from}-{claims?.to}
                     </span> of 
@@ -155,7 +158,6 @@ function Claims () {
                             Prev
                         </li>
                     }
-
                     {
                         Array.from({ length: claims?.last_page }, (_, i) => (
                             <li
@@ -172,7 +174,6 @@ function Claims () {
                             </li>
                           ))
                     }
-
                     {
                         claims?.next_page_url 
                         && <li

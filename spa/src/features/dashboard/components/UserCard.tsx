@@ -24,7 +24,7 @@ function UserCard ({id}: {id: number}) {
         <div>
             {
                 user
-                && <div className="flex flex-col gap-1"> 
+                && <div className="flex gap-4"> 
                     <div>
                         {   
                             user?.image 
@@ -34,19 +34,24 @@ function UserCard ({id}: {id: number}) {
                             </div>
                         }
                     </div>
-                    <p>
-                        Name: {user?.name}
-                    </p>
-                    <p>
-                        Email: {user?.email}
-                    </p>
-                    <div className="flex items-center gap-2">
-                        <p>Role(s):</p>
-                        {user?.roles && user.roles.map(role => {
-                            return (
-                                <p className="px-2 py-0.2 rounded-sm bg-amber-500 text-white max-w-min">{role.name}</p>
-                            )
-                        }) }
+                    <div className="flex flex-col gap-4">
+                        <p className="text-lg dark:text-dark-text-highlighted">User Data</p>
+                        <div className="flex gap-1 flex-col">
+                            <p>
+                                <span className="dark:text-dark-text-highlighted">Name:</span> {user?.name}
+                            </p>
+                            <p>
+                                <span className="dark:text-dark-text-highlighted">Email:</span> {user?.email}
+                            </p>
+                            <div className="flex items-center gap-2">
+                                <p className="dark:text-dark-text-highlighted">Role(s):</p>
+                                {user?.roles && user.roles.map(role => {
+                                    return (
+                                        <p className="px-2 py-0.2 rounded-sm bg-amber-500 text-white max-w-min">{role.name}</p>
+                                    )
+                                }) }
+                            </div>
+                        </div>
                     </div>
                 </div>
             }
