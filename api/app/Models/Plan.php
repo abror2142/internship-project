@@ -12,4 +12,9 @@ class Plan extends Model
 
     protected $fillable = ['name', 'description', 'price', 'billingPeriod', 'duration', 'size', 'sizeLabel'];
     protected $hidden = ['size'];
+
+    public function claims () 
+    {
+        return $this->hasMany(StorageClaim::class);
+    }
 }

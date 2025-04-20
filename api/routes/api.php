@@ -68,6 +68,8 @@ Route::middleware(['auth:api', 'role:admin'])->group(function(): void {
     # System configuration.
     Route::post('/settings', [SettingsController::class, 'update']);
     Route::get('/extensions', [FileExtensionController::class, 'index']);
+    Route::get('/claims', [StorageClaimController::class, 'index']);
+    Route::get('/new-claims/count', [StorageClaimController::class, 'newClaimsCount']);
 
     # Individual Operations on a user.
     Route::post('/users/unblock', [UserController::class, 'activateUser']);

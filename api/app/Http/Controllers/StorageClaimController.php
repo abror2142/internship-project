@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreStorageClaimRequest;
 use App\Http\Requests\UpdateStorageClaimRequest;
+use App\Models\ClaimStatus;
 use App\Models\StorageClaim;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class StorageClaimController extends Controller
     public function index()
     {
         //
-        return StorageClaim::all();
+        return StorageClaim::with(['user:id,name,storage', 'plan:id,name,sizeLabel', 'claimStatus:id,name'])->get();
     }
 
     /**
@@ -32,7 +33,8 @@ class StorageClaimController extends Controller
         
         $storageClaim = StorageClaim::create([
             'user_id' => $user->id,
-            'plan_id' => $request->plan_id
+            'plan_id' => $request->plan_id,
+            'claim_status_id' => ClaimStatus::where('name', 'sent')->first()->id,
         ]);
 
         return response()->json([
@@ -47,6 +49,13 @@ class StorageClaimController extends Controller
     public function show(StorageClaim $storageClaim)
     {
         //
+    }
+
+    public function newClaimsCount()
+    {
+        $status = ClaimStatus::where('name', 'sent')->first()->id;
+        $count = StorageClaim::where('claim_status_id', $status)->count();
+        return response()->json(['count' => $count]);
     }
 
     /**

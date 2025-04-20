@@ -20,11 +20,7 @@ import Profile from "./features/profile/containers/Profile";
 const routes = createRoutesFromElements(
     <Route>
         {/* Admin Routes */}
-        <Route path="/admin" element={
-            <ProtectedRoute allowedRoles={['admin']}>
-                <AdminLayout />
-            </ProtectedRoute>
-        }>
+        <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<Dashboard />} />
             <Route path="users" element={<Users />} loader={UsersLoader}/>
             <Route path="tags" element={<Tags />} />

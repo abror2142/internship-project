@@ -1,8 +1,5 @@
 <?php
 
-use App\Models\ClaimStatus;
-use App\Models\Plan;
-use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('storage_claims', function (Blueprint $table) {
+        Schema::create('claim_statuses', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class);
-            $table->foreignIdFor(Plan::class);
-            $table->foreignIdFor(ClaimStatus::class);
-            $table->timestamps();
+            $table->string('name');
         });
     }
 
@@ -28,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('storage_claims');
+        Schema::dropIfExists('claim_statuses');
     }
 };
