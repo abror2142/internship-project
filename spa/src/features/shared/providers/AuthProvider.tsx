@@ -4,6 +4,7 @@ import { registerApi, loginApi, logoutApi, meApi, userApi } from "../utils/api";
 import { loginSchema, userMeSchema, userSchema } from "../utils/zod";
 import { z } from "zod";
 import { User } from "../types/user";
+import { useNavigate } from "react-router-dom";
 
 const getToken = () => {
     return localStorage.getItem('token');
@@ -11,7 +12,8 @@ const getToken = () => {
 
 function AuthProvider ({children} :PropsWithChildren) {
     const [user, setUser] = useState<User | null | undefined>(undefined);
-    const [token, setToken] = useState<string | null>(getToken())
+    const [token, setToken] = useState<string | null>(getToken());
+    const navigate = useNavigate();
 
     const setAuth = (token: string, user: User) => {
         localStorage.setItem('token', token);
@@ -57,13 +59,15 @@ function AuthProvider ({children} :PropsWithChildren) {
             const resp = await loginApi(json);
             const validatedData = loginSchema.parse(resp.data);
             setAuth(validatedData.token, validatedData.user);
-        } catch (e) {
+            return navigate('/');
+        } catch (error) {
             removeAuth()
-            if(e instanceof z.ZodError) {
-                console.log("Validation Error: ", e.errors);
+            if(error instanceof z.ZodError) {
+                console.log("Validation Error: ", error.errors);
             } else {
-                console.log("Api Error: ", e);
+                console.log("Api Error: ", error);
             }
+            throw error;
         }
     }
 
@@ -72,6 +76,7 @@ function AuthProvider ({children} :PropsWithChildren) {
             try {
                 await logoutApi();
                 removeAuth();
+                return navigate('/login')
             } catch (e) {
                 console.log(e);
             }   

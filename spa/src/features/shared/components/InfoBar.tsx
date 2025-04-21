@@ -3,8 +3,13 @@ import { faHardDrive, faHome, faTrash, faUserGear } from "@fortawesome/free-soli
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import StorageInfoFull from "../../file/components/StorageInfoFull";
 import UploadFile from "../../file/components/upload/UploadFile";
+import { useAuth } from "../hooks/useAuth";
 
 function InfoBar() {
+    const  { user } = useAuth();
+    if(!user) {
+        return null;
+    }
     return (
         <div className="flex flex-col gap-4 dark:bg-dark-blue px-8 py-4 dark:text-dark-text min-w-72">
             <UploadFile />

@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosInstance } from 'axios';
+import axios, { AxiosInstance } from 'axios';
 
 
 // api Axios Instance to handle token error by attempting to refresh
@@ -25,25 +25,25 @@ api.interceptors.request.use((config) => {
     return config;
 }, (error) => Promise.reject(error));
 
-api.interceptors.response.use(
-    (response) => response,
-    async (error: AxiosError) => {
-        const originalRequest = error.config;
-        if(originalRequest && error.response?.status === 401 && !originalRequest?._retry) {
-            originalRequest._retry = true;
-            try {
-                const resp = await fetchRefreshToken();
-                const { token } = resp.data;
-                localStorage.setItem('token', token)
-                originalRequest.headers.Authorization = `Bearer ${token}`;
-                const promise = api(originalRequest)
-                console.log(promise);
-                return promise;
-            } catch(e) {
-                console.log('Error during token refresh:', e);
-            }
-        }
-        return Promise.reject(error);
-    }
-)
+// api.interceptors.response.use(
+//     (response) => response,
+//     async (error: AxiosError) => {
+//         const originalRequest = error.config;
+//         if(originalRequest && error.response?.status === 401 && !originalRequest?._retry) {
+//             originalRequest._retry = true;
+//             try {
+//                 const resp = await fetchRefreshToken();
+//                 const { token } = resp.data;
+//                 localStorage.setItem('token', token)
+//                 originalRequest.headers.Authorization = `Bearer ${token}`;
+//                 const promise = api(originalRequest)
+//                 console.log(promise);
+//                 return promise;
+//             } catch(e) {
+//                 console.log('Error during token refresh:', e);
+//             }
+//         }
+//         return Promise.reject(error);
+//     }
+// )
 

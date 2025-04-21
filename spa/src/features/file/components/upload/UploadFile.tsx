@@ -66,7 +66,6 @@ function UploadFile () {
         try {
             setLoading(true);
             const resp = await createFile(json, {headers: {'Content-Type': 'multipart/form-data'}});
-            console.log(resp.data);
             if(resp.data?.file?.id) {
                 return navigate(`/file/${resp.data.file.id}`)
             }
@@ -79,8 +78,8 @@ function UploadFile () {
 
     const handleApiUpload = async () => {
         if(file){
-            setLoading(true);
             try {
+                setLoading(true);
                 const fileUrl = await uploadFile(file);
                 return fileUrl;
             } catch(e) {
@@ -109,13 +108,11 @@ function UploadFile () {
 
         if(settings && settings.storage === 'api'){
             const url = await handleApiUpload();
-            if(url) {
+            if(url)
                 formData.append('path', url);
-            }
         } else {
-            if(file){
+            if(file)
                 formData.append('file', file);
-            }
         }
         const type = getType()?.name;
         if(type){
@@ -152,9 +149,6 @@ function UploadFile () {
                     validationSchema={FileSchema}
                     onSubmit={async (values) => {
                         const formData = await createFormData(values);
-                        for (const [key, value] of formData.entries()) {
-                            console.log(`${key}:`, value);
-                        }
                         handleSubmit(formData);
                     }}
                 >

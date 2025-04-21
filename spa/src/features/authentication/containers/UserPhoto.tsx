@@ -4,6 +4,7 @@ import { uploadFile } from "../../shared/utils/uploader";
 import { updateUserImage } from "../../shared/api/apiService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight, faImage } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 function UserPhoto ({setStep}: {setStep: React.Dispatch<React.SetStateAction<number>>}) {
     const { user, refreshUser } = useAuth();
@@ -40,11 +41,12 @@ function UserPhoto ({setStep}: {setStep: React.Dispatch<React.SetStateAction<num
 
     return (
         <div className="flex flex-col items-center justify-center gap-4 ">
-            <button onClick={() => setStep(3)} className="text-end w-full text-red-500 hover:text-red-600">
-                skip
-            </button>
+            <Link to={'/my-drive'} className="text-end w-full text-red-500 hover:text-red-600">
+                skip all
+            </Link>
+                <p className="text-center text-2xl dark:text-dark-text-highlighted">Welcome, <span className="text-indigo-500 font-semibold">{user?.name}</span>!</p>
             <div>
-                <p className="text-center text-xl dark:text-dark-text-highlighted">Upload your Photo!</p>
+                <p className="text-center text-xl">You can upload your Photo.</p>
             </div>
             {
                 user?.image

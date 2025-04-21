@@ -23,11 +23,11 @@ function AdminSidebar () {
                     <FontAwesomeIcon icon={faHashtag} className="text-lg " />
                     <p className="text-gray-600 dark:text-dark-text">Tags</p>
                 </Link>
-                <Link to={"/admin/settings"} className="flex items-center gap-2 hover:bg-indigo-100 dark:hover:bg-dark-bg-contrast px-2 py-1 rounded-sm">
+                <Link to={"/admin/settings"} className="flex items-center gap-2 text-nowrap hover:bg-indigo-100 dark:hover:bg-dark-bg-contrast px-2 py-1 rounded-sm">
                     <FontAwesomeIcon icon={faGears} className="text-lg " />
                     <p className="text-gray-600 dark:text-dark-text">App Settings</p>
                 </Link>
-                <Link to={"/admin/logs"} className="flex items-center gap-2 hover:bg-indigo-100 dark:hover:bg-dark-bg-contrast px-2 py-1 rounded-sm">
+                <Link to={"/admin/logs"} className="flex items-center gap-2 hover:bg-indigo-100 dark:hover:bg-dark-bg-contrast px-2 py-1 rounded-sm text-nowrap">
                     <FontAwesomeIcon icon={faClockRotateLeft} className="text-lg " />
                     <p className="text-gray-600 dark:text-dark-text">System Logs</p>
                 </Link>

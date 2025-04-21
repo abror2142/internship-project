@@ -8,7 +8,7 @@ import { Country, UserInfo } from "../../shared/types/fileTypes";
 import { fetchUserInfo } from "../../shared/api/apiService";
 import { useAuth } from "../../shared/hooks/useAuth";
 import { updateUserInfo } from "../../shared/api/apiService";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function UserInfoForm () {
     const [countries, setCountries] = useState<Country[]>([]);
@@ -76,7 +76,11 @@ function UserInfoForm () {
                     handleUpdate(json);
                 }}
             >
-                <Form className="flex flex-col gap-4 max-w-md">
+                <Form className="flex flex-col gap-2 max-w-md">
+                    <Link to={'/my-drive'} className="text-end w-full text-red-500 hover:text-red-600">
+                        skip all
+                    </Link>
+                    <p className="text-center text-lg font-semibold">Tell us about yourself ...</p>
                     <div className="flex flex-col gap-1">
                         <label>Job</label>
                         <Field name="job" id="job"  className="dark:bg-dark-blue px-2 py-1 rounded-sm outline-none" placeholder="Software Engineer" />
@@ -106,9 +110,7 @@ function UserInfoForm () {
                         <label>Address</label>
                         <Field id="address" name="address" className="dark:bg-dark-blue px-2 py-1 rounded-sm outline-none" placeholder=""  />
                     </div>
-                    <div>
-                        <button type="submit">Complete</button>
-                    </div>
+                    <button type="submit" className="px-2 py-0.5 rounded-sm bg-indigo-500 hover:bg-indigo-600 text-white self-end">Complete</button>
                 </Form>
             </Formik>
         </div>
