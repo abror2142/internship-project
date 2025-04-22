@@ -10,9 +10,11 @@
  | ┣ 📂 app               | Laravel project|
  | ┣ 📂 nginx             | Nginx reverse proxy config |
  | ┣ 📂 php               | PHP docker config |
+ | ┣ 📂 spa               | React frontend written in TypeScript |
  | ┣ 📄 compose.dev.yaml  | compose file for DEV mode |
  | ┣ 📄 compose.yaml      | compose file for PROD mode |
  | ┣ 📄 .env.example      | example .env file |
+ | ┣ 📄 .gitignore        | Gitignore file |
  | ┗ 📄 README.md         | Readme file |
 
 ---
@@ -31,6 +33,9 @@
 
 ## 🛠️ Build & Run Your App
 
+### !!! ATTENTION
+### To successfully build and run this app, You MUST create Algolia and Firebase storage Accounts.
+
 ### 1. Clone the repository
 ```bash
 git clone https://github.com/abror2142/internship-project
@@ -46,6 +51,24 @@ cp app/.env.example app/.env
 ```
 
 ** Update environment variables as needed.
+
+### 1. Create Firebase Account and Appropriate bucket (free trial possible).
+- Make Sure you got firebase-auth.json file and place it in the project. Then you should point this file using .env variables.
+- You Also need to put firebase.json to the frontend (As this project explores both file uploads: from directly frontend to firebase and fronend to backend then to firebase).
+- Some problems may arise which might require a bit research.
+
+### 2. Create Algolia account (free within allocated limit).
+- You should provide algolia client to both frontend and backend.
+- Backend pushes and manages search entries.
+- Frontend is responsible for data retrieval.
+- For backend, update the .env with suitable keys!
+- For frontend, instal algoliasearch package, create algolia.ts in the root file with following content:
+  ```bash
+  import { algoliasearch } from "algoliasearch";
+  export const client = algoliasearch(YOUR_APP_ID, YOUR_SEARCH_API_KEY);
+  ```
+
+  *** Building might take some effort as the project heavily utilizes third party services.
 
 ### 3. 📦 Docker Compose
 
