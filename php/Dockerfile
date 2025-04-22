@@ -24,9 +24,8 @@ RUN composer install --prefer-dist --no-dev --no-scripts --no-progress --no-inte
 
 COPY ./api .
 
-RUN composer dump-autoload --optimize
-
 COPY ./php/entrypoint.sh /
+# RUN composer dump-autoload --optimize
 
 ENTRYPOINT [ "sh", "/entrypoint.sh" ]
 

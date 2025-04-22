@@ -1,6 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
 
-
 // api Axios Instance to handle token error by attempting to refresh
 export const api: AxiosInstance = axios.create({
     headers: {
@@ -11,10 +10,6 @@ export const api: AxiosInstance = axios.create({
 
 const getToken = () => {
     return localStorage.getItem('token');
-}
-
-const fetchRefreshToken = async () => {
-    return api.post('http://localhost:8000/api/refresh', {}, {headers: {Accept: 'application/json'}, withCredentials: true});
 }
 
 api.interceptors.request.use((config) => {
@@ -46,4 +41,3 @@ api.interceptors.request.use((config) => {
 //         return Promise.reject(error);
 //     }
 // )
-
