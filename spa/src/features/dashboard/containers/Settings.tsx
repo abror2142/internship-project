@@ -10,6 +10,7 @@ import { fetchSettings } from "../../file/api/fileService";
 import { Extension, SettingsData } from "../../shared/types/fileTypes";
 import { fetchExtensions } from "../../file/api/fileService";
 import { updateExtensions, updateSettings } from "../api/dashboardService";
+import ExtensionUpdate from "../components/ExtensionUpdate";
 
 type Option = {
     label: string;
@@ -34,10 +35,10 @@ function Settings () {
     const [fileSize, setFileSize] = useState<string | null>(null);
     const [storageSize, setStorageSize] = useState<string | null>(null);
     const [storage, setStorage] = useState<string | null>(null);
-    const [extensions, setExtensions] = useState<Extension[]>([]);
+  
     const [fileSizeOption, setFileSizeOption] = useState<Option>(sizeOptions[2]);
     const [storageSizeOption, setStorageSizeOption] = useState<Option>(sizeOptions[3]);
-    const [current, setCurrent] = useState<number[]>([]);
+  
 
     const setData = (settings: SettingsData[]) => {
         setStorage(settings.find(setting => setting.key === 'storage')?.value || null);
@@ -54,39 +55,9 @@ function Settings () {
         }
     };
     
-    const fetchExtensionsData = async () => {
-        try {
-            const extensions = await fetchExtensions();
-            setExtensions(extensions);
-        } catch(e) {
-            console.log(e);
-        }
-    };
-
     useEffect(() => {
         fetchSettingsData();
-        fetchExtensionsData();
     }, []) 
-
-    const toggleExtension  = (id: number) => {
-        current.includes(id) 
-            ? setCurrent(prev => prev.filter(item => item !== id)) 
-            : setCurrent(prev => [...prev, id]);
-    }
-
-    const allow = () => {
-        if(current){
-            setExtensions(prev => prev.map(ext => current.includes(ext.id) ? ({ ...ext, isEnabled: true }) : ext));
-            setCurrent([]);
-        }
-    }
-
-    const limit = () => {
-        if(current){
-            setExtensions(prev => prev.map(ext => current.includes(ext.id) ? ({ ...ext, isEnabled: false }) : ext));
-            setCurrent([]);
-        }
-    }
 
     const handleSettingsUpdate = async () => {
         const json = JSON.stringify({
@@ -102,34 +73,18 @@ function Settings () {
         }
     }
 
-    const handleExtensionsUpdate = async () => {
-        const json = JSON.stringify(extensions);
-        try {
-            const response = await updateExtensions(json);
-            console.log(response);
-        } catch(e) {
-            console.log(e);
-        }
-    }
-
-    const handleUpdate = async () => {
-        handleExtensionsUpdate();
-        handleSettingsUpdate();
-    }
-
     return (
-        <div className="flex flex-col gap-4 mx-auto mt-5">
+        <div className="flex gap-4 mx-auto mt-5">
             <Formik
                 initialValues={{
                     storageSize: "",
                     storage: storage,
-                    fileSize: "",
-                    extensions: extensions
+                    fileSize: ""
                 }}
                 enableReinitialize={true}
                 onSubmit={async (values) => {
-                    await new Promise((r) => setTimeout(r, 500));
                     alert(JSON.stringify(values, null, 2));
+                    handleSettingsUpdate()
                 }}
             >
                 <Form className="flex flex-col gap-4 dark:text-dark-text">
@@ -188,66 +143,12 @@ function Settings () {
                             classNamePrefix="react-select"
                         />
                     </div>
+                    <div className="dark:bg-dark-blue px-6 py-3 rounded-md flex">
+                        <button className="mt-2 ml-auto px-2 py-1 bg-indigo-500 hover:bg-indigo-600 text-white rounded-sm max-w-min" type="submit">Save</button>
+                    </div>
                 </Form>
             </Formik>
-            <div className="flex flex-col gap-2 dark:bg-dark-blue px-6 py-3">
-                <p>Extension Settings</p>
-                <CreatableExtension />
-                <div>
-                    <div className="flex justify-between items-center dark:bg-dark-card-light px-6 py-2">
-                        <p>Not Allowed</p>
-                        <p>Allowed</p>
-                    </div>
-
-                    <div className="flex justify-between w-full">
-                        <div   
-                            className="px-3 py-2 dark:bg-dark-card-light flex flex-col gap-0.5 max-h-50 overflow-auto grow-1
-                                scrollbar-thin scrollbar-track-gray-300scrollbar-thumb-gray-500 
-                                dark:scrollbar-track-transparent dark:scrollbar-thumb-blue-700"
-                        >
-                            {
-                                extensions.map(extension => (
-                                !extension.isEnabled 
-                                ? <p 
-                                className={`px-2 py-0.5 dark:hover:bg-dark-blue ${current.includes(extension.id) && "bg-dark-blue"}`}
-                                    onClick={() => toggleExtension(extension.id)}
-                                >{extension.name}</p> 
-                                : null
-                            ))}
-                        </div>
-                        <div className="flex flex-col justify-center items-center px-2 text-lg gap-4">
-                            <FontAwesomeIcon 
-                                icon={faArrowAltCircleRight} 
-                                className="hover:text-indigo-500"
-                                onClick={allow} 
-                            />
-                            <FontAwesomeIcon 
-                                icon={faArrowAltCircleLeft} 
-                                className="hover:text-red-500"
-                                onClick={limit}
-                            />
-                        </div>
-                        <div 
-                            className="px-3 py-2 dark:bg-dark-card-light flex flex-col gap-0.5 max-h-50 overflow-auto grow-1
-                                scrollbar-thin scrollbar-track-gray-300scrollbar-thumb-gray-500 
-                                dark:scrollbar-track-transparent dark:scrollbar-thumb-blue-700"
-                        >
-                            {
-                                extensions.map(extension => (
-                                extension.isEnabled 
-                                ? <p 
-                                    className={`px-2 py-0.5 dark:hover:bg-dark-blue ${current.includes(extension.id) && "bg-dark-blue"}`}
-                                    onClick={() => toggleExtension(extension.id)}    
-                                >{extension.name}</p> 
-                                : null
-                            ))}
-                        </div>
-                    </div>
-                    <div className="mt-2 ml-auto px-2 py-1 bg-indigo-500 hover:bg-indigo-600 text-white rounded-sm max-w-min">
-                        Save
-                    </div>
-                </div>
-            </div>
+            <ExtensionUpdate />
         </div>
     )
 }
