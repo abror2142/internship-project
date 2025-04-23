@@ -40,6 +40,7 @@ export const extensionSchema = z.object({
     id: z.number(),
     name: z.string(),
     image: z.string(),
+    isEnabled: z.number(),
     file_type: z.object({
         id: z.number(),
         name: z.string(),

@@ -14,7 +14,7 @@ class FileExtensionController extends Controller
     public function index()
     {
         // Return all extensions
-        return FileExtension::all();
+        return FileExtension::with('fileType:id,name,image')->get();
     }
 
     /**

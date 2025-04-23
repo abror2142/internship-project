@@ -65,3 +65,21 @@ export const fetchLogs = async () => {
         throw error;
     }
 }
+
+export const updateSettings = async (json: string) => {
+    try {
+        const response = await apiClient.put(endpoints.SETTING, json);
+        return response.data;
+    } catch(error) {
+        throw error;
+    }
+}
+
+export const updateExtensions = async (json: string) => {
+    try {
+        const response = await apiClient.put(endpoints.EXTENSIONS, json);
+        return response.data;
+    } catch(error) {
+        throw error;
+    }
+}

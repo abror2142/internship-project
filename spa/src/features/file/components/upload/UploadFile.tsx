@@ -9,7 +9,7 @@ import StorageIndicator from "../../../shared/components/StorageIndicator";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Extension, SettingsData, Settings } from "../../../shared/types/fileTypes";
-import { fetchSettings, fetchExtensions } from "../../api/fileService";
+import { fetchSettings, fetchEnabledExtensions } from "../../api/fileService";
 import { parseSettings } from "../../utils/utils";
 import { uploadFile } from "../../../shared/utils/uploader";
 import { useNavigate } from "react-router-dom";
@@ -51,7 +51,7 @@ function UploadFile () {
             const settingsParsed = parseSettings(settingsData); 
             setSettings(settingsParsed);
 
-            const extensions: Extension[] = await fetchExtensions();
+            const extensions: Extension[] = await fetchEnabledExtensions();
             setExtensions(extensions);
         } catch(e) {
             console.log(e);

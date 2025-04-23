@@ -3,4 +3,6 @@ export const endpoints = {
     FETCH_NEW_CLAIMS_COUNT: '/new-claims/count',
     FETCH_USER: (id: number) => `/users/${id}`,
     FETCH_LOGS: '/logs',
+    SETTING: '/settings',
+    EXTENSIONS: '/extensions'
 }

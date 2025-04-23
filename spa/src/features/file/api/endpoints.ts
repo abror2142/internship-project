@@ -11,5 +11,6 @@ export const endpoints = {
     FETCH_ALL_TAGS: '/tags',  // GET
 
     FETCH_SETTINGS: '/settings',  // GET
-    FETCH_EXTENSIONS: '/extensions/enabled',  // GET
+    FETCH_ENABLED_EXTENSIONS: '/extensions/enabled',  // GET
+    FETCH_EXTENSIONS: '/extensions',  // GET
 }

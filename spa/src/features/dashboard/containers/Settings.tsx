@@ -1,26 +1,15 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Extension from "../../assets/extension.png";
 import { faArrowAltCircleLeft, faArrowAltCircleRight } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import { getSettings } from "../../shared/utils/api";
 import { Field, Form, Formik } from "formik";
 import Select from 'react-select'
 import CreatableExtension from "../../authentication/components/CreatableExtension";
-import { useTheme } from "../../shared/hooks/useTheme";
 import { customStyles } from "../../file/components/Filters";
 import { byteFormat } from "../../shared/utils/utils";
-
-type Extension = {
-    id: number;
-    name: string;
-    isEnabled: number;
-    file_type_id: number;
-    file_type: {
-        id: number;
-        name: string;
-        image: string;
-    }
-}
+import { fetchSettings } from "../../file/api/fileService";
+import { Extension, SettingsData } from "../../shared/types/fileTypes";
+import { fetchExtensions } from "../../file/api/fileService";
+import { updateExtensions, updateSettings } from "../api/dashboardService";
 
 type Option = {
     label: string;
@@ -42,34 +31,41 @@ const sizeOptions = [
 ]
 
 function Settings () {
-    const [fileSize, setFileSize] = useState<number | null>(null);
-    const [storageSize, setStorageSize] = useState<number | null>(null);
-    const [storage, setStorage] = useState<number | null>(null);
+    const [fileSize, setFileSize] = useState<string | null>(null);
+    const [storageSize, setStorageSize] = useState<string | null>(null);
+    const [storage, setStorage] = useState<string | null>(null);
     const [extensions, setExtensions] = useState<Extension[]>([]);
     const [fileSizeOption, setFileSizeOption] = useState<Option>(sizeOptions[2]);
     const [storageSizeOption, setStorageSizeOption] = useState<Option>(sizeOptions[3]);
     const [current, setCurrent] = useState<number[]>([]);
 
-    const { isDarkMode } = useTheme();
-
-    const setData = (data) => {
-        setStorage(data.settings.filter((setting) => setting?.storage)[0]?.storage);
-        setExtensions(data?.extensions);
-        setFileSize(data.settings.filter(setting => setting?.file_size_limit)[0]?.file_size_limit);
-        setStorageSize(data.settings.filter(setting => setting?.storage_size_limit)[0]?.storage_size_limit);
+    const setData = (settings: SettingsData[]) => {
+        setStorage(settings.find(setting => setting.key === 'storage')?.value || null);
+        setFileSize(settings.find(setting => setting.key === 'file_size_limit')?.value || null);
+        setStorageSize(settings.find(setting => setting.key === 'storage_size_limit')?.value || null);
     }
 
-    const fetchSettings = async () => {
+    const fetchSettingsData = async () => {
         try {
-            const resp = await getSettings();
-            setData(resp.data);
+            const settings = await fetchSettings();
+            setData(settings)
+        } catch(e) {
+            console.log(e);
+        }
+    };
+    
+    const fetchExtensionsData = async () => {
+        try {
+            const extensions = await fetchExtensions();
+            setExtensions(extensions);
         } catch(e) {
             console.log(e);
         }
     };
 
     useEffect(() => {
-        fetchSettings();
+        fetchSettingsData();
+        fetchExtensionsData();
     }, []) 
 
     const toggleExtension  = (id: number) => {
@@ -80,20 +76,49 @@ function Settings () {
 
     const allow = () => {
         if(current){
-            setExtensions(prev => prev.map(ext => current.includes(ext.id) ? ({ ...ext, isEnabled: 1 }) : ext));
+            setExtensions(prev => prev.map(ext => current.includes(ext.id) ? ({ ...ext, isEnabled: true }) : ext));
             setCurrent([]);
         }
     }
 
     const limit = () => {
         if(current){
-            setExtensions(prev => prev.map(ext => current.includes(ext.id) ? ({ ...ext, isEnabled: 0 }) : ext));
+            setExtensions(prev => prev.map(ext => current.includes(ext.id) ? ({ ...ext, isEnabled: false }) : ext));
             setCurrent([]);
         }
     }
 
+    const handleSettingsUpdate = async () => {
+        const json = JSON.stringify({
+            file_size_limit: fileSize,
+            storage: storage,
+            storage_size_limit: storageSize
+        })
+        try {
+            const response = await updateSettings(json);
+            console.log(response);
+        } catch(e) {
+            console.log(e);
+        }
+    }
+
+    const handleExtensionsUpdate = async () => {
+        const json = JSON.stringify(extensions);
+        try {
+            const response = await updateExtensions(json);
+            console.log(response);
+        } catch(e) {
+            console.log(e);
+        }
+    }
+
+    const handleUpdate = async () => {
+        handleExtensionsUpdate();
+        handleSettingsUpdate();
+    }
+
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 mx-auto mt-5">
             <Formik
                 initialValues={{
                     storageSize: "",
@@ -121,7 +146,7 @@ function Settings () {
                                 placeholder="0"
                             />
                             <Select 
-                                styles={customStyles(isDarkMode)}
+                                styles={customStyles()}
                                 className="react-select-container"
                                 classNamePrefix="react-select"
                                 options={sizeOptions}
@@ -143,7 +168,7 @@ function Settings () {
                                 placeholder="0"
                             />
                             <Select 
-                                styles={customStyles(isDarkMode)}
+                                styles={customStyles()}
                                 className="react-select-container"
                                 classNamePrefix="react-select"
                                 options={sizeOptions}
@@ -158,7 +183,7 @@ function Settings () {
                             options={options} 
                             value={{label: storage, value: storage}}
                             onChange={(e) => setStorage(e?.value || null)}
-                            styles={customStyles(isDarkMode)}
+                            styles={customStyles()}
                             className="react-select-container"
                             classNamePrefix="react-select"
                         />
@@ -217,6 +242,9 @@ function Settings () {
                                 : null
                             ))}
                         </div>
+                    </div>
+                    <div className="mt-2 ml-auto px-2 py-1 bg-indigo-500 hover:bg-indigo-600 text-white rounded-sm max-w-min">
+                        Save
                     </div>
                 </div>
             </div>

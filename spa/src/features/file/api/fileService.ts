@@ -162,6 +162,22 @@ export const fetchSettings = async () => {
     }
 }
 
+export const fetchEnabledExtensions = async () => {
+    try {
+        const response = await apiClient(endpoints.FETCH_ENABLED_EXTENSIONS);
+        const parsed = extensionsArraySchema.safeParse(response.data);
+
+        if(!parsed.success) {
+            console.error("Validation Error with zod!", parsed.error);
+            throw new Error('Api data mismatch!');
+        }
+
+        return parsed.data;
+    } catch(error) {
+        throw error;
+    }
+}
+
 export const fetchExtensions = async () => {
     try {
         const response = await apiClient(endpoints.FETCH_EXTENSIONS);
