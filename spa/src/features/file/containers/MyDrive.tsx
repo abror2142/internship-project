@@ -20,7 +20,7 @@ export const loader = async () => {
 function MyDrive () {
     useQueryParamsInterceptor();
     const file = useLoaderData();
-    const [files, setFiles] = useState<File[]>(file);
+    const [files, setFiles] = useState<File[]>(file || []);
 
     const [view, setView] = useState('gallery');
 

@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
             $table->string('action');
+            $table->string('target')->default('user');
             $table->foreignIdFor(User::class);
             $table->boolean('successful')->default(false);
             $table->timestamp('created_at')->useCurrent();

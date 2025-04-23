@@ -39,12 +39,14 @@ Route::controller(FileController::class)
         Route::post('/', 'store')->middleware(ActionLogger::class . ':upload')->name('store');
         Route::put('/{file}', 'update')->name('update');
         Route::get('/{file}', 'show')->name('show');
-        Route::get('/{file}/download', 'download')->name('download');
         Route::delete('/{file}', 'destroy')
-            ->middleware(ActionLogger::class . ':delete')
-            ->name('destroy');
+        ->middleware(ActionLogger::class . ':delete')
+        ->name('destroy');
     }
 );
+
+# This is a separate route because it does not require permissions.
+Route::get('/files/{file}/download', [FileController::class, 'download'])->name('download');
 
 Route::get('/search', [FileController::class, 'search'])->middleware(['auth:api', ActionLogger::class . ':search']);
 Route::get('/my-tags', [TagController::class, 'usedTags'])->middleware(['auth:api']);
@@ -72,12 +74,12 @@ Route::middleware(['auth:api', 'role:admin'])->group(function(): void {
     Route::get('/new-claims/count', [StorageClaimController::class, 'newClaimsCount']);
 
     # Individual Operations on a user.
-    Route::post('/users/unblock', [UserController::class, 'activateUser']);
-    Route::post('/users/block', [UserController::class, 'deactivateUser']);
-    Route::post('/users/storage', [UserController::class, 'updateStorage']);
-    Route::post('/users/make-admin', [UserController::class, 'addAdminRole']);
-    Route::post('/users/remove-admin', [UserController::class, 'removeAdminRole']);
-    Route::post('/users/delete-list', [UserController::class, 'deleteUsers']);
+    Route::post('/users/unblock', [UserController::class, 'activateUser'])->middleware([ActionLogger::class . ':activate-user']);
+    Route::post('/users/block', [UserController::class, 'deactivateUser'])->middleware([ActionLogger::class . ':deactivate-user']);
+    Route::post('/users/storage', [UserController::class, 'updateStorage'])->middleware([ActionLogger::class . ':update-storage']);
+    Route::post('/users/make-admin', [UserController::class, 'addAdminRole'])->middleware([ActionLogger::class . ':make-admin']);
+    Route::post('/users/remove-admin', [UserController::class, 'removeAdminRole'])->middleware([ActionLogger::class . ':remove-admin']);
+    Route::post('/users/delete-list', [UserController::class, 'deleteUsers'])->middleware([ActionLogger::class . ':delete-user']);
 
     # CRUD Operations on users
    Route::resource('users', UserController::class)->except(['edit']); 

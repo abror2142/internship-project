@@ -121,10 +121,6 @@ function UploadFile () {
         
         return formData;
     }
-    
-    if(!settings){
-        return <p>No settings Available!</p>
-    }
 
     return (
         <div className="relative z-50" >

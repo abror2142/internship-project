@@ -9,6 +9,7 @@ function FileDownloadBtn ({ file }: {file: File}) {
             let url = file.storage === 'local' 
                 ? `http://127.0.0.1:8000/api/files/${file.id}/download` 
                 : await fetchDownloadUrl(file.id);
+            console.log(url)
             downloadFile(url, file.name);
         } catch(e) {
             console.log(e);

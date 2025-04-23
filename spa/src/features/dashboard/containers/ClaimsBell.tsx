@@ -26,10 +26,11 @@ function ClaimsBell () {
         <Link to={"/admin/claims"} className="relative hover:text-indigo-500">
             <FontAwesomeIcon icon={faBell} />
             {
-                count 
-                && <div className="absolute text-[12px] font-semibold rounded-full bg-red-500 w-3.5 h-3.5 flex items-center justify-center -top-2 -right-2 text-white z-10">
+                count > 0
+                ? <div className="absolute text-[12px] font-semibold rounded-full bg-red-500 w-3.5 h-3.5 flex items-center justify-center -top-2 -right-2 text-white z-10">
                     {count}
                 </div>
+                : null
             }
         </Link>  
     )

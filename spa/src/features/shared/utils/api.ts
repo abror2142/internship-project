@@ -152,6 +152,6 @@ export const deleteTag = (id: number) => {
     return api.delete(URLs(id).TAG_DETAIL);
 }
 
-export const getLogs = (params: string) => {
-    return api.get(URLs().LOGS + params);
+export const getLogs = () => {
+    return api.get(URLs().LOGS);
 }

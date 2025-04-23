@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faChevronDown, faCircleDown, faCircleUp, faCloud, faLock, faLockOpen, faTrash, faX } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
+import { byteFormat } from "../../shared/utils/utils";
 
 export const loader = async () => {
     try {
@@ -85,7 +86,7 @@ function Users () {
         if(selected.length > 0){
             const json = JSON.stringify({
                 users: selected,
-                storage: `${storage}GB`
+                storage: storage * 1024 * 1024 * 1024
             });
             try {
                 const resp = await updateStorage(json);
@@ -245,7 +246,7 @@ function Users () {
                                     {user.name}
                                 </td>
                                 <td className="px-4 py-2 text-center">
-                                    {user.storage}
+                                    {user?.storage && byteFormat(user.storage)}
                                 </td>
                                 <td className="px-4 py-2 flex gap-1 items-center justify-center">
                                     {user?.roles && user.roles.map(role => (

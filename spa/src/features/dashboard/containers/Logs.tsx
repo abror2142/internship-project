@@ -1,49 +1,14 @@
 import { useState, useEffect } from "react";
-import { getLogs } from "../../shared/utils/api";
 import dayjs from "dayjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar, faChevronDown, faChevronUp, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 import { useSearchParams } from "react-router-dom";
 import Select from "react-select";
 import { customStyles } from "../../file/components/Filters";
-import { useTheme } from "../../shared/hooks/useTheme";
 import { v4 } from "uuid";
-
-interface Log {
-    id: number;
-    action: string;
-    user_id: number;
-    successful: number;
-    created_at: string;
-    updated_at: string;
-    user: {
-        id: number;
-        name: string;
-        email: string;
-    }
-}
-
-interface Link {
-    url: string;
-    label: string;
-    active: boolean;
-}
-
-interface Data {
-    current_page: number;
-    data: Log[];
-    first_page_url: string;
-    from: number;
-    last_page: number;
-    last_page_url: string;
-    links: Link[];
-    next_page_url: string;
-    path: string;
-    per_page: number;
-    prev_page_url: null,
-    to: number;
-    total: number;
-}
+import { useQueryParamsInterceptor } from "../../shared/hooks/useQueryParamsInterceptor";
+import { fetchLogs } from "../api/dashboardService";
+import { LogsPaginated } from "../utils/types";
 
 const actionOptions = [
     {label: "Upload", value: "upload"},
@@ -58,31 +23,27 @@ const statusOptions = [
 ]
 
 function Logs () {
-    const [data, setData] = useState<Data | null>(null);
+    useQueryParamsInterceptor();
+
+    const [data, setData] = useState<LogsPaginated | null>(null);
     const [open, setOpen] = useState<number | null>(null);
     const [searchParams, setSearchParams] = useSearchParams();
     const [fromDate, setFromDate] = useState<string | null>(searchParams.get('fromDate'));
     const [toDate, setToDate] = useState<string | null>(searchParams.get('toDate'));
 
-    const { isDarkMode } = useTheme();
-
-    const fetchLogs = async (params: string) => {
-        console.log(params);
+    const fetchLogsData = async () => {
+        console.log('Fetching!')
         try {
-            const resp = await getLogs(params);
-            setData(resp.data);
+            const data = await fetchLogs();
+            setData(data);
         } catch(e) {
+            setData(null);
             console.log(e);
         }
     }
 
     useEffect(() => {
-        if(searchParams.size > 0){
-            const params = searchParams.toString();
-            fetchLogs('?' + params);
-        } else {
-            fetchLogs("");
-        }
+        fetchLogsData();
     },[searchParams])
 
     const handleParams = (key: string, value: string | null) => {
@@ -92,39 +53,45 @@ function Logs () {
     }
 
     return (
-        <div>
-            <div>
+        <div className="w-full mt-5 dark:bg-dark-blue px-8 py-4 rounded-md flex flex-col gap-4 max-h-min">
+            <div className="flex items-center gap-4">
                 <button 
                     onClick={() => handleParams('target', 'user')}
-                    className={`${(searchParams.has('target') && searchParams.get('target') === 'user') || !searchParams.has('target') ? 'bg-indigo-500' : null}`}
+                    className={`px-3 py-1 rounded-sm ${(searchParams.has('target') && searchParams.get('target') === 'user') || !searchParams.has('target') ? 'bg-indigo-500 text-white hover:bg-indigo-600' : 'dark:hover:bg-dark-bg'}`}
                 >User</button>
                 <button
                     onClick={() => handleParams('target', 'admin')}
-                    className={`${(searchParams.has('target') && searchParams.get('target') === 'admin') ? 'bg-indigo-500' : null}`}
+                    className={`px-3 py-1 rounded-sm ${(searchParams.has('target') && searchParams.get('target') === 'admin') ? 'bg-indigo-500 text-white hover:bg-indigo-600' : 'dark:hover:bg-dark-bg'}`}
                 >Admin</button>
             </div>
-            <div>
-                <Select
-                    options={actionOptions}
-                    styles={customStyles(isDarkMode)}
-                    className="react-select-container"
-                    classNamePrefix="react-select"
-                    onChange={(e) => handleParams('action', e ? e.value : null)}
-                    isClearable={true}
-                    defaultValue={searchParams.get('action') ? actionOptions.find(action => action.value == searchParams.get('action')) : null}
-                    placeholder="Action"
-                />
-                <Select
-                    options={statusOptions}
-                    styles={customStyles(isDarkMode)}
-                    className="react-select-container"
-                    classNamePrefix="react-select"
-                    onChange={(e) => handleParams('status', e ? e.value : null)}
-                    isClearable={true}
-                    defaultValue={searchParams.get('status') ? statusOptions.find(status => status.value == searchParams.get('status')) : null}
-                />
+            <div className="flex w-full gap-4">
+                <div className="flex flex-col gap-2 grow-1 max-w-80">
+                    <p>Performed Action</p>
+                    <Select
+                        options={actionOptions}
+                        styles={customStyles()}
+                        className="react-select-container"
+                        classNamePrefix="react-select"
+                        onChange={(e) => handleParams('action', e ? e.value : null)}
+                        isClearable={true}
+                        defaultValue={searchParams.get('action') ? actionOptions.find(action => action.value == searchParams.get('action')) : null}
+                        placeholder="Action"
+                    />
+                </div>
+                <div className="flex flex-col gap-2 grow-1 max-w-80">
+                    <p>Status</p>
+                    <Select
+                        options={statusOptions}
+                        styles={customStyles()}
+                        className="react-select-container"
+                        classNamePrefix="react-select"
+                        onChange={(e) => handleParams('status', e ? e.value : null)}
+                        isClearable={true}
+                        defaultValue={searchParams.get('status') ? statusOptions.find(status => status.value == searchParams.get('status')) : null}
+                    />
+                </div>
             </div>
-            <div className="flex gap-4">
+            <div className="flex gap-4 ">
                 <div className="flex gap-1 items-center">
                     <label htmlFor="fromDate" className="py-2 px-2 dark:bg-dark-blue rounded-sm">From</label>
                     {
@@ -195,7 +162,7 @@ function Logs () {
                         </tr>
                     </thead>
                     <tbody>
-                        {data && data.data.map(log => {
+                        {data?.data && data.data.map(log => {
                             return (
                                 <>
                                     <tr key={v4()} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">  

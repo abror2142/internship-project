@@ -48,7 +48,7 @@ class UserController extends Controller
         $request->validate([
             'users' => 'array',
             'users.*' => 'numeric|exists:users,id',
-            'storage' => 'required|string'
+            'storage' => 'required|integer'
         ]);
         
         $newStorage = $request->storage;

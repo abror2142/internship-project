@@ -21,6 +21,8 @@ class LogController extends Controller
         // target => can be admin/user to see logs based on role.
         if($request->has('target')) {
             $query->where('target', $request->query('target'));
+        } else {
+            $query->where('target', 'user');
         }
         
         if($request->has('action')) {
@@ -37,6 +39,13 @@ class LogController extends Controller
         
         if($request->has('userId')) {
             $query->where('user_id', $request->query('userId'));
+        }
+
+        if($request->query('fromDate')) {
+            $query->where('created_at', '>=', $request->query('fromDate')); 
+        }
+        if($request->query('toDate')) {
+            $query->where('created_at', '<', $request->query('toDate')); 
         }
 
         return $query->with(['user:id,name,email'])->paginate(10);

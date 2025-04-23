@@ -12,8 +12,8 @@ function ProfileStorageInfo () {
             {
                 user
                 && available 
-                && <div className="dark:bg-dark-bg w-full px-6 py-4 rounded-md flex flex-col gap-4">
-                    <div className="flex justify-between items-center">
+                && <div className="dark:bg-dark-bg w-full px-6 py-4 rounded-md flex flex-col gap-4 ">
+                    <div className="flex justify-between items-center relative">
                         <div className="flex gap-2 items-center">
                             <FontAwesomeIcon icon={faCloud}  className="text-2xl text-indigo-600" />
                             <p className="dark:text-dark-text-highlighted text-xl font-semibold">Storage Info</p>

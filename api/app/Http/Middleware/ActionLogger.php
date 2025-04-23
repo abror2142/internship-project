@@ -18,20 +18,23 @@ class ActionLogger
     {        
         $response = $next($request);
         
-        if($request->user()->hasRole('user')){
+        if($request->user()->hasRole('admin')){
+            $this->log($request, $response, $action, 'admin');
+        } else if($request->user()->hasRole('user')){
             if(in_array($action, ['delete', 'search', 'upload'])) {
-                $this->log($request, $response, $action);
+                $this->log($request, $response, $action, 'user');
             }
         }
 
         return $response;
     }
 
-    public function log (Request $request, Response $response, $action) {
+    public function log (Request $request, Response $response, $action, $taget) {
         Log::create([
             'action' => $action,
             'user_id' => $request->user()->id,
-            'successful' => $response->isSuccessful()
+            'successful' => $response->isSuccessful(),
+            'target' => $taget
         ]);
     }
 }

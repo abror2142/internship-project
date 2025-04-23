@@ -1,5 +1,5 @@
 import { apiClient } from "../../shared/api/apiClient"
-import { claimPaginatedSchema, newClaimsCountSchema, userWithRolesSchema } from "../utils/zod";
+import { claimPaginatedSchema, logsPaginatedSchema, newClaimsCountSchema, userWithRolesSchema } from "../utils/zod";
 import { endpoints } from "./endpoints"
 
 export const fetchClaims = async () => {
@@ -38,6 +38,22 @@ export const fetchUser = async (id: number) => {
     try {
         const response = await apiClient.get(endpoints.FETCH_USER(id));
         const parsed = userWithRolesSchema.safeParse(response.data);
+
+        if(!parsed.success) {
+            console.log('Error while parsing data!', parsed.error);
+            throw new Error('Api data mismatch!');
+        }
+
+        return parsed.data;
+    } catch(error) {
+        throw error;
+    }
+}
+
+export const fetchLogs = async () => {
+    try {
+        const response = await apiClient.get(endpoints.FETCH_LOGS);
+        const parsed = logsPaginatedSchema.safeParse(response.data);
 
         if(!parsed.success) {
             console.log('Error while parsing data!', parsed.error);
