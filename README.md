@@ -23,7 +23,7 @@
 
 | Layer       | Technology |
 |-------------|------------|
-| Frontend    | Vite, TailwindCSS |
+| Frontend    | TypeScript, React, Vite, TailwindCSS |
 | Backend     | PHP, Laravel |
 | Reverse Proxy | Nginx |
 | Database    | MySQL |
