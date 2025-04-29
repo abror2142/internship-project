@@ -43,7 +43,7 @@ function FileInput ({ setFile, settings, extensions }: FileInputProps) {
     }
 
     return (
-        <div className="relative min-w-86 z-50">  
+        <div className="relative min-w-64 z-40">  
             <div className="flex items-center justify-center w-full">
                 <label 
                     htmlFor="dropzone-file" 
@@ -68,8 +68,7 @@ function FileInput ({ setFile, settings, extensions }: FileInputProps) {
                         accept={parsedExtentions()}
                     />
                 </label>
-            </div> 
-            
+            </div>            
             {errors.map(error => <p className="text-red-500 text-sm">{error}</p>)}
         </div>
     )

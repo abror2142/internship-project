@@ -19,7 +19,7 @@ function SearchBar () {
                 results.length > 0
                 && <div 
                         className="absolute transform -bottom-1 right-0 z-50 flex flex-col translate-y-full 
-                            bg-dark-blue w-full overflow-auto  rounded-sm "
+                            bg-dark-blue w-full overflow-auto  rounded-sm px-6 py-4"
                     >
                     {results.map(result => {
                         return (

@@ -4,6 +4,6 @@ export const endpoints = {
     UPDATE_USER_INFO: '/user-info',
     UPDATE_USER_IMAGE: '/update/image',
     FETCH_PLANS: '/plans',
-
+    SEARCH: '/search',
     CREATE_STORAGE_CLAIM: '/claim-storage',
 }

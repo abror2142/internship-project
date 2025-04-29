@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import { createFile } from "../../../shared/utils/api";
 import StorageIndicator from "../../../shared/components/StorageIndicator";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faCheckCircle, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Extension, SettingsData, Settings } from "../../../shared/types/fileTypes";
 import { fetchSettings, fetchEnabledExtensions } from "../../api/fileService";
 import { parseSettings } from "../../utils/utils";
@@ -67,6 +67,8 @@ function UploadFile () {
             setLoading(true);
             const resp = await createFile(json, {headers: {'Content-Type': 'multipart/form-data'}});
             if(resp.data?.file?.id) {
+                setOpen(false);
+                setFile(null);
                 return navigate(`/file/${resp.data.file.id}`)
             }
         } catch(e) {
@@ -115,6 +117,7 @@ function UploadFile () {
                 formData.append('file', file);
         }
         const type = getType()?.name;
+        console.log(type)
         if(type){
             formData.append('type', type);
         }
@@ -153,7 +156,14 @@ function UploadFile () {
                             <p className="text-3xl mb-6 font-semibold dark:text-indigo-400 text-center">Upload a File</p>
                             <StorageIndicator />
                             <div className="flex gap-5">
-                                <FileInput setFile={setFile} settings={settings} extensions={extensions}/>
+                                {
+                                    file 
+                                    ? <div className="min-w-64 h-64 flex items-center justify-center border-2 border-green-500 border-dashed">
+                                        <FontAwesomeIcon icon={faCheckCircle} className="text-4xl text-green-400"/>
+                                    </div>
+                                    : 
+                                    <FileInput setFile={setFile} settings={settings} extensions={extensions}/>
+                                }
                                 <div className="flex flex-col gap-4">
                                     <div className="flex flex-col gap-1">
                                         <label htmlFor="name">File Name:</label>

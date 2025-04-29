@@ -70,6 +70,7 @@ Route::middleware(['auth:api', 'role:admin'])->group(function(): void {
     # System configuration.
     Route::post('/settings', [SettingsController::class, 'update']);
     Route::get('/extensions', [FileExtensionController::class, 'index']);
+    Route::put('/extensions', [FileExtensionController::class, 'update']);
     Route::get('/claims', [StorageClaimController::class, 'index']);
     Route::get('/new-claims/count', [StorageClaimController::class, 'newClaimsCount']);
 

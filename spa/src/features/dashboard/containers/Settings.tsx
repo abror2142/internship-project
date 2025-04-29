@@ -1,15 +1,13 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowAltCircleLeft, faArrowAltCircleRight } from "@fortawesome/free-solid-svg-icons";
+import { faArrowAltCircleRight } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { Field, Form, Formik } from "formik";
 import Select from 'react-select'
-import CreatableExtension from "../../authentication/components/CreatableExtension";
 import { customStyles } from "../../file/components/Filters";
 import { byteFormat } from "../../shared/utils/utils";
 import { fetchSettings } from "../../file/api/fileService";
-import { Extension, SettingsData } from "../../shared/types/fileTypes";
-import { fetchExtensions } from "../../file/api/fileService";
-import { updateExtensions, updateSettings } from "../api/dashboardService";
+import { SettingsData } from "../../shared/types/fileTypes";
+import { updateSettings } from "../api/dashboardService";
 import ExtensionUpdate from "../components/ExtensionUpdate";
 
 type Option = {

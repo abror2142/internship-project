@@ -26,7 +26,7 @@ function PlansModal () {
     return (
         <div className="relative">
             <div onClick={() => setOpen(prev => !prev)}>
-                <div className="absolute text-sm text-blue-400 top-0 right-0 hover:text-blue-700">
+                <div className="absolute z-50 text-sm text-blue-400 top-0 right-0 hover:text-blue-700">
                     <div className="group relative" >
                         <FontAwesomeIcon icon={faInfoCircle} />
                         <div className="hidden group-hover:block absolute -bottom-4 right-0 bg-dark-bg text-dark-text px-2 py-0.1 text-nowrap">
@@ -38,7 +38,7 @@ function PlansModal () {
             <OutsideCickDetector toggler={setOpen}>
                 {
                     open
-                    && <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                    && <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-100">
                         <div className="bg-white space-y-4 dark:bg-dark-blue p-6 rounded-lg shadow-xl relative dark:text-dark-text min-w-md flex flex-col items-center">
                             <FontAwesomeIcon icon={faXmarkCircle} onClick={() => setOpen(prev => !prev)} className="self-end text-red-500 text-xl hover:text-red-600"/>
                             <div className="flex gap-4">

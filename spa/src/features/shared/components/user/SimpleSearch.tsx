@@ -4,10 +4,20 @@ import { faSearch, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { client } from "../../../../../algolia";
 import { useAuth } from "../../hooks/useAuth";
+import { apiClient } from "../../api/apiClient";
+import { endpoints } from "../../api/endpoints";
 
 function SimpleSearch ({setOpen, setResults}: {setOpen: React.Dispatch<React.SetStateAction<boolean>>, setResults: React.Dispatch<React.SetStateAction<any>>}) {
     const [term, setTerm] = useState<string>("");
     const { user } = useAuth();
+
+    const logSearch = async () => {
+        try {
+            await apiClient(endpoints.SEARCH);
+        } catch(e) {
+            console.log(e);
+        }
+    }
 
     const searchByTerm = async () => {
         const filterClause = `user_id:${user.id}`;
@@ -20,6 +30,7 @@ function SimpleSearch ({setOpen, setResults}: {setOpen: React.Dispatch<React.Set
             }],
         });
         setResults(response.results[0]?.hits);  
+        await logSearch();
     }
 
     useEffect(() => {

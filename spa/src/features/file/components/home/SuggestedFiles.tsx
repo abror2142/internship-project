@@ -8,7 +8,7 @@ import FileGalleryView from "../file-view/gallery/FileGalleryView";
 import FileTableView from "../file-view/table/FileTableView";
 
 function SuggestedFiles () {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(true);
     const [files, setFiles] = useState<File[]>([]);
     const [view, setView] = useState('gallery');
 

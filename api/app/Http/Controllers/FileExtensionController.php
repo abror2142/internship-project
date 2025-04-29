@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreFileExtensionRequest;
-use App\Http\Requests\UpdateFileExtensionRequest;
+use Illuminate\Http\Request;
 use App\Models\FileExtension;
 
 class FileExtensionController extends Controller
@@ -45,9 +45,14 @@ class FileExtensionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateFileExtensionRequest $request, FileExtension $fileExtension)
+    public function update(Request $request, FileExtension $fileExtension)
     {
-        //
+        $request->validate([
+            '*.id' => 'required|integer',
+            '*.name' => 'required|string|max:50',
+            '*.image' => 'string|nullable',
+            '*.isEnabled' => 'required|number'
+        ]);
     }
 
     /**

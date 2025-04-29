@@ -31,7 +31,7 @@ function StorageIndicator () {
               ></div>
               <p className="pr-2 dark:text-indigo-300">{available}%</p>
             </label>
-            <div className="relative pr-3 py-1">
+            <div className="px-2 pb-8">
                 <PlansModal />
             </div>
         </div>

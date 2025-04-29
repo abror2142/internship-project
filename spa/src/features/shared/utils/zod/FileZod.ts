@@ -39,12 +39,12 @@ export const settingSchema = z.object({
 export const extensionSchema = z.object({
     id: z.number(),
     name: z.string(),
-    image: z.string(),
-    isEnabled: z.number(),
+    image: z.string().nullable(),
+    isEnabled: z.number().nullable().optional(),
     file_type: z.object({
         id: z.number(),
         name: z.string(),
-        image: z.string()
+        image: z.string().nullable()
     })
 });
 

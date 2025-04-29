@@ -151,6 +151,9 @@ class FileController extends Controller
 
         $file->tags()->sync($tags);
 
+        $file->load('tags');
+        $file->searchable();
+
         return response()->json([
             'file' => $file,
             'message' => 'Successfully uploded!'
@@ -212,6 +215,9 @@ class FileController extends Controller
 
         $file->tags()->sync($tags);
 
+        $file->load('tags');
+        $file->searchable();
+
         return response()->json([
             'file' => $file,
             'message' => 'Successfully updated!'
@@ -233,5 +239,9 @@ class FileController extends Controller
         return response()->json([
             'message' => 'File deleted successfully!'
         ]);
+    }
+
+    public function search() {
+        
     }
 }
